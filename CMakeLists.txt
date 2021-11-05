@@ -60,8 +60,14 @@ message("${ColourReset}")
 
 ## Math Kernel Library ------------------------------------------------------ ##
 
+## Compile EaFort Library --------------------------------------------------- ##
+
 ##... Set Library name
 set(LIB_NAME_EaFort EaFort)
-
 ##...
 add_subdirectory(src)
+
+## Compile Testing EaFort Programs ------------------------------------------ ##
+
+set(TEST_NAME_string testString)
+add_subdirectory(test/testString)

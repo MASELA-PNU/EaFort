@@ -19,7 +19,7 @@ Implicit None
     !!... JSON Core
     Type(json_core) :: JSON
 
-#include "json.routines"
+#include "json.routine"
 
 !! -------------------------------------------------------------------------- !!
 Contains

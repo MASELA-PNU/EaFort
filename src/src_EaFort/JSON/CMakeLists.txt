@@ -6,8 +6,7 @@ set(SRC_CURRENT_${ITEM_NAME}
     src/ThirdParty/json-fortran/src/json_parameters.F90
     src/ThirdParty/json-fortran/src/json_string_utilities.F90
     src/ThirdParty/json-fortran/src/json_value_module.F90
-    src/JSON/modJSON.F90
-    # PARENT_SCOPE
+    src/modJSON.F90
 )
 
 foreach( SUB_SRC_NAME IN LISTS SRC_CURRENT_${ITEM_NAME} )
@@ -18,6 +17,4 @@ foreach( SUB_SRC_NAME IN LISTS SRC_CURRENT_${ITEM_NAME} )
 
 endforeach()
 
-
-
-message( ${SRC_GATHER_${ITEM_NAME}} )
+set( SRC_${ITEM_NAME} "${SRC_GATHER_${ITEM_NAME}}" PARENT_SCOPE )
