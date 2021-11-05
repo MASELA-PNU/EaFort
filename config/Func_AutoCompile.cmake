@@ -101,41 +101,41 @@ else()
 endif()
 
 ##... Print out Install Path and Compile Flags
-message("${Green}  - INSTALL_PATH     : ${White}${INSTALL_PATH}${Green}")
-message("${Green}  - COMPILE_FLAG     : ${White}${Fortran_FLAG}${Green}")
+    message("${Green}  - INSTALL_PATH      : ${White}${INSTALL_PATH}${Green}")
+    message("${Green}  - COMPILE_FLAG      : ${White}${Fortran_FLAG}${Green}")
 
 ## Set Fortran Flag
 set_target_properties(${INSTALL_NAME} PROPERTIES COMPILE_FLAGS "${Fortran_FLAG}" )
 
 ##... Print Out Information
 if (NOT "${INSTALL_INC}" STREQUAL "" )
-    message("${Green}  - INSTALL_INC      : ${White}${INSTALL_INC}${Green}")
+    message("${Green}  - INSTALL_INC       : ${White}${INSTALL_INC}${Green}")
     target_include_directories(${INSTALL_NAME} PRIVATE "${INSTALL_INC}" )
 endif()
 
 if (NOT "${INSTALL_LIB}" STREQUAL "" )
-    message("${Green}  - INSTALL_LIB      : ${White}${INSTALL_LIB}${Green}")
+    message("${Green}  - INSTALL_LIB       : ${White}${INSTALL_LIB}${Green}")
     target_link_directories(${INSTALL_NAME} PRIVATE "${INSTALL_LIB}" )
 endif()
 
 if (NOT "${INSTALL_DEPEND}" STREQUAL "" )
-    message("${Green}  - INSTALL_DEPEND   : ${White}${INSTALL_DEPEND}")
+    message("${Green}  - INSTALL_DEPEND    : ${White}${INSTALL_DEPEND}")
     add_dependencies(${INSTALL_NAME} ${INSTALL_DEPEND} )
     target_link_libraries(${INSTALL_NAME} ${INSTALL_DEPEND} )
 endif()
 
 if (NOT "${INSTALL_EXT_LIB}" STREQUAL "" )
-    message("${Green}  - INSTALL_EXT_LIB  : ${White}${INSTALL_EXT_LIB}")
+    message("${Green}  - INSTALL_EXT_LIB   : ${White}${INSTALL_EXT_LIB}")
     target_link_libraries(${INSTALL_NAME} ${INSTALL_EXT_LIB} )
 endif()
 
 if (NOT "${INSTALL_EXT_INC}" STREQUAL "" )
-    message("${Green}  - INSTALL_EXT_INC  : ${White}${INSTALL_EXT_INC}")
+    message("${Green}  - INSTALL_EXT_INC   : ${White}${INSTALL_EXT_INC}")
     target_link_libraries(${INSTALL_NAME} ${INSTALL_EXT_INC} )
 endif()
 
 if (NOT "${INSTALL_EXT_FLAG}" STREQUAL "" )
-    message("${Green}  - INSTALL_EXT_FLAG : ${White}${INSTALL_EXT_FLAG}")
+    message("${Green}  - INSTALL_EXT_FLAG  : ${White}${INSTALL_EXT_FLAG}")
     target_link_libraries(${INSTALL_NAME} ${INSTALL_EXT_FLAG} )
 endif()
 

@@ -1,0 +1,12 @@
+
+Interface JSON_ReadFile
+
+    Procedure :: JSON_ReadFile_Char
+
+End Interface
+
+Interface JSON_WriteFile
+
+    Procedure :: JSON_WriteFile_Char
+
+End Interface

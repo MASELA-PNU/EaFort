@@ -2,16 +2,26 @@
 set(ITEM_TYPE "LIB")
 set(ITEM_NAME "EaFort")
 set(SRC_${ITEM_NAME}
-
-    JSON/ThirdParty/json-fortran/src/json_kinds.F90
-    JSON/ThirdParty/json-fortran/src/json_file_module.F90
-    JSON/ThirdParty/json-fortran/src/json_module.F90
-    JSON/ThirdParty/json-fortran/src/json_parameters.F90
-    JSON/ThirdParty/json-fortran/src/json_string_utilities.F90
-    JSON/ThirdParty/json-fortran/src/json_value_module.F90
-
-    JSON/modJSON.F90
+    ##.... Wrapper Module of EaFort
+    pkgEaFort.F90
 )
+
+set(LIST_SUB_ITEM_NAME
+    JSON
+)
+
+foreach( SUB_ITEM_NAME IN LISTS LIST_SUB_ITEM_NAME )
+    message( "${SUB_ITEM_NAME}" )
+    add_subdirectory( ${SUB_ITEM_NAME} )
+
+    # message("${SUB_ITEM_NAME}")
+    # message("${SRC_${SUB_ITEM_NAME}}")
+
+    # set( SRC_${ITEM_NAME} ${SRC_${ITEM_NAME}} ${SRC_${SUB_ITEM_NAME}} )
+
+endforeach()
+
+message("${SRC_${ITEM_NAME}}")
 
 ##... Compile
 AutoCompile(
