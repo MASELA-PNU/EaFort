@@ -79,12 +79,15 @@ type :: string
     procedure, pass(self) :: search           !< Search for *tagged* record into string.
     procedure, pass(self) :: slice            !< Return the raw characters data sliced.
     procedure, pass(self) :: snakecase        !< Return a string with all words lowercase separated by "_".
-    procedure, pass(self) :: split            !< Return a list of substring in the string, using sep as the delimiter string.
+    procedure, pass(self) :: split_String     !< Return a list of substring in the string, using sep as the delimiter string.
     procedure, pass(self) :: split_chunked    !< Return a list of substring in the string, using sep as the delimiter string.
     procedure, pass(self) :: startcase        !< Return a string with all words capitalized, e.g. title case.
     procedure, pass(self) :: strip            !< Return a string with the leading and trailing characters removed.
     procedure, pass(self) :: swapcase         !< Return a string with uppercase chars converted to lowercase and vice versa.
     procedure, pass(self) :: tempname         !< Return a safe temporary name suitable for temporary file or directories.
+
+    generic               :: split => split_String
+
     generic               :: to_number =>   &
                              to_integer_I1P,&
 #ifndef _NVF
@@ -2266,7 +2269,7 @@ contains
    endif
    endfunction snakecase
 
-   pure subroutine split(self, tokens, sep, max_tokens)
+   Pure subroutine split_String(self, tokens, sep, max_tokens)
    !< Return a list of substring in the string, using sep as the delimiter string.
    !<
    !< @note Multiple subsequent separators are collapsed to one occurrence.
@@ -2374,7 +2377,7 @@ contains
        tokens(1) = self
      endif
    endif
-   endsubroutine split
+   endsubroutine split_String
 
    pure subroutine split_chunked(self, tokens, chunks, sep)
    !< Return a list of substring in the string, using sep as the delimiter string, chunked (memory-efficient) algorithm.

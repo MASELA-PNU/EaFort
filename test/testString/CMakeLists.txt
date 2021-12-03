@@ -1,6 +1,7 @@
 set(ITEM_TYPE "test")
 set(ITEM_NAME "string")
 set(SRC_${ITEM_NAME}
+    src/testStringModule.F90
     src/testString.F90
 )
 

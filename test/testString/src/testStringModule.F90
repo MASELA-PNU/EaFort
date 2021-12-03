@@ -1,32 +1,30 @@
-!                                   EaFort:String                             !!
 !! -------------------------------------------------------------------------- !!
-!   Wrapper Module of JSON-Fortran for easy use.
-!
-!   author: Young-Myung Choi
-!   date: 2021-10-20
-!
+!! EaFort:testStringModule
 !! -------------------------------------------------------------------------- !!
-Module modString
+!! Testing Program of String Module
+!!
+!!   Author: Young-Myung Choi
+!!   Date  : 2021-12-03
+!!
+!! -------------------------------------------------------------------------- !!
+Module testStringModule
 !! -------------------------------------------------------------------------- !!
 
-    Use modEaFort       !!... Global variables of EaFort
-    Use stringifor      !!... StringIFor Module
+        Use pkgEaFort
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
-#include "string/stringH.proc"
-
-#include "string/string.typ"
-
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
 
-#include "string/stringH.inc"
+#include "tests/test_String_SingleConversion.inc"
 
-#include "string/string.inc"
+#include "tests/test_String_Split.inc"
+
+#include "tests/test_String_VectorConversion.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

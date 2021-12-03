@@ -10,27 +10,20 @@
 Program testString
 !! -------------------------------------------------------------------------- !!
 
-    Use pkgEaFort
+    Use testStringModule
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
+    !!... Test Single Conversion
+    Call Test_String_SingleConversion()
 
-!! -------------------------------------------------------------------------- !!
-    Type(typString) :: str1
-    Type(typString) :: str2
-    Type(typString) :: str3
-    !!...
-    Integer(IP)     :: intValue
-    Real(RP)        :: realValue
+    !!... Test Split String
+    Call Test_String_Split()
 
-    str1 = 3
-
-    intValue = str1%GetInt()
-
-    write(*,*) "intValue", intValue
-
+    !!... Test Vector Conversion
+    Call Test_String_VectorConversion()
 
 !! -------------------------------------------------------------------------- !!
 End Program
