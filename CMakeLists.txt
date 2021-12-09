@@ -60,11 +60,22 @@ message("${ColourReset}")
 
 ## Math Kernel Library ------------------------------------------------------ ##
 
+## Compile ThirdParty Library ----------------------------------------------- ##
+
+set(LIB_NAME_StringiFor StringiFor)
+add_subdirectory(ThirdParty/StringiFor)
+
+set(LIB_NAME_json-fortran json-fortran)
+add_subdirectory(ThirdParty/json-fortran)
+
+
 ## Compile EaFort Library --------------------------------------------------- ##
 
 ##... Set Library name
-set(LIB_NAME_EaFort EaFort)
-##...
+set( LIB_NAME_EaFort EaFort )
+set( DEPEND_EaFort StringiFor json-fortran )
+
+##... Set dependencies
 add_subdirectory(src)
 
 ## Compile Testing EaFort Programs ------------------------------------------ ##

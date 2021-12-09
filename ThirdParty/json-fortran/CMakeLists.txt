@@ -1,21 +1,16 @@
 ##... Source Files
 set(ITEM_TYPE "LIB")
-set(ITEM_NAME "EaFort")
+set(ITEM_NAME "json-fortran")
 set(SRC_${ITEM_NAME}
     ##.... Wrapper Module of EaFort
-    modEaFort.F90
-    pkgEaFort.F90
-)
+    src/json_file_module.F90
 
-set(LIST_SUB_ITEM_NAME
-    string
-    JSON
+    src/json_kinds.F90
+    src/json_module.F90
+    src/json_parameters.F90
+    src/json_string_utilities.F90
+    src/json_value_module.F90
 )
-
-foreach( SUB_ITEM_NAME IN LISTS LIST_SUB_ITEM_NAME )
-    add_subdirectory( ${SUB_ITEM_NAME} )
-    set( SRC_${ITEM_NAME} ${SRC_${ITEM_NAME}} ${SRC_${SUB_ITEM_NAME}} )
-endforeach()
 
 ##... Compile
 AutoCompile(
@@ -23,6 +18,5 @@ AutoCompile(
     IS_DYNAMIC_LIB      False
     INSTALL_NAME        "${LIB_NAME_${ITEM_NAME}}"
     INSTALL_PATH        "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
-    INSTALL_DEPEND      "${DEPEND_${ITEM_NAME}}"
     INSTALL_SRC         "${SRC_${ITEM_NAME}}"
 )
