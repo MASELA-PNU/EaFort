@@ -67,3 +67,11 @@ execute_process(
 #... Add Preprocessor for program
 add_definitions("-D__GIT_BRANCH__=\"${GIT_BRANCH}\"")
 add_definitions("-D__GIT_COMMIT_HASH__=\"${GIT_COMMIT_HASH}\"")
+
+## OS Environment ----------------------------------------------------------- ##
+
+if( WIN32 )
+    add_definitions(-D__OS_WINDOWS__)
+elseif( UNIX )
+    add_definitions(-D__OS_LINUX__)
+endif()

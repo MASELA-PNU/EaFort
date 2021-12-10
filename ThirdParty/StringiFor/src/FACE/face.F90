@@ -145,6 +145,7 @@ contains
    integer(int32)                                     :: i         !< Counter.
 
    colorized = string
+#ifdef __OS_LINUX__
    if (present(color_fg)) then
       i = color_index(upper(color_fg))
       if (i>0) then
@@ -172,6 +173,7 @@ contains
          colorized = colorized//buffer
       endif
    endif
+#endif
    endfunction colorize_ascii
 
    pure function colorize_default(string, color_fg, color_bg, style) result(colorized)
@@ -209,6 +211,7 @@ contains
    integer(int32)                                    :: i         !< Counter.
 
    colorized = string
+#ifdef __OS_LINUX__
    if (present(color_fg)) then
       i = color_index(upper(color_fg))
       if (i>0) then
@@ -236,6 +239,7 @@ contains
          colorized = colorized//buffer
       endif
    endif
+#endif
    endfunction colorize_ucs4
 
    elemental function color_index(color)

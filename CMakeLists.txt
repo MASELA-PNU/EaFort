@@ -82,3 +82,6 @@ add_subdirectory(src)
 
 set(TEST_NAME_string testString)
 add_subdirectory(test/testString)
+
+set(TEST_NAME_GURU testGURU)
+add_subdirectory(test/testGURU)

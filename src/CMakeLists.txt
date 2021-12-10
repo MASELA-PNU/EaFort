@@ -10,6 +10,7 @@ set(SRC_${ITEM_NAME}
 set(LIST_SUB_ITEM_NAME
     string
     JSON
+    GURU
 )
 
 foreach( SUB_ITEM_NAME IN LISTS LIST_SUB_ITEM_NAME )
