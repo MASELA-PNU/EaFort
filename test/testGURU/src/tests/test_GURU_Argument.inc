@@ -29,6 +29,13 @@ Implicit None
     &   description   = "Output File Path",   &
     &   isRequiredKey = .FALSE.               )
 
+    !!... Add Arguments
+    Call GURU%AddCommandArgument(                   &
+    &   key           = "print",                    &
+    &   singleKey     = "p",                        &
+    &   description   = "Test another argument",    &
+    &   isRequiredKey = .FALSE.                     )
+
     !!... Update Key
     Call GURU%UpdateCommandArgument()
 

@@ -195,6 +195,8 @@ Implicit None
 
     this%isFound = .FALSE.
 
+    ! write(*,*) "key", this%key
+
     !!... Find the corresponding keyword
     Do iArg = 0, nTotalArg
 
@@ -207,7 +209,7 @@ Implicit None
             if ( arg(1:2).EQ."--" ) then
 
                 if ( arg(3:nChArg).EQ.this%key ) then
-                    indStart = iArg + 1
+                    indStart = iArg
                     isActive = .TRUE.
                     isFound  = .TRUE.
                 else if (isActive) then
@@ -236,17 +238,20 @@ Implicit None
     !!... If Found, Save the following arguments
     If ( isFound ) Then
         this%isFound = .TRUE.
-        nGivenArg = indEnd - indStart + 1
 
-        if ( nGivenArg.LT.this%nRequiredArg ) then
-            write(*,"(a)") PREIX_ERROR//" Update_typCommandArgument"
-            write(*,"(a)")
-            write(*,"(a)") INDENT//"The number of argument after keyword is less than the requirement."
-            write(*,"(a)")
-            write(*,"(a)") INDENT//" * key: --"//trim(this%key)
-            write(*,"(a, i6)") INDENT//" * Required number of argument :", this%nRequiredArg
-            write(*,"(a)")
-            stop
+        nGivenArg = indEnd - indStart
+
+        If (this%nRequiredArg.GE.1) then
+            if ( (indEnd.GE.indStart).AND.(nGivenArg.LT.this%nRequiredArg) ) then
+                write(*,"(a)") PREIX_ERROR//" Update_typCommandArgument"
+                write(*,"(a)")
+                write(*,"(a)") INDENT//"The number of argument after keyword is less than the requirement."
+                write(*,"(a)")
+                write(*,"(a)") INDENT//" * key: --"//trim(this%key)
+                write(*,"(a, i6)") INDENT//" * Required number of argument :", this%nRequiredArg
+                write(*,"(a)")
+                stop
+            end if
         end if
 
         If ( nGivenArg.GE.1 ) then
@@ -254,10 +259,11 @@ Implicit None
             If ( Allocated(this%arguments) ) Deallocate( this%arguments )
             Allocate( this%arguments(this%nArguments) )
             jArg = 0
-            do iArg = indStart, indEnd
+            do iArg = indStart+1, indEnd
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
                 this%arguments(jArg) = trim(arg)
+                write(*,*) iArg, this%arguments(jArg)%Chars()
             end do
         end if
 
@@ -292,7 +298,7 @@ Implicit None
 
                 do iCh = 2, nChArg
                     if ( arg(iCh:iCh).EQ.this%singleKey ) then
-                        indStart = iArg + 1
+                        indStart = iArg
                         isActive = .TRUE.
                         isFound  = .TRUE.
                         this%isFound = .TRUE.
@@ -308,29 +314,37 @@ Implicit None
 
         end if
 
+        if ( (iArg.EQ.nTotalArg).AND.isActive ) Then
+            indEnd   = iArg
+            isActive = .FALSE.
+        end if
+
     End do SingleKeyLoop
 
     !!... Save
     if ( (isFound).AND.(.NOT.isMultiple) ) then
-        nGivenArg = indEnd - indStart + 1
 
-        if ( nGivenArg.LT.this%nRequiredArg ) then
-            write(*,"(a)") PREIX_ERROR//" Update_typCommandArgument"
-            write(*,"(a)")
-            write(*,"(a)") INDENT//"The number of argument after keyword is less than the requirement."
-            write(*,"(a)")
-            write(*,"(a)") INDENT//" * key: --"//trim(this%key)
-            write(*,"(a, i6)") INDENT//" * Required number of argument :", this%nRequiredArg
-            write(*,"(a)")
-            stop
-        end if
+        nGivenArg = indEnd - indStart
+
+        If (this%nRequiredArg.GE.1) then
+            if ( nGivenArg.LT.this%nRequiredArg ) then
+                write(*,"(a)") PREIX_ERROR//" Update_typCommandArgument"
+                write(*,"(a)")
+                write(*,"(a)") INDENT//"The number of argument after keyword is less than the requirement."
+                write(*,"(a)")
+                write(*,"(a)") INDENT//" * key: --"//trim(this%key)
+                write(*,"(a, i6)") INDENT//" * Required number of argument :", this%nRequiredArg
+                write(*,"(a)")
+                stop
+            end if
+        End if
 
         If ( nGivenArg.GE.1 ) then
             this%nArguments = nGivenArg
             If ( Allocated(this%arguments) ) Deallocate( this%arguments )
             Allocate( this%arguments(this%nArguments) )
             jArg = 0
-            do iArg = indStart, indEnd
+            do iArg = indStart+1, indEnd
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
                 this%arguments(jArg) = trim(arg)
