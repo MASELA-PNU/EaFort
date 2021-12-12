@@ -99,6 +99,7 @@ Subroutine PrintInfo_typCommandArgument(this, ioUnit, isColor)
         colorKey      = "Yellow"
         colorFound    = "Green"
         colorNotFound = "Red"
+        If (.NOT.this%isRequiredKey) colorNotFound = "MAGENTA"
     end if
 
     keyToPrint = INDENT2//"--"//Colorize(this%key, colorKey)
@@ -126,22 +127,31 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine PrintHelp_typCommandArgument(this, ioUnit)
+Subroutine PrintHelp_typCommandArgument(this, ioUnit, isColor)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typCommandArgument), intent(in) :: this
     Integer, optional                     :: ioUnit
+    Logical, optional                     :: isColor
 !! -------------------------------------------------------------------------- !!
     Integer :: ioUnit_
     Character(len=:), Allocatable :: keyToPrint
+    Logical :: isColor_
+    Character(len=17) :: colorKey
+
+    isColor_ = .FALSE.
+    if (Present(isColor)) isColor_ = isColor
+
+    colorKey = ""
+    If (isColor_) colorKey = "Yellow"
 
     ioUnit_ = 6
     if ( present(ioUnit) ) ioUnit_ = ioUnit
 
-    keyToPrint = INDENT2//"--"//this%key
+    keyToPrint = INDENT2//"--"//Colorize(this%key, colorKey)
 
-    If ( this%isSingleKeyGiven ) keyToPrint = keyToPrint//", "//"-"//this%singleKey
+    If ( this%isSingleKeyGiven ) keyToPrint = keyToPrint//", "//"-"//Colorize(this%singleKey, colorKey)
     write(ioUnit_, "(a)") keyToPrint
 
     If ( Allocated(keyToPrint) ) Deallocate(keyToPrint)
@@ -263,7 +273,7 @@ Implicit None
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
                 this%arguments(jArg) = trim(arg)
-                write(*,*) iArg, this%arguments(jArg)%Chars()
+                !write(*,*) iArg, this%arguments(jArg)%Chars()
             end do
         end if
 

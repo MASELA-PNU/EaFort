@@ -1,27 +1,24 @@
 !! -------------------------------------------------------------------------- !!
-!                                   EaFort:JSON                               !!
+!! EaFort:testGURU
 !! -------------------------------------------------------------------------- !!
-!   Wrapper Module of JSON-Fortran for easy use.
-!
-!   author: Young-Myung Choi
-!   date: 2021-10-20
-!
+!! Testing Program of OS Module
+!!
+!!   Author: Young-Myung Choi
+!!   Date  : 2021-12-09
+!!
 !! -------------------------------------------------------------------------- !!
-Module pkgEaFort
+Program testOS
 !! -------------------------------------------------------------------------- !!
 
-    Use modEaFort       !!... Global Variables
-    Use modGURU         !!... GURU Module
-    Use modJSON         !!... JSON Module
-    Use modString       !!... String Module
-    Use modOS           !!... OS Module
+    Use testOSModule
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
-
+    !!... Test GURU Argument by Command
+    Call Test_OS_fileSystem()
 
 !! -------------------------------------------------------------------------- !!
-End Module
+End Program
 !! -------------------------------------------------------------------------- !!

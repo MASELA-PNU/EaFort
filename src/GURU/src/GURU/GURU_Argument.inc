@@ -54,11 +54,11 @@ Subroutine InitializeDescription_typGURU(this, &
     !!... Update Basic arguments
     Call this%UpdateCommandArgument()
 
-    !!... Log File Update
-
     !!... Color & Debug Mode
     If ( this%IsFoundKey( key = "color" ) ) this%isColor_ = .TRUE.
     If ( this%IsFoundKey( key = "debug" ) ) this%isDebug_ = .TRUE.
+
+    !!... See GURU_Message.inc
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
@@ -112,6 +112,33 @@ Subroutine Destroy_typGURU(this)
             Call this%arguments(iArg)%Destroy()
         end do
     end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine UpdateAndPrintDescription_typGURU(this)
+!! -------------------------------------------------------------------------- !!
+Implicit None
+!! -------------------------------------------------------------------------- !!
+Class(typGURU), intent(in) :: this
+!! -------------------------------------------------------------------------- !!
+
+    !!... Update Key
+    Call GURU%UpdateCommandArgument()
+
+    !!... Print Description
+    Call GURU%PrintDescription()
+
+    !!... If --help is given, print help message and stop
+    If ( this%IsFoundKey( key = "help" ) ) then
+        Call GURU%PrintHelp()
+        stop
+    end if
+
+    !!... Print Given Key Information
+    Call GURU%PrintGivenKey()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
@@ -230,6 +257,33 @@ Subroutine PrintDescription_typGURU(this, ioUnit)
         end if
 
     End Block blkWriteVersionDate
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine PrintGivenKey_typGURU(this, ioUnit)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+!! -------------------------------------------------------------------------- !!
+    Class(typGURU), intent(in) :: this
+    Integer, optional          :: ioUnit
+!! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: ioUnit_
+
+    !!... Set Print Mode
+    isColor = this%isColor_
+    ioUnit_ = 6
+    if ( present(ioUnit) ) then
+        if (ioUnit.EQ.6) then
+            isColor = this%isColor_
+        else
+            isColor = .FALSE.
+        end if
+        ioUnit_ = ioUnit
+    end if
 
     !!... Write Required Key Information
     blkWriteRequiredKey : Block
@@ -431,27 +485,45 @@ Subroutine PrintHelp_typGURU(this, ioUnit)
     end if
 
     blkWriteRequiredKey: Block
+        Integer :: iArg, nArg
         Character(len=17) :: color1
 
         If ( this%nArguments.GE.1 ) Then
 
-            color1 = ""
-            If ( isColor ) color1 = "GREEN"
-            Write(ioUnit_, "(a)") INDENT//Colorize("Required", color1)
-            Write(ioUnit_, "(a)") ""
-
+            nArg = 0
             do iArg = 1, this%nArguments
-                Call this%arguments(iArg)%PrintHelp( ioUnit )
-            end do
+                If ( this%arguments(iArg)%isRequiredKey ) nArg = nArg + 1
+            End do
+
+            if ( nArg.GE.1 ) then
+
+                color1 = ""
+                If ( isColor ) color1 = "GREEN"
+                Write(ioUnit_, "(a)") INDENT//Colorize("Required", color1)
+                Write(ioUnit_, "(a)") ""
+
+                do iArg = 1, this%nArguments
+                    If ( this%arguments(iArg)%isRequiredKey ) then
+                        Call this%arguments(iArg)%PrintHelp( ioUnit, isColor )
+                    End if
+                end do
+
+            end if
 
         End if
 
     End Block blkWriteRequiredKey
 
     blkWriteOptionalKey: Block
+        Integer :: iArg, nArg
         Character(len=17) :: color1
 
         If ( this%nArguments.GE.1 ) Then
+
+            nArg = 0
+            do iArg = 1, this%nArguments
+                If ( .NOT.this%arguments(iArg)%isRequiredKey ) nArg = nArg + 1
+            End do
 
             color1 = ""
             If ( isColor ) color1 = "GREEN"
@@ -459,7 +531,9 @@ Subroutine PrintHelp_typGURU(this, ioUnit)
             Write(ioUnit_, "(a)") ""
 
             do iArg = 1, this%nArguments
-                Call this%arguments(iArg)%PrintHelp( ioUnit )
+                If ( .NOT.this%arguments(iArg)%isRequiredKey ) then
+                    Call this%arguments(iArg)%PrintHelp( ioUnit, isColor )
+                End if
             end do
 
         End if

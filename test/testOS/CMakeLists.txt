@@ -1,8 +1,8 @@
 set(ITEM_TYPE "test")
-set(ITEM_NAME "string")
+set(ITEM_NAME "OS")
 set(SRC_${ITEM_NAME}
-    src/testStringModule.F90
-    src/testString.F90
+    src/testOSModule.F90
+    src/testOS.F90
 )
 
 set(DEPEND_${ITEM_NAME}

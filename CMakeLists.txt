@@ -80,8 +80,6 @@ add_subdirectory(src)
 
 ## Compile Testing EaFort Programs ------------------------------------------ ##
 
-set(TEST_NAME_string testString)
 add_subdirectory(test/testString)
-
-set(TEST_NAME_GURU testGURU)
 add_subdirectory(test/testGURU)
+add_subdirectory(test/testOS)

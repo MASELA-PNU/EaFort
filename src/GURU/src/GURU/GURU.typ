@@ -34,20 +34,26 @@ Contains
     !!... Initialize the description
     Procedure :: InitializeDescription => InitializeDescription_typGURU
 
-    !!... Print the description
-    Procedure :: PrintDescription => PrintDescription_typGURU
-
     !!... Add Argument
     Procedure :: AddCommandArgument => AddCommandArgument_typGURU
-
-    !!... Print Help
-    Procedure :: PrintHelp => PrintHelp_typGURU
 
     !!... Update Arguments
     Procedure :: UpdateCommandArgument => UpdateCommandArgument_typGURU
 
     !!... Found Key
     Procedure :: IsFoundKey => IsFoundKey_typGURU
+
+    !!... Update and Print
+    Procedure :: UpdateAndPrintDescription => UpdateAndPrintDescription_typGURU
+
+    !!... Print the description
+    Procedure :: PrintDescription => PrintDescription_typGURU
+
+    !!... Print Help
+    Procedure :: PrintHelp => PrintHelp_typGURU
+
+    !!... Print the description
+    Procedure :: PrintGivenKey => PrintGivenKey_typGURU
 
 !!... Error/Warning Message ----------------------------------------------------
 

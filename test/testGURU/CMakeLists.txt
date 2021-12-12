@@ -12,7 +12,7 @@ set(DEPEND_${ITEM_NAME}
 ##... Compile
 AutoCompile(
     IS_COMPILE_EXE      True
-    INSTALL_NAME        "${TEST_NAME_${ITEM_NAME}}"
+    INSTALL_NAME        "test${ITEM_NAME}"
     INSTALL_PATH        "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
     INSTALL_SRC         "${SRC_${ITEM_NAME}}"
     INSTALL_DEPEND      "${DEPEND_${ITEM_NAME}}"

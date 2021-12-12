@@ -11,6 +11,7 @@ set(LIST_SUB_ITEM_NAME
     string
     JSON
     GURU
+    OS
 )
 
 foreach( SUB_ITEM_NAME IN LISTS LIST_SUB_ITEM_NAME )

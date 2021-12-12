@@ -1,26 +1,31 @@
+!                                   EaFort:String                             !!
 !! -------------------------------------------------------------------------- !!
-!                                   EaFort:JSON                               !!
-!! -------------------------------------------------------------------------- !!
-!   Wrapper Module of JSON-Fortran for easy use.
+!
+!   OS module to control dir/files
 !
 !   author: Young-Myung Choi
 !   date: 2021-10-20
 !
 !! -------------------------------------------------------------------------- !!
-Module pkgEaFort
+Module modOS
 !! -------------------------------------------------------------------------- !!
 
-    Use modEaFort       !!... Global Variables
-    Use modGURU         !!... GURU Module
-    Use modJSON         !!... JSON Module
-    Use modString       !!... String Module
-    Use modOS           !!... OS Module
+    Use modEaFort       !!... Global variables of EaFort
+    Use stringifor      !!... Third Party String Module
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
+!!... Control the file system procedure definitions
+#include "fileSystem/fileSystem.proc"
 
+!! -------------------------------------------------------------------------- !!
+Contains
+!! -------------------------------------------------------------------------- !!
+
+!!... Control the file system
+#include "fileSystem/fileSystem.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

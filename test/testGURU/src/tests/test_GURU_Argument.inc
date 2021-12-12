@@ -37,13 +37,7 @@ Implicit None
     &   isRequiredKey = .FALSE.                     )
 
     !!... Update Key
-    Call GURU%UpdateCommandArgument()
-
-    !!... Print Description
-    Call GURU%PrintDescription()
-
-    ! !!... Print Help
-    ! Call GURU%PrintHelp()
+    Call GURU%UpdateAndPrintDescription()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
