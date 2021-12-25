@@ -1,10 +1,10 @@
 !! -------------------------------------------------------------------------- !!
-Subroutine InitializeDescription_typGURU(this, &
-    projectName, description, authors, date, version)
+Subroutine Initialize_typInfoArg( &
+    &   this, projectName, description, authors, date, version)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(inout)          :: this
+    Class(typInfoArg), intent(inout)          :: this
     Character(len=*), intent(in)           :: projectName
     Character(len=*), intent(in), Optional :: description
     Character(len=*), intent(in), Optional :: authors
@@ -13,7 +13,7 @@ Subroutine InitializeDescription_typGURU(this, &
 !! -------------------------------------------------------------------------- !!
 
     if ( len_trim(projectName).LE.0 ) then
-        write(*,"(a)") PREIX_WARN//" InitializeDescription_typGURU"
+        write(*,"(a)") PREIX_WARN//" Initialize_typInfoArg"
         write(*,"(a)")
         write(*,"(a)") INDENT//"The length of 'projectName' is less than 1."
         write(*,"(a)")
@@ -27,7 +27,7 @@ Subroutine InitializeDescription_typGURU(this, &
     if ( present(version) )     this%version     = version
 
     !!... Set basic arguments
-    this%nArguments = 4
+    this%nArguments = 1
     Allocate( this%arguments(this%nArguments) )
 
     Call this%arguments(1)%Initialize( &
@@ -35,42 +35,42 @@ Subroutine InitializeDescription_typGURU(this, &
     &   description   = "Print help messages",    &
     &   isRequiredKey = .FALSE.                   )
 
-    Call this%arguments(2)%Initialize( &
-    &   key           = "log",               &
-    &   description   = "Log File Path",     &
-    &   isRequiredKey = .FALSE.,             &
-    &   nRequiredArg  = 1                    )
-
-    Call this%arguments(3)%Initialize( &
-    &   key           = "color",              &
-    &   isRequiredKey = .FALSE.,             &
-    &   description   = "Color Mode"          )
-
-    Call this%arguments(4)%Initialize( &
-    &   key           = "debug",              &
-    &   isRequiredKey = .FALSE.,             &
-    &   description   = "Debug Mode"          )
+    ! Call this%arguments(2)%Initialize( &
+    ! &   key           = "log",               &
+    ! &   description   = "Log File Path",     &
+    ! &   isRequiredKey = .FALSE.,             &
+    ! &   nRequiredArg  = 1                    )
+    !
+    ! Call this%arguments(3)%Initialize( &
+    ! &   key           = "color",             &
+    ! &   isRequiredKey = .FALSE.,             &
+    ! &   description   = "Color Mode"         )
+    !
+    ! Call this%arguments(4)%Initialize( &
+    ! &   key           = "debug",             &
+    ! &   isRequiredKey = .FALSE.,             &
+    ! &   description   = "Debug Mode"         )
 
     !!... Update Basic arguments
-    Call this%UpdateCommandArgument()
+    Call this%Update()
 
     !!... Color & Debug Mode
-    If ( this%IsFoundKey( key = "color" ) ) this%isColor_ = .TRUE.
-    If ( this%IsFoundKey( key = "debug" ) ) this%isDebug_ = .TRUE.
+    ! If ( this%IsFoundKey( key = "color" ) ) this%isColor_ = .TRUE.
+    ! If ( this%IsFoundKey( key = "debug" ) ) this%isDebug_ = .TRUE.
 
-    !!... See GURU_Message.inc
+    !!... Logger: See with GURU_Message.inc
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function IsFoundKey_typGURU( this, key ) result(isFound)
+Function IsFoundKey_typInfoArg( this, key ) result(isFound)
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(in)   :: this
-    Character(len=*), intent(in) :: key
+    Class(typInfoArg), intent(in) :: this
+    Character(len=*), intent(in)  :: key
     Logical :: isFound
 !! -------------------------------------------------------------------------- !!
     Integer :: iArg
@@ -87,12 +87,15 @@ Implicit None
 End Function
 !! -------------------------------------------------------------------------- !!
 
+
+
+
 !! -------------------------------------------------------------------------- !!
-Subroutine Destroy_typGURU(this)
+Subroutine Destroy_typInfoArg(this)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(inout) :: this
+    Class(typInfoArg), intent(inout) :: this
 !! -------------------------------------------------------------------------- !!
     Integer :: nArg, iArg
     Call this%projectName%Free()
@@ -101,8 +104,8 @@ Subroutine Destroy_typGURU(this)
     Call this%date%Free()
     Call this%version%Free()
 
-    this%isColor_ = .TRUE.
-    this%isDebug_ = .FALSE.
+    ! this%isColor_ = .TRUE.
+    ! this%isDebug_ = .FALSE.
 
     this%nArguments = 0
 
@@ -118,49 +121,50 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine UpdateAndPrintDescription_typGURU(this)
+Subroutine UpdateAndPrint_typInfoArg(this)
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
-Class(typGURU), intent(in) :: this
+Class(typInfoArg), intent(inout) :: this
 !! -------------------------------------------------------------------------- !!
 
     !!... Update Key
-    Call GURU%UpdateCommandArgument()
+    Call this%Update()
 
     !!... Print Description
-    Call GURU%PrintDescription()
+    Call this%PrintDescription()
 
     !!... If --help is given, print help message and stop
     If ( this%IsFoundKey( key = "help" ) ) then
-        Call GURU%PrintHelp()
+        Call this%PrintHelp()
         stop
     end if
 
     !!... Print Given Key Information
-    Call GURU%PrintGivenKey()
+    Call this%PrintGivenKey()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine PrintDescription_typGURU(this, ioUnit)
+Subroutine PrintDescription_typInfoArg(this, ioUnit)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(in) :: this
-    Integer, optional          :: ioUnit
+    Class(typInfoArg), intent(in) :: this
+    Integer, optional             :: ioUnit
 !! -------------------------------------------------------------------------- !!
     Logical :: isColor
     Integer :: ioUnit_
 
     !!... Set Print Mode
-    isColor = this%isColor_
+    ! isColor = this%isColor_
     ioUnit_ = 6
     if ( present(ioUnit) ) then
         if (ioUnit.EQ.6) then
-            isColor = this%isColor_
+            ! isColor = this%isColor_
+            isColor = .FALSE.
         else
             isColor = .FALSE.
         end if
@@ -263,22 +267,22 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine PrintGivenKey_typGURU(this, ioUnit)
+Subroutine PrintGivenKey_typInfoArg(this, ioUnit)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(in) :: this
-    Integer, optional          :: ioUnit
+    Class(typInfoArg), intent(in) :: this
+    Integer, optional             :: ioUnit
 !! -------------------------------------------------------------------------- !!
     Logical :: isColor
     Integer :: ioUnit_
 
     !!... Set Print Mode
-    isColor = this%isColor_
+    ! isColor = this%isColor_
     ioUnit_ = 6
     if ( present(ioUnit) ) then
         if (ioUnit.EQ.6) then
-            isColor = this%isColor_
+            ! isColor = this%isColor_
         else
             isColor = .FALSE.
         end if
@@ -350,11 +354,11 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine UpdateCommandArgument_typGURU(this)
+Subroutine Update_typInfoArg(this)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(inout) :: this
+    Class(typInfoArg), intent(inout) :: this
 !! -------------------------------------------------------------------------- !!
     Integer :: iArg
 
@@ -365,7 +369,7 @@ Subroutine UpdateCommandArgument_typGURU(this)
     do iArg = 1, this%nArguments
         if ( this%arguments(iArg)%isRequiredKey.AND.&
         &    (.NOT.this%arguments(iArg)%isFound) ) then
-            write(*,"(a)") PREIX_ERROR//" Update_typGURU"
+            write(*,"(a)") PREIX_ERROR//" Update_typInfoArg"
             write(*,"(a)")
             write(*,"(a)") INDENT//"Required key is not given."
             write(*,"(a)") INDENT//"key: --"//this%arguments(iArg)%key
@@ -379,12 +383,12 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine AddCommandArgument_typGURU( &
+Subroutine AddKey_typInfoArg( &
     &   this, key, singleKey, description, isRequiredKey, nRequiredArg )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(inout)            :: this
+    Class(typInfoArg), intent(inout)         :: this
     Character(len=*), intent(in)             :: key
     Character(len=*), Optional, intent(in)   :: singleKey
     Character(len=*), Optional, intent(in)   :: description
@@ -405,14 +409,14 @@ Subroutine AddCommandArgument_typGURU( &
     If ( nPreviousArg.GE.1 ) then
         do iArg = 1, nPreviousArg
             if ( this%arguments(iArg)%key.EQ.key ) then
-                write(*,"(a)") PREIX_ERROR//" AddCommandArgument_typGURU"
+                write(*,"(a)") PREIX_ERROR//" AddKey_typInfoArg"
                 write(*,"(a)")
                 write(*,"(a)") INDENT//"Given 'key' exist already."
                 write(*,"(a)") INDENT//"  key: --"//trim(key)
                 write(*,"(a)")
                 stop
             else if ( this%arguments(iArg)%singleKey.EQ.singleKey ) then
-                write(*,"(a)") PREIX_ERROR//" AddCommandArgument_typGURU"
+                write(*,"(a)") PREIX_ERROR//" AddKey_typInfoArg"
                 write(*,"(a)")
                 write(*,"(a)") INDENT//"Given 'singleKey' exist already."
                 write(*,"(a)") INDENT//"  singleKey: -"//trim(singleKey)
@@ -462,22 +466,22 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine PrintHelp_typGURU(this, ioUnit)
+Subroutine PrintHelp_typInfoArg(this, ioUnit)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(in) :: this
-    Integer, optional          :: ioUnit
+    Class(typInfoArg), intent(in) :: this
+    Integer, optional             :: ioUnit
 !! -------------------------------------------------------------------------- !!
     Logical :: isColor
     Integer :: ioUnit_, iArg
 
     !!... Set Print Mode
-    isColor = this%isColor_
+    ! isColor = this%isColor_
     ioUnit_ = 6
     if ( present(ioUnit) ) then
         if (ioUnit.EQ.6) then
-            isColor = this%isColor_
+            ! isColor = this%isColor_
         else
             isColor = .FALSE.
         end if

@@ -1,6 +1,6 @@
 !                                   EaFort:String                             !!
 !! -------------------------------------------------------------------------- !!
-!   GURU to handle the fortran program
+!   Info to handle the fortran program
 !
 !    - Error / Warning Message
 !    - Argument by command line
@@ -11,7 +11,7 @@
 !   date: 2021-10-20
 !
 !! -------------------------------------------------------------------------- !!
-Module modGURU
+Module modInfoFortran
 !! -------------------------------------------------------------------------- !!
 
     Use modEaFort       !!... Global variables of EaFort
@@ -36,25 +36,22 @@ Implicit None
     Character(len=8), Parameter, Private :: INDENT4 = "        "
 
 !!... Arguments Class Definition
-#include "GURU/CommandArgument/CommandArgument.typ"
+#include "InfoArg/CommandArgument/CommandArgument.typ"
 
 !!... GURU defintion
-#include "GURU/GURU.typ"
+#include "InfoArg/InfoArg.typ"
 
-    Type(typGURU), target :: GURU
+    Type(typInfoArg), target :: InfoArg
 
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
 
 !!... Arguments Class Functions
-#include "GURU/CommandArgument/CommandArgument.inc"
+#include "InfoArg/CommandArgument/CommandArgument.inc"
 
 !!... GURU Functions associated with arguments
-#include "GURU/GURU_Argument.inc"
-
-!!... GURU Functions associated with messages
-#include "GURU/GURU_Message.inc"
+#include "InfoArg/InfoArg.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module
