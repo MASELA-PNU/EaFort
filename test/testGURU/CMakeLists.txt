@@ -1,8 +1,8 @@
 set(ITEM_TYPE "test")
-set(ITEM_NAME "InfoFortran")
+set(ITEM_NAME "GURU")
 set(SRC_${ITEM_NAME}
-    src/testInfoFortranModule.F90
-    src/testInfoFortran.F90
+    src/testGURUModule.F90
+    src/testGURU.F90
 )
 
 set(DEPEND_${ITEM_NAME}

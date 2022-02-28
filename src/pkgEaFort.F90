@@ -11,7 +11,7 @@ Module pkgEaFort
 !! -------------------------------------------------------------------------- !!
 
     Use modEaFort       !!... Global Variables
-    Use modInfoFortran  !!... Info Module
+    Use modGURU         !!... GURU Module
     Use modJSON         !!... JSON Module
     Use modString       !!... String Module
     Use modOS           !!... OS Module

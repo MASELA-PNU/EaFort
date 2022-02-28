@@ -1,6 +1,6 @@
-set(ITEM_NAME "InfoFortran")
+set(ITEM_NAME "GURU")
 set(SRC_CURRENT_${ITEM_NAME}
-    src/modInfoFortran.F90
+    src/modGURU.F90
 )
 
 foreach( SUB_SRC_NAME IN LISTS SRC_CURRENT_${ITEM_NAME} )

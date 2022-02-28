@@ -1,4 +1,4 @@
-Type typInfoArg
+Type typArgGURU
 
     !!... Project name
     Type(string) :: projectName
@@ -32,16 +32,16 @@ Contains
 !!... Argument Handling --------------------------------------------------------
 
     !!... Initialize the description
-    Procedure :: Initialize => Initialize_typInfoArg
+    Procedure :: Initialize => Initialize_typArgGURU
 
     !!... Add Argument
-    Procedure :: AddKey => AddKey_typInfoArg
+    Procedure :: AddKey => AddKey_typArgGURU
 
     !!... Update Arguments
-    Procedure :: Update => Update_typInfoArg
+    Procedure :: Update => Update_typArgGURU
 
     !!... Found Key
-    Procedure :: IsFoundKey => IsFoundKey_typInfoArg
+    Procedure :: IsFoundKey => IsFoundKey_typArgGURU
 
     ! !!... Get the number of argument
     ! Procedure :: GetNArgument => GetNArgument_typInfoArg
@@ -53,18 +53,18 @@ Contains
     ! Procedure :: GetArgumentOrDefault => GetArgumentOrDefault_typInfoArg
 
     !!... Update and Print
-    Procedure :: UpdateAndPrint => UpdateAndPrint_typInfoArg
+    Procedure :: UpdateAndPrint => UpdateAndPrint_typArgGURU
 
     !!... Print the description
-    Procedure :: PrintDescription => PrintDescription_typInfoArg
+    Procedure :: PrintDescription => PrintDescription_typArgGURU
 
     !!... Print Help
-    Procedure :: PrintHelp => PrintHelp_typInfoArg
+    Procedure :: PrintHelp => PrintHelp_typArgGURU
 
     !!... Print the description
-    Procedure :: PrintGivenKey => PrintGivenKey_typInfoArg
+    Procedure :: PrintGivenKey => PrintGivenKey_typArgGURU
 
     !!... Destroy the class
-    Procedure :: Destroy => Destroy_typInfoArg
+    Procedure :: Destroy => Destroy_typArgGURU
 
 End Type

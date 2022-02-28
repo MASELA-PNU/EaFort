@@ -10,7 +10,7 @@ Subroutine CreateDir( dirPath, isError, isExist, isCreate )
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_, isExist_, isCreate_
 
-    isError_  = .TRUE.
+    isError_  = .FALSE.
     isExist_  = .FALSE.
     isCreate_ = .FALSE.
 
@@ -30,7 +30,8 @@ Subroutine CreateDir( dirPath, isError, isExist, isCreate )
             !!... Check the directory is created
             isCreate_ = IsExistDir( dirPath )
         End if
-
+    else
+        isError_ = .TRUE.
     end if
 
     If ( Present(isError) ) isError = isError_

@@ -1,0 +1,8 @@
+Interface WriteMessage
+    Procedure :: WriteMessage
+End Interface
+
+
+Interface WritePrefixMessage
+    Procedure :: WritePrefixMessage
+End Interface

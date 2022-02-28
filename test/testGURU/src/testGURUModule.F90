@@ -1,24 +1,34 @@
 !! -------------------------------------------------------------------------- !!
-!! EaFort:testGURU
+!! EaFort:testGURUModule
 !! -------------------------------------------------------------------------- !!
-!! Testing Program of InfoFortran Module
+!! Testing Program of GURU Module
 !!
 !!   Author: Young-Myung Choi
 !!   Date  : 2021-12-09
 !!
 !! -------------------------------------------------------------------------- !!
-Program testInfoFortran
+Module testGURUModule
 !! -------------------------------------------------------------------------- !!
 
-    Use testInfoFortranModule
+    Use pkgEaFort
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
-    !!... Test InfoArg
-    Call Test_InfoArg()
+!! -------------------------------------------------------------------------- !!
+Contains
+!! -------------------------------------------------------------------------- !!
+
+!!... Test Writing Functions
+#include "tests/test_GURUauxilary.inc"
+
+!!... Test Arg GURU
+#include "tests/test_argGURU.inc"
+
+!!... Test Log GURU
+#include "tests/test_logGURU.inc"
 
 !! -------------------------------------------------------------------------- !!
-End Program
+End Module
 !! -------------------------------------------------------------------------- !!

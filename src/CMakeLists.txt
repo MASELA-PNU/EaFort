@@ -10,7 +10,7 @@ set(SRC_${ITEM_NAME}
 set(LIST_SUB_ITEM_NAME
     string
     JSON
-    InfoFortran
+    GURU
     OS
 )
 

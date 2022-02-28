@@ -1,11 +1,11 @@
 !! -------------------------------------------------------------------------- !!
-Subroutine Test_InfoArg()
+Subroutine Test_ArgGURU()
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
     !!... Initizlize Description
-    Call InfoArg%Initialize( &
+    Call argGURU%Initialize( &
     &   projectName = "Test_GURU_Argument", &
     &   description = "Testing the GURU argment \\&
                     &Test Line1", &
@@ -15,7 +15,7 @@ Implicit None
     &   version     = "0.0.1"               )
 
     !!... Add Arguments
-    Call InfoArg%AddKey( &
+    Call argGURU%AddKey( &
     &   key           = "input",              &
     &   singleKey     = "i",                  &
     &   description   = "Input File Path",    &
@@ -23,21 +23,21 @@ Implicit None
     &   nRequiredArg  = 1                     )
 
     !!... Add Arguments
-    Call InfoArg%AddKey(             &
+    Call argGURU%AddKey(             &
     &   key           = "output",             &
     &   singleKey     = "o",                  &
     &   description   = "Output File Path",   &
     &   isRequiredKey = .FALSE.               )
 
     !!... Add Arguments
-    Call InfoArg%AddKey(                   &
+    Call argGURU%AddKey(                   &
     &   key           = "print",                    &
     &   singleKey     = "p",                        &
     &   description   = "Test another argument",    &
     &   isRequiredKey = .FALSE.                     )
 
     !!... Update Key
-    Call InfoArg%UpdateAndPrint()
+    Call argGURU%UpdateAndPrint()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
