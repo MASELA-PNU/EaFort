@@ -41,10 +41,10 @@ Implicit None
     Character(len=6), Parameter, Private :: INDENT3 = "      "
     Character(len=8), Parameter, Private :: INDENT4 = "        "
 
-    Character(len=LEN_COLOR), Parameter, Private :: ERROR_COLOR = "RED_INTENSE"
-    Character(len=LEN_COLOR), Parameter, Private :: WARN_COLOR  = "YELLOW_INTENSE"
-    Character(len=LEN_COLOR), Parameter, Private :: DEBUG_COLOR = "CYAN_INTENSE"
-    Character(len=LEN_COLOR), Parameter, Private :: HEAD_COLOR  = "GREEN"
+    Character(len=LEN_COLOR), Parameter, Private :: COLOR_ERROR = "RED_INTENSE"
+    Character(len=LEN_COLOR), Parameter, Private :: COLOR_WARN  = "YELLOW_INTENSE"
+    Character(len=LEN_COLOR), Parameter, Private :: COLOR_DEBUG = "CYAN_INTENSE"
+    Character(len=LEN_COLOR), Parameter, Private :: COLOR_HEAD  = "GREEN"
 
     !!... Log File Max
     Integer, Parameter :: N_MAX_LOG_FILE = 100
@@ -65,14 +65,16 @@ Implicit None
 #include "argGURU/CommandArgument/CommandArgument.typ"
 
 !!... Arguments GURU Class Definition
-#include "argGURU/argGURU.typ"
+!#include "argGURU/argGURU.typ"
 
-    Type(typArgGURU), target :: argGURU
+    ! Type(typArgGURU), target :: argGURU
 
 !!... Arguments GURU Class Definition
-#include "logGURU/logGURU.typ"
+! #include "logGURU/logGURU.typ"
 
-    Type(typLogGURU), target :: logGURU
+#include "GURU.typ"
+
+    Type(typGURU), target :: GURU
 
 
 !! -------------------------------------------------------------------------- !!

@@ -78,7 +78,7 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     prefixColor_ = ""
     headColor    = ""
     If (isColor_) then
-        headColor   = HEAD_COLOR
+        headColor   = COLOR_HEAD
         If ( Present(prefixColor) ) prefixColor_ = prefixColor
     end if
 

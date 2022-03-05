@@ -5,7 +5,7 @@ Implicit None
 !! -------------------------------------------------------------------------- !!
 
     !!... Initizlize Description
-    Call argGURU%Initialize( &
+    Call GURU%Initialize_ARG( &
     &   projectName = "Test_GURU_Argument", &
     &   description = "Testing the GURU argment \\&
                     &Test Line1", &
@@ -15,7 +15,7 @@ Implicit None
     &   version     = "0.0.1"               )
 
     !!... Add Arguments
-    Call argGURU%AddKey( &
+    Call GURU%AddKey( &
     &   key           = "input",              &
     &   singleKey     = "i",                  &
     &   description   = "Input File Path",    &
@@ -23,21 +23,21 @@ Implicit None
     &   nRequiredArg  = 1                     )
 
     !!... Add Arguments
-    Call argGURU%AddKey(             &
+    Call GURU%AddKey(             &
     &   key           = "output",             &
     &   singleKey     = "o",                  &
     &   description   = "Output File Path",   &
     &   isRequiredKey = .FALSE.               )
 
     !!... Add Arguments
-    Call argGURU%AddKey(                   &
+    Call GURU%AddKey(                   &
     &   key           = "print",                    &
     &   singleKey     = "p",                        &
     &   description   = "Test another argument",    &
     &   isRequiredKey = .FALSE.                     )
 
     !!... Update Key
-    Call argGURU%UpdateAndPrint()
+    Call GURU%UpdateAndPrint()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine

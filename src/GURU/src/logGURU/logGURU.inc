@@ -1,10 +1,10 @@
 !! -------------------------------------------------------------------------- !!
-Subroutine Initialize_typLogGURU( &
+Subroutine LOG_Initialize_typGURU( &
     & this, logFilePath, isDebug, isColor, MPI_isMaster )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typLogGURU), intent(inout)        :: this
+    Class(typGURU), intent(inout)        :: this
     Character(len=*), intent(in), Optional  :: logFilePath
     Logical, intent(in), Optional           :: isDebug
     Logical, intent(in), Optional           :: isColor
@@ -41,12 +41,12 @@ Subroutine Initialize_typLogGURU( &
             this%logFilePath_ = logFilePath
         else
             Call WritePrefixMessage( &
-            &   prefix      = PREIX_ERROR,              &
-            &   prefixColor = ERROR_COLOR,              &
-            &   head        = "Initialize_typLogGURU",  &
-            &   msg         = "Given 'logFilePath' is less than 0.", &
-            &   isColor     = this%isColor_,            &
-            &   isStop      = .TRUE.                    )
+            &   prefix      = PREIX_ERROR,                              &
+            &   prefixColor = COLOR_ERROR,                              &
+            &   head        = "LOG_Initialize_typGURU",                 &
+            &   msg         = "Given 'logFilePath' is less than 0.",    &
+            &   isColor     = this%isColor_,                            &
+            &   isStop      = .TRUE.                                    )
         End if
 
     end If
@@ -67,8 +67,8 @@ Subroutine Initialize_typLogGURU( &
         If ( isFileOpen.EQV..TRUE. ) then
             Call WritePrefixMessage( &
             &   prefix      = PREIX_ERROR,              &
-            &   prefixColor = ERROR_COLOR,              &
-            &   head        = "Initialize_typLogGURU",  &
+            &   prefixColor = COLOR_ERROR,              &
+            &   head        = "LOG_Initialize_typGURU",  &
             &   msg         = "Given log file is already opened.", &
             &   isColor     = this%isColor_,            &
             &   isStop      = .TRUE.                    )
@@ -91,8 +91,8 @@ Subroutine Initialize_typLogGURU( &
                 If ( (isError.EQV..TRUE.).OR.(isCreate.EQV..FALSE.) ) then
                     Call WritePrefixMessage( &
                     &   prefix      = PREIX_ERROR,              &
-                    &   prefixColor = ERROR_COLOR,              &
-                    &   head        = "Initialize_typLogGURU",  &
+                    &   prefixColor = COLOR_ERROR,              &
+                    &   head        = "LOG_Initialize_typGURU",  &
                     &   msg         = "Failed to create the directory for log file.", &
                     &   errValue    = baseDir,                  &
                     &   isColor     = this%isColor_,            &
@@ -128,8 +128,8 @@ Subroutine Initialize_typLogGURU( &
                 if ( isOpened.EQV..TRUE. ) then
                     Call WritePrefixMessage( &
                     &   prefix      = PREIX_ERROR,              &
-                    &   prefixColor = ERROR_COLOR,              &
-                    &   head        = "Initialize_typLogGURU",  &
+                    &   prefixColor = COLOR_ERROR,              &
+                    &   head        = "LOG_Initialize_typGURU",  &
                     &   msg         = "Given 'logFilePath' is already opened.", &
                     &   errValue    = this%logFilePath_,        &
                     &   isColor     = this%isColor_,            &
@@ -149,8 +149,8 @@ Subroutine Initialize_typLogGURU( &
                         If (ios.ne.0) then
                             Call WritePrefixMessage( &
                             &   prefix      = PREIX_ERROR,              &
-                            &   prefixColor = ERROR_COLOR,              &
-                            &   head        = "Initialize_typLogGURU",  &
+                            &   prefixColor = COLOR_ERROR,              &
+                            &   head        = "LOG_Initialize_typGURU",  &
                             &   msg         = "Failed to convert the integer.", &
                             &   isColor     = this%isColor_,            &
                             &   isStop      = .TRUE.                    )
@@ -170,8 +170,8 @@ Subroutine Initialize_typLogGURU( &
                         If ( iFIle.EQ.N_MAX_LOG_FILE ) then
                             Call WritePrefixMessage( &
                             &   prefix      = PREIX_ERROR,              &
-                            &   prefixColor = ERROR_COLOR,              &
-                            &   head        = "Initialize_typLogGURU",  &
+                            &   prefixColor = COLOR_ERROR,              &
+                            &   head        = "LOG_Initialize_typGURU",  &
                             &   msg         = "Too many log files. Please delete them.", &
                             &   isColor     = this%isColor_,            &
                             &   isStop      = .TRUE.                    )
@@ -192,7 +192,7 @@ Subroutine Initialize_typLogGURU( &
 
         !!... Create Log File
         Open( &
-        &   newunit = this%fid_,         &
+        &   newunit = this%logUnit_,     &
         &   file    = this%logFilePath_, &
         &   status  = "replace"          )
 
@@ -209,37 +209,37 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ToggleDebugMode_typLogGURU( this, isDebug )
+Subroutine LOG_ToggleDebugMode_typGURU( this, isDebug )
     Implicit None
-    Class(typLogGURU), intent(inout) :: this
+    Class(typGURU), intent(inout) :: this
     Logical, intent(in)              :: isDebug
     this%isDebug_ = isDebug
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ToggleColorMode_typLogGURU( this, isColor )
+Subroutine LOG_ToggleColorMode_typGURU( this, isColor )
     Implicit None
-    Class(typLogGURU), intent(inout) :: this
+    Class(typGURU), intent(inout) :: this
     Logical, intent(in)              :: isColor
     this%isColor_ = isColor
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ToggleIsMaster_typLogGURU( this, isMaster )
+Subroutine LOG_ToggleIsMaster_typGURU( this, isMaster )
     Implicit None
-    Class(typLogGURU), intent(inout) :: this
+    Class(typGURU), intent(inout) :: this
     Logical, intent(in)              :: isMaster
     this%MPI_isMaster = isMaster
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine Write_typLogGURU( this, msg, color, nSpace, isAdvance )
+Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typLogGURU), intent(in)          :: this
+    Class(typGURU), intent(in)          :: this
     Character(len=*), intent(in)           :: msg
     Character(len=*), intent(in), Optional :: color
     Integer, intent(in), Optional          :: nSpace
@@ -276,7 +276,7 @@ Subroutine Write_typLogGURU( this, msg, color, nSpace, isAdvance )
             If ( this%MPI_isMaster ) then
                 Call WriteMessage( &
                 &   msg       = tmpMsg,         &
-                &   unit      = this%fid_,      &
+                &   unit      = this%logUnit_,  &
                 &   color     = color           )
             else
                 Call WriteMessage(              &
@@ -287,7 +287,7 @@ Subroutine Write_typLogGURU( this, msg, color, nSpace, isAdvance )
             If ( this%MPI_isMaster ) then
                 Call WriteMessage( &
                 &   msg       = tmpMsg,         &
-                &   unit      = this%fid_,      &
+                &   unit      = this%logUnit_,  &
                 &   color     = color,          &
                 &   isAdvance = isAdvance       )
             else
@@ -316,10 +316,10 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine WriteDebug_typLogGURU( this, msg, color, nSpace, isAdvance )
+Subroutine LOG_WriteDebug_typGURU( this, msg, color, nSpace, isAdvance )
 !! -------------------------------------------------------------------------- !!
 Implicit None
-Class(typLogGURU), intent(in)          :: this
+Class(typGURU), intent(in)          :: this
 Character(len=*), intent(in)           :: msg
 Character(len=*), intent(in), Optional :: color
 Integer, intent(in), Optional          :: nSpace
@@ -337,10 +337,10 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine Error_typLogGURU( this, msg, head, value, refValue, isStop )
+Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typLogGURU), intent(in)          :: this
+    Class(typGURU), intent(in)             :: this
     Character(len=*), intent(in)           :: msg
     Character(len=*), intent(in), Optional :: head
     Class(*), intent(in), Optional         :: value
@@ -365,12 +365,12 @@ Subroutine Error_typLogGURU( this, msg, head, value, refValue, isStop )
     !!... Write Message
     Call WritePrefixMessage( &
     &   prefix      = PREIX_ERROR,      &
-    &   prefixColor = ERROR_COLOR,      &
+    &   prefixColor = COLOR_ERROR,      &
     &   msg         = msg,              &
     &   head        = head,             &
     &   errValue    = valueChar,        &
     &   refValue    = refValueChar,     &
-    &   unit        = this%fid_,        &
+    &   unit        = this%logUnit_,    &
     &   isColor     = this%isColor_,    &
     &   isStop      = isStop            )
 
@@ -385,10 +385,10 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine Warn_typLogGURU( this, msg, head, value, refValue )
+Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typLogGURU), intent(in)          :: this
+    Class(typGURU), intent(in)          :: this
     Character(len=*), intent(in)           :: msg
     Character(len=*), intent(in), Optional :: head
     Class(*), intent(in), Optional         :: value
@@ -412,12 +412,12 @@ Subroutine Warn_typLogGURU( this, msg, head, value, refValue )
     !!... Write Message
     Call WritePrefixMessage( &
     &   prefix      = PREIX_WARN,       &
-    &   prefixColor = WARN_COLOR,       &
+    &   prefixColor = COLOR_WARN,       &
     &   msg         = msg,              &
     &   head        = head,             &
     &   errValue    = valueChar,        &
     &   refValue    = refValueChar,     &
-    &   unit        = this%fid_,        &
+    &   unit        = this%logUnit_,    &
     &   isColor     = this%isColor_,    &
     &   isStop      = .FALSE.           )
 
@@ -432,10 +432,10 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine Debug_typLogGURU( this, msg, head, value, refValue )
+Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typLogGURU), intent(in)          :: this
+    Class(typGURU), intent(in)          :: this
     Character(len=*), intent(in)           :: msg
     Character(len=*), intent(in), Optional :: head
     Class(*), intent(in), Optional         :: value
@@ -461,12 +461,12 @@ Subroutine Debug_typLogGURU( this, msg, head, value, refValue )
         !!... Write Message
         Call WritePrefixMessage( &
         &   prefix      = PREIX_DEBUG,      &
-        &   prefixColor = DEBUG_COLOR,      &
+        &   prefixColor = COLOR_DEBUG,      &
         &   msg         = msg,              &
         &   head        = head,             &
         &   errValue    = valueChar,        &
         &   refValue    = refValueChar,     &
-        &   unit        = this%fid_,        &
+        &   unit        = this%logUnit_,    &
         &   isColor     = this%isColor_,    &
         &   isStop      = .FALSE.           )
 
@@ -483,22 +483,22 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine Flush_typLogGURU(this)
+    Subroutine LOG_Flush_typGURU(this)
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typLogGURU), intent(in) :: this
+    Class(typGURU), intent(in) :: this
 !! -------------------------------------------------------------------------- !!
-    if ( this%isLogFile_ ) Flush(this%fid_)
+    if ( this%isLogFile_ ) Flush(this%logUnit_)
 !! -------------------------------------------------------------------------- !!
     End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine Destroy_typLogGURU(this)
+    Subroutine LOG_Destroy_typGURU(this)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typLogGURU), intent(inout) :: this
+    Class(typGURU), intent(inout) :: this
 !! -------------------------------------------------------------------------- !!
     Call this%Flush()   !!... Write Log file
 
@@ -509,7 +509,7 @@ End Subroutine
     this%logFilePath_ = ""
 
     !!... Default Output
-    this%fid_ = 11
+    this%logUnit_ = 11
 
     !!... Is Debug Mode (Write the message when the debug mode is enabled)
     this%isDebug_ = .FALSE.

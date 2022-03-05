@@ -20,10 +20,10 @@ Implicit None
     ! Call Test_GURUAuxilary()
 
     !!... Test Log GURU
-    Call Test_LogGURU()
+    ! Call Test_LogGURU()
 
     !!... Test Argument GURU
-    !! Call Test_ArgGURU()
+     Call Test_ArgGURU()
 
 !! -------------------------------------------------------------------------- !!
 End Program
