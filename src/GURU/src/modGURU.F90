@@ -55,6 +55,9 @@ Implicit None
 !!... Separate Path
 #include "auxiliary/SeparatePath.proc"
 
+!!... Get String from arbitrary input
+#include "auxiliary/GetCharFromClass.proc"
+
     !!... Private
     ! Private :: WriteMessage, WritePrefixMessage
 
@@ -81,6 +84,9 @@ Contains
 
 !!... Separate Path
 #include "auxiliary/SeparatePath.inc"
+
+!!... Get String from arbitrary input
+#include "auxiliary/GetCharFromClass.inc"
 
 !!... Arguments Class Functions
 #include "argGURU/CommandArgument/CommandArgument.inc"

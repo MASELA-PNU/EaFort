@@ -1,25 +1,44 @@
 !! -------------------------------------------------------------------------- !!
-Subroutine WriteMessage(msg, unit, color)
+Subroutine WriteMessage(msg, unit, color, isAdvance)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Character(len=*), intent(in)            :: msg
     Integer, intent(in), optional           :: unit
     Character(len=*), intent(in), optional  :: color
+    Logical, intent(in), Optional           :: isAdvance
 !! -------------------------------------------------------------------------- !!
     Integer :: unit_
     Character(len=LEN_COLOR) :: color_
+    Logical :: isAdvance_
+    Character(len=:), Allocatable :: wrtMessage
 
-    unit_  = 6
-    color_ = ""
-    If ( Present(unit) )  unit_ = unit
-    If ( Present(color) ) color_ = color
+    unit_      = 6
+    color_     = ""
+    isAdvance_ = .TRUE.
+    If ( Present(unit) )  unit_          = unit
+    If ( Present(color) ) color_         = color
+    If ( Present(isAdvance) ) isAdvance_ = isAdvance
 
     If ( unit_.ne.6 ) then
-        write(unit_, msg) msg
-        write(*, msg) Colorize(msg, color_)
+        If ( isAdvance_.EQV..TRUE. ) then
+            write(unit_, "(a)" ) msg
+        else
+            write(unit_, "(a)", advance = "no") msg
+        end if
+    end if
+
+
+    if ( present(color) ) then
+        wrtMessage = Colorize(msg, color)
     else
-        write(*, msg) Colorize(msg, color_)
+        wrtMessage = msg
+    end if
+
+    If ( isAdvance_.EQV..TRUE. ) then
+        write(*, "(a)" ) wrtMessage
+    else
+        write(*, "(a)", advance = "no") wrtMessage
     end if
 
 !! -------------------------------------------------------------------------- !!
@@ -27,14 +46,14 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine WritePrefixMessage( prefix, prefixColor, head, msg, &
+Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     &   errValue, refValue, unit, isColor, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Character(len=*), intent(in)            :: prefix
-    Character(len=*), intent(in)            :: head
     Character(len=*), intent(in)            :: msg
+    Character(len=*), intent(in), Optional  :: head
     Character(len=*), intent(in), Optional  :: errValue
     Character(len=*), intent(in), Optional  :: refValue
     Integer, intent(in), optional           :: unit
@@ -45,10 +64,10 @@ Subroutine WritePrefixMessage( prefix, prefixColor, head, msg, &
     Logical :: isColor_
     Character(LEN_COLOR) :: prefixColor_, headColor
     Integer :: unit_
-    type(string)              :: str
+    type(string)              :: str, headStr
     type(string), Allocatable :: strVect(:)
     Integer :: nMsgLine, iMsg
-    Logical :: isStop_
+    Logical :: isStop_, isEndEmptyLine
 
     isColor_ = .FALSE.
     if ( Present(isColor) ) isColor_ = isColor
@@ -70,12 +89,23 @@ Subroutine WritePrefixMessage( prefix, prefixColor, head, msg, &
     Call str%Split( tokens = strVect, sep = lineSep )
     nMsgLine =  size(strVect)
 
+    headStr = ""
+    if ( present(head) ) headStr = head
+
+    isEndEmptyLine = .FALSE.
+    if (present(errValue)) then
+        if (len_trim(errValue).ge.1) isEndEmptyLine = .TRUE.
+    end if
+
+    if (present(refValue)) then
+        if (len_trim(refValue).ge.1) isEndEmptyLine = .TRUE.
+    end if
+
+    !!----- File
     If ( unit_.ne.6 ) then
 
-        !!----- File
-
         !!... Write Header
-        Write(unit_,"(a)") prefix//head
+        Write(unit_,"(a)") prefix//headStr%Chars()
         write(unit_,"(a)")
 
         !!... Write Message (Line Separated)
@@ -86,65 +116,63 @@ Subroutine WritePrefixMessage( prefix, prefixColor, head, msg, &
 
         !!... Write Given Value
         If ( Present(errValue) ) then
-            write(unit_,"(a)") INDENT//PREFIX_GIVEN//errValue
+            if (len_trim(errValue).ge.1) write(unit_,"(a)") INDENT//PREFIX_GIVEN//errValue
+
         End if
 
         !!... Write Reference Value
-        If ( Present(errValue) ) then
-            write(unit_,"(a)") INDENT//PREFIX_REF//refValue
+        If ( Present(refValue) ) then
+            if (len_trim(refValue).ge.1) write(unit_,"(a)") INDENT//PREFIX_REF//refValue
         End if
 
-        !!----- Command Windows
+        if ( isEndEmptyLine ) then
+            write(unit_,"(a)")
+        end if
 
-        !!... Write Header
-        Write(*,"(a)") Colorize(prefix, prefixColor_)//Colorize(head, headColor)
-        write(*,"(a)")
-
-        !!... Write Message (Line Separated)
-        do iMsg = 1, nMsgLine
-            write(*,"(a)") INDENT//strVect(iMsg)%Chars()
-        end do
-        write(*,"(a)")
-
-        !!... Write Given Value
-        If ( Present(errValue) ) then
-            write(*,"(a)") INDENT//PREFIX_GIVEN//errValue
-        End if
-
-        !!... Write Reference Value
-        If ( Present(errValue) ) then
-            write(*,"(a)") INDENT//PREFIX_REF//refValue
-        End if
-
-    else
-
-        !!... Write Header
-        Write(*,"(a)") Colorize(prefix, prefixColor)//Colorize(head, headColor)
-        write(*,"(a)")
-
-        !!... Write Message (Line Separated)
-        do iMsg = 1, nMsgLine
-            write(*,"(a)") INDENT//strVect(iMsg)%Chars()
-        end do
-        write(*,"(a)")
-
-        !!... Write Given Value
-        If ( Present(errValue) ) then
-            write(*,"(a)") INDENT//PREFIX_GIVEN//errValue
-        End if
-
-        !!... Write Reference Value
-        If ( Present(errValue) ) then
-            write(*,"(a)") INDENT//PREFIX_REF//refValue
-        End if
     end if
-    write(*,"(a)")
+
+    !!----- Command Windows
+    Block
+
+        !!... Write Header
+        Write(*,"(a)") Colorize(prefix, prefixColor_)//Colorize(headStr%Chars(), headColor)
+        write(*,"(a)")
+
+        !!... Write Message (Line Separated)
+        do iMsg = 1, nMsgLine
+            write(*,"(a)") INDENT//strVect(iMsg)%Chars()
+        end do
+        write(*,"(a)")
+
+        !!... Write Given Value
+        If ( Present(errValue) ) then
+            if (len_trim(errValue).ge.1) write(*,"(a)") INDENT//PREFIX_GIVEN//errValue
+        End if
+
+        !!... Write Reference Value
+        If ( Present(refValue) ) then
+            if (len_trim(refValue).ge.1) write(*,"(a)") INDENT//PREFIX_REF//refValue
+        End if
+
+        if ( isEndEmptyLine ) then
+            write(*,"(a)")
+        end if
+
+    End Block
 
     If ( isStop_ ) then
         write(*,"(a)") "Please insert any key to exit."
         read(*,*)
         Stop
     End If
+
+    !!... Free the memory
+    Call str%Free()
+    Call headStr%Free()
+    do iMsg = 1, nMsgLine
+        Call strVect%Free()
+    end do
+    If (Allocated(strVect)) deallocate(strVect)
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine

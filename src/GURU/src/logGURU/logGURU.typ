@@ -35,11 +35,29 @@ Contains
     !!... Toggle Color Mode
     Procedure :: ToggleColorMode => ToggleColorMode_typLogGURU
 
-    ! !!... Flush File IO
-    ! Procedure :: Flush => Flush_typLogGURU
-    !
-    ! !!... Destroy
-    ! Procedure :: Destroy => Destroy_typLogGURU
+    !!... Toggle isMaster
+    Procedure :: ToggleIsMaster => ToggleIsMaster_typLogGURU
+
+    !!... Write Message
+    Procedure :: Write => Write_typLogGURU
+
+    !!... Write Message
+    Procedure :: WriteDebug => WriteDebug_typLogGURU
+
+    !!... Write Message
+    Procedure :: Error => Error_typLogGURU
+
+    !!... Write Message
+    Procedure :: Warn => Warn_typLogGURU
+
+    !!... Write Message
+    Procedure :: Debug => Debug_typLogGURU
+
+    !!... Flush File IO
+    Procedure :: Flush => Flush_typLogGURU
+
+    !!... Destroy
+    Procedure :: Destroy => Destroy_typLogGURU
 
 !! -------------------------------------------------------------------------- !!
 End Type

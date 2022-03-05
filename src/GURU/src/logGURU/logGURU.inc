@@ -225,3 +225,301 @@ Subroutine ToggleColorMode_typLogGURU( this, isColor )
     this%isColor_ = isColor
 End Subroutine
 !! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ToggleIsMaster_typLogGURU( this, isMaster )
+    Implicit None
+    Class(typLogGURU), intent(inout) :: this
+    Logical, intent(in)              :: isMaster
+    this%MPI_isMaster = isMaster
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine Write_typLogGURU( this, msg, color, nSpace, isAdvance )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typLogGURU), intent(in)          :: this
+    Character(len=*), intent(in)           :: msg
+    Character(len=*), intent(in), Optional :: color
+    Integer, intent(in), Optional          :: nSpace
+    Logical, intent(in), Optional          :: isAdvance
+!! -------------------------------------------------------------------------- !!
+    type(string)              :: str
+    type(string), Allocatable :: strVect(:)
+    Character(len=:), Allocatable :: prefix, tmpMsg
+    Logical :: isSpace
+    Integer :: iMsg, nMsgLine
+
+    !!... Separate message with line separator
+    str = msg
+    Call str%Split( tokens = strVect, sep = lineSep )
+    nMsgLine =  size(strVect)
+
+    !!... Set space before writing the message
+    isSpace = .FALSE.
+    if ( present(nSpace) ) then
+        if (nSpace.ge.1) then
+            Allocate( character(nSpace) :: prefix )
+            prefix(:) = " "
+            isSpace   = .TRUE.
+        end if
+    end if
+
+    !!... Write each lines
+    do iMsg = 1, nMsgLine
+
+        tmpMsg = strVect(iMsg)%Chars()
+        if ( isSpace ) tmpMsg = prefix//tmpMsg
+
+        if ( iMsg.lt.nMsgLine ) then
+            If ( this%MPI_isMaster ) then
+                Call WriteMessage( &
+                &   msg       = tmpMsg,         &
+                &   unit      = this%fid_,      &
+                &   color     = color           )
+            else
+                Call WriteMessage(              &
+                &   msg       = tmpMsg,         &
+                &   color     = color           )
+            end if
+        else
+            If ( this%MPI_isMaster ) then
+                Call WriteMessage( &
+                &   msg       = tmpMsg,         &
+                &   unit      = this%fid_,      &
+                &   color     = color,          &
+                &   isAdvance = isAdvance       )
+            else
+                Call WriteMessage(              &
+                &   msg       = tmpMsg,         &
+                &   color     = color,          &
+                &   isAdvance = isAdvance       )
+            end if
+        end if
+
+        If (Allocated(tmpMsg)) Deallocate(tmpMsg)
+
+    end do
+
+    If (Allocated(prefix)) Deallocate(prefix)
+
+    !!... Free the memory
+    Call str%Free()
+    do iMsg = 1, nMsgLine
+        Call strVect%Free()
+    end do
+    If (Allocated(strVect)) deallocate(strVect)
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine WriteDebug_typLogGURU( this, msg, color, nSpace, isAdvance )
+!! -------------------------------------------------------------------------- !!
+Implicit None
+Class(typLogGURU), intent(in)          :: this
+Character(len=*), intent(in)           :: msg
+Character(len=*), intent(in), Optional :: color
+Integer, intent(in), Optional          :: nSpace
+Logical, intent(in), Optional          :: isAdvance
+!! -------------------------------------------------------------------------- !!
+    If ( this%isDebug_ ) then
+        Call this%Write( &
+        &   msg       = msg,        &
+        &   color     = color,      &
+        &   nSpace    = nSpace,     &
+        &   isAdvance = isAdvance   )
+    end if
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine Error_typLogGURU( this, msg, head, value, refValue, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typLogGURU), intent(in)          :: this
+    Character(len=*), intent(in)           :: msg
+    Character(len=*), intent(in), Optional :: head
+    Class(*), intent(in), Optional         :: value
+    Class(*), intent(in), Optional         :: refValue
+    Logical, intent(in), Optional          :: isStop
+!! -------------------------------------------------------------------------- !!
+    Type(string) :: valueStr, refValueStr
+    Character(len=:), Allocatable :: valueChar, refValueChar
+
+    !!... Convert values
+    valueChar = ""
+    if ( present(value) ) then
+        Call GetStrFromClass(value, valueStr)
+        valueChar    = valueStr%Chars()
+    end if
+
+    if ( present(refValue) ) then
+        Call GetStrFromClass(refValue, refValueStr)
+        refValueChar = refValueStr%Chars()
+    end if
+
+    !!... Write Message
+    Call WritePrefixMessage( &
+    &   prefix      = PREIX_ERROR,      &
+    &   prefixColor = ERROR_COLOR,      &
+    &   msg         = msg,              &
+    &   head        = head,             &
+    &   errValue    = valueChar,        &
+    &   refValue    = refValueChar,     &
+    &   unit        = this%fid_,        &
+    &   isColor     = this%isColor_,    &
+    &   isStop      = isStop            )
+
+    !!... Free the memory
+    If ( Allocated(valueChar) ) Deallocate(valueChar)
+    If ( Allocated(refValueChar) ) Deallocate(refValueChar)
+    Call valueStr%Free()
+    Call refValueStr%Free()
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine Warn_typLogGURU( this, msg, head, value, refValue )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typLogGURU), intent(in)          :: this
+    Character(len=*), intent(in)           :: msg
+    Character(len=*), intent(in), Optional :: head
+    Class(*), intent(in), Optional         :: value
+    Class(*), intent(in), Optional         :: refValue
+!! -------------------------------------------------------------------------- !!
+    Type(string) :: valueStr, refValueStr
+    Character(len=:), Allocatable :: valueChar, refValueChar
+
+    !!... Convert values
+    valueChar = ""
+    if ( present(value) ) then
+        Call GetStrFromClass(value, valueStr)
+        valueChar    = valueStr%Chars()
+    end if
+
+    if ( present(refValue) ) then
+        Call GetStrFromClass(refValue, refValueStr)
+        refValueChar = refValueStr%Chars()
+    end if
+
+    !!... Write Message
+    Call WritePrefixMessage( &
+    &   prefix      = PREIX_WARN,       &
+    &   prefixColor = WARN_COLOR,       &
+    &   msg         = msg,              &
+    &   head        = head,             &
+    &   errValue    = valueChar,        &
+    &   refValue    = refValueChar,     &
+    &   unit        = this%fid_,        &
+    &   isColor     = this%isColor_,    &
+    &   isStop      = .FALSE.           )
+
+    !!... Free the memory
+    If ( Allocated(valueChar) ) Deallocate(valueChar)
+    If ( Allocated(refValueChar) ) Deallocate(refValueChar)
+    Call valueStr%Free()
+    Call refValueStr%Free()
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine Debug_typLogGURU( this, msg, head, value, refValue )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typLogGURU), intent(in)          :: this
+    Character(len=*), intent(in)           :: msg
+    Character(len=*), intent(in), Optional :: head
+    Class(*), intent(in), Optional         :: value
+    Class(*), intent(in), Optional         :: refValue
+!! -------------------------------------------------------------------------- !!
+    Type(string) :: valueStr, refValueStr
+    Character(len=:), Allocatable :: valueChar, refValueChar
+
+    If ( this%isDebug_ ) then
+
+        !!... Convert values
+        valueChar = ""
+        if ( present(value) ) then
+            Call GetStrFromClass(value, valueStr)
+            valueChar    = valueStr%Chars()
+        end if
+
+        if ( present(refValue) ) then
+            Call GetStrFromClass(refValue, refValueStr)
+            refValueChar = refValueStr%Chars()
+        end if
+
+        !!... Write Message
+        Call WritePrefixMessage( &
+        &   prefix      = PREIX_DEBUG,      &
+        &   prefixColor = DEBUG_COLOR,      &
+        &   msg         = msg,              &
+        &   head        = head,             &
+        &   errValue    = valueChar,        &
+        &   refValue    = refValueChar,     &
+        &   unit        = this%fid_,        &
+        &   isColor     = this%isColor_,    &
+        &   isStop      = .FALSE.           )
+
+        !!... Free the memory
+        If ( Allocated(valueChar) ) Deallocate(valueChar)
+        If ( Allocated(refValueChar) ) Deallocate(refValueChar)
+        Call valueStr%Free()
+        Call refValueStr%Free()
+
+    End if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+    Subroutine Flush_typLogGURU(this)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typLogGURU), intent(in) :: this
+!! -------------------------------------------------------------------------- !!
+    if ( this%isLogFile_ ) Flush(this%fid_)
+!! -------------------------------------------------------------------------- !!
+    End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+    Subroutine Destroy_typLogGURU(this)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+!! -------------------------------------------------------------------------- !!
+    Class(typLogGURU), intent(inout) :: this
+!! -------------------------------------------------------------------------- !!
+    Call this%Flush()   !!... Write Log file
+
+    !!... Write the message to the log file
+    this%isLogFile_ = .FALSE.
+
+    !!... Log File Path
+    this%logFilePath_ = ""
+
+    !!... Default Output
+    this%fid_ = 11
+
+    !!... Is Debug Mode (Write the message when the debug mode is enabled)
+    this%isDebug_ = .FALSE.
+
+    !!... Is Color Mode (Write the message when the debug mode is enabled)
+    this%isColor_ = .FALSE.
+
+    !!... MPI Variable representing the master
+    this%MPI_isMaster = .TRUE.
+
+!! -------------------------------------------------------------------------- !!
+    End Subroutine
+!! -------------------------------------------------------------------------- !!
