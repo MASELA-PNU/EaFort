@@ -1,6 +1,6 @@
 !! -------------------------------------------------------------------------- !!
 Subroutine Initialize_typCommandArgument( &
-    &   this, key, singleKey, description, isRequiredKey, nRequiredArg)
+    &   this, key, singleKey, description, isRequiredKey, nRequiredWord)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
@@ -9,7 +9,7 @@ Subroutine Initialize_typCommandArgument( &
     Character(len=*), Optional, intent(in)   :: singleKey
     Character(len=*), Optional, intent(in)   :: description
     Logical, Optional, intent(in)            :: isRequiredKey
-    Integer, Optional, intent(in)            :: nRequiredArg
+    Integer, Optional, intent(in)            :: nRequiredWord
 !! -------------------------------------------------------------------------- !!
     Character(len=:), Allocatable :: cleanKey
     Logical :: isCorrect
@@ -22,13 +22,14 @@ Subroutine Initialize_typCommandArgument( &
     &   isCorrect = isCorrect   )
 
     If (.NOT.isCorrect) then
-        write(*,"(a)") PREIX_ERROR//" Initialize_typCommandArgument"
-        write(*,"(a)")
-        write(*,"(a)") INDENT//"Wrong 'key' is given. "
-        write(*,"(a)")
-        write(*,"(a)") INDENT//"  key:"//trim(key)
-        write(*,"(a)")
-        stop
+        Call WritePrefixMessage( &
+        &   prefix      = PREIX_ERROR,                              &
+        &   prefixColor = COLOR_ERROR,                              &
+        &   head        = "Initialize_typCommandArgument",          &
+        &   msg         = "Wrong 'key' is given. ",                 &
+        &   errValue    = trim(key),                                &
+        &   isColor     = .FALSE.,                                  &
+        &   isStop      = .TRUE.                                    )
     End if
 
     this%key = trim(cleanKey)
@@ -43,20 +44,23 @@ Subroutine Initialize_typCommandArgument( &
         &   isCorrect = isCorrect   )
 
         If (.NOT.isCorrect) then
-            write(*,"(a)") PREIX_ERROR//" Initialize_typCommandArgument"
-            write(*,"(a)")
-            write(*,"(a)") INDENT//"Wrong 'singleKey' is given. "
-            write(*,"(a)")
-            write(*,"(a)") INDENT//"  singleKey:"//trim(key)
-            write(*,"(a)")
-            stop
+            Call WritePrefixMessage( &
+            &   prefix      = PREIX_ERROR,                              &
+            &   prefixColor = COLOR_ERROR,                              &
+            &   head        = "Initialize_typCommandArgument",          &
+            &   msg         = "Wrong 'singleKey' is given. ",           &
+            &   errValue    = trim(key),                                &
+            &   isColor     = .FALSE.,                                  &
+            &   isStop      = .TRUE.                                    )
         elseif (len_trim(cleanKey).GE.2) Then
-            write(*,"(a)") PREIX_ERROR//" Initialize_typCommandArgument"
-            write(*,"(a)")
-            write(*,"(a)") INDENT//"The 'singleKey' should be single character."
-            write(*,"(a)") INDENT//"  singleKey:"//trim(key)
-            write(*,"(a)")
-            stop
+            Call WritePrefixMessage( &
+            &   prefix      = PREIX_ERROR,                              &
+            &   prefixColor = COLOR_ERROR,                              &
+            &   head        = "Initialize_typCommandArgument",          &
+            &   msg         = "The 'singleKey' should be single character.", &
+            &   errValue    = trim(key),                                &
+            &   isColor     = .FALSE.,                                  &
+            &   isStop      = .TRUE.                                    )
         else
             this%isSingleKeyGiven = .TRUE.
             this%singleKey = cleanKey(1:1)
@@ -66,7 +70,7 @@ Subroutine Initialize_typCommandArgument( &
 
     If (Present(description))   this%description   = description
     If (Present(isRequiredKey)) this%isRequiredKey = isRequiredKey
-    If (Present(nRequiredArg))  this%nRequiredArg  = nRequiredArg
+    If (Present(nRequiredWord)) this%nRequiredWord  = nRequiredWord
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
@@ -81,7 +85,7 @@ Subroutine PrintInfo_typCommandArgument(this, ioUnit, isColor)
     Integer, optional                     :: ioUnit
     Logical, optional                     :: isColor
 !! -------------------------------------------------------------------------- !!
-    Integer :: ioUnit_, iArg
+    Integer :: ioUnit_, iWord
     Character(len=:), Allocatable :: keyToPrint
     Logical :: isColor_
     Character(len=17) :: colorKey, colorFound, colorNotFound
@@ -115,9 +119,9 @@ Subroutine PrintInfo_typCommandArgument(this, ioUnit, isColor)
     end if
 
     write(ioUnit_, "(a)") keyToPrint
-    if ( this%nArguments.GE.1 ) then
-        do iArg = 1, this%nArguments
-            write( ioUnit_, "(a,i5,a,a)") INDENT3, iArg, " : ",this%arguments(iArg)%Chars()
+    if ( this%nWord.GE.1 ) then
+        do iWord = 1, this%nWord
+            write( ioUnit_, "(a,i5,a,a)") INDENT3, iWord, " : ",this%words(iWord)%Chars()
         end do
     end if
     write( ioUnit_, *) ""
@@ -251,29 +255,31 @@ Implicit None
 
         nGivenArg = indEnd - indStart
 
-        If (this%nRequiredArg.GE.1) then
-            if ( (indEnd.GE.indStart).AND.(nGivenArg.LT.this%nRequiredArg) ) then
-                write(*,"(a)") PREIX_ERROR//" Update_typCommandArgument"
-                write(*,"(a)")
-                write(*,"(a)") INDENT//"The number of argument after keyword is less than the requirement."
-                write(*,"(a)")
-                write(*,"(a)") INDENT//" * key: --"//trim(this%key)
-                write(*,"(a, i6)") INDENT//" * Required number of argument :", this%nRequiredArg
-                write(*,"(a)")
-                stop
+        If (this%nWord.GE.1) then
+            if ( (indEnd.GE.indStart).AND.(nGivenArg.LT.this%nRequiredWord) ) then
+                Call WritePrefixMessage( &
+                &   prefix      = PREIX_ERROR,                              &
+                &   prefixColor = COLOR_ERROR,                              &
+                &   head        = "Update_typCommandArgument",              &
+                &   msg         = "The number of words after keyword is less than the requirement.\n&
+                                &* Required number of words is given in the below.", &
+                &   errValue    = trim(this%key),                           &
+                &   refValue    = this%nRequiredWord,                       &
+                &   isColor     = .FALSE.,                                  &
+                &   isStop      = .TRUE.                                    )
             end if
         end if
 
         If ( nGivenArg.GE.1 ) then
-            this%nArguments = nGivenArg
-            If ( Allocated(this%arguments) ) Deallocate( this%arguments )
-            Allocate( this%arguments(this%nArguments) )
+            this%nWord = nGivenArg
+            If ( Allocated(this%words) ) Deallocate( this%words )
+            Allocate( this%words(this%nWord) )
             jArg = 0
             do iArg = indStart+1, indEnd
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
-                this%arguments(jArg) = trim(arg)
-                !write(*,*) iArg, this%arguments(jArg)%Chars()
+                this%words(jArg) = trim(arg)
+                !write(*,*) iArg, this%words(jArg)%Chars()
             end do
         end if
 
@@ -336,28 +342,30 @@ Implicit None
 
         nGivenArg = indEnd - indStart
 
-        If (this%nRequiredArg.GE.1) then
-            if ( nGivenArg.LT.this%nRequiredArg ) then
-                write(*,"(a)") PREIX_ERROR//" Update_typCommandArgument"
-                write(*,"(a)")
-                write(*,"(a)") INDENT//"The number of argument after keyword is less than the requirement."
-                write(*,"(a)")
-                write(*,"(a)") INDENT//" * key: --"//trim(this%key)
-                write(*,"(a, i6)") INDENT//" * Required number of argument :", this%nRequiredArg
-                write(*,"(a)")
-                stop
+        If (this%nRequiredWord.GE.1) then
+            if ( nGivenArg.LT.this%nRequiredWord ) then
+                Call WritePrefixMessage( &
+                &   prefix      = PREIX_ERROR,                              &
+                &   prefixColor = COLOR_ERROR,                              &
+                &   head        = "Update_typCommandArgument",              &
+                &   msg         = "The number of argument after keyword is less than the requirement.\n&
+                                &* Required number of words is given in the below.", &
+                &   errValue    = trim(this%key),                           &
+                &   refValue    = this%nRequiredWord,                       &
+                &   isColor     = .FALSE.,                                  &
+                &   isStop      = .TRUE.                                    )
             end if
         End if
 
         If ( nGivenArg.GE.1 ) then
-            this%nArguments = nGivenArg
-            If ( Allocated(this%arguments) ) Deallocate( this%arguments )
-            Allocate( this%arguments(this%nArguments) )
+            this%nWord = nGivenArg
+            If ( Allocated(this%words) ) Deallocate( this%words )
+            Allocate( this%words(this%nWord) )
             jArg = 0
             do iArg = indStart+1, indEnd
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
-                this%arguments(jArg) = trim(arg)
+                this%words(jArg) = trim(arg)
             end do
 
             ! write(*,*) this%nArguments
@@ -435,16 +443,16 @@ Subroutine Destroy_typCommandArgument(this)
     this%singleKey = " "
 
     If ( Allocated(this%description%raw) ) Deallocate(this%description%raw)
-    If ( Allocated(this%arguments) ) then
-        nArg = size( this%arguments )
+    If ( Allocated(this%words) ) then
+        nArg = size( this%words )
         do iArg = 1, nArg
-            If ( Allocated(this%arguments(iArg)%raw) ) Deallocate( this%arguments(iArg)%raw )
+            If ( Allocated(this%words(iArg)%raw) ) Deallocate( this%words(iArg)%raw )
         end do
     end if
 
-    this%nArguments    = 0
-    this%isRequiredKey = .TRUE.
-    this%nRequiredArg  = 0
+    this%nWord          = 0
+    this%isRequiredKey  = .TRUE.
+    this%nRequiredWord  = 0
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
@@ -458,7 +466,7 @@ Subroutine Copy_typCommandArgument(to, from)
     Class(typCommandArgument), intent(inout) :: to
     Class(typCommandArgument), intent(in)    :: from
 !! -------------------------------------------------------------------------- !!
-    Integer :: nArg, iArg
+    Integer :: nWord, iWord
 
     !!... Destroy
     Call to%Destroy()
@@ -470,16 +478,16 @@ Subroutine Copy_typCommandArgument(to, from)
 
     to%isRequiredKey = from%isRequiredKey
     to%isFound       = from%isFound
-    to%nRequiredArg  = from%nRequiredArg
 
-    to%nArguments = from%nArguments
+    to%nRequiredWord = from%nRequiredWord
+    to%nWord         = from%nWord
 
-    If ( Allocated(from%arguments) ) then
-        nArg = size( from%arguments )
-        Allocate( to%arguments(nArg) )
-        do iArg = 1, nArg
-            If ( Allocated(from%arguments(iArg)%raw) ) Then
-                to%arguments(iArg)%raw = from%arguments(iArg)%raw
+    If ( Allocated(from%words) ) then
+        nWord = size( from%words )
+        Allocate( to%words(nWord) )
+        do iWord = 1, nWord
+            If ( Allocated(from%words(iWord)%raw) ) Then
+                to%words(iWord)%raw = from%words(iWord)%raw
             End if
         end do
     end if

@@ -347,20 +347,10 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     Class(*), intent(in), Optional         :: refValue
     Logical, intent(in), Optional          :: isStop
 !! -------------------------------------------------------------------------- !!
-    Type(string) :: valueStr, refValueStr
-    Character(len=:), Allocatable :: valueChar, refValueChar
+    Logical :: isStop_
 
-    !!... Convert values
-    valueChar = ""
-    if ( present(value) ) then
-        Call GetStrFromClass(value, valueStr)
-        valueChar    = valueStr%Chars()
-    end if
-
-    if ( present(refValue) ) then
-        Call GetStrFromClass(refValue, refValueStr)
-        refValueChar = refValueStr%Chars()
-    end if
+    isStop_ = .true.
+    if (present(isStop)) isStop_ = isStop
 
     !!... Write Message
     Call WritePrefixMessage( &
@@ -368,17 +358,11 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     &   prefixColor = COLOR_ERROR,      &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   errValue    = valueChar,        &
-    &   refValue    = refValueChar,     &
+    &   errValue    = value,            &
+    &   refValue    = refValue,         &
     &   unit        = this%logUnit_,    &
     &   isColor     = this%isColor_,    &
-    &   isStop      = isStop            )
-
-    !!... Free the memory
-    If ( Allocated(valueChar) ) Deallocate(valueChar)
-    If ( Allocated(refValueChar) ) Deallocate(refValueChar)
-    Call valueStr%Free()
-    Call refValueStr%Free()
+    &   isStop      = isStop_           )
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
@@ -394,38 +378,17 @@ Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
     Class(*), intent(in), Optional         :: value
     Class(*), intent(in), Optional         :: refValue
 !! -------------------------------------------------------------------------- !!
-    Type(string) :: valueStr, refValueStr
-    Character(len=:), Allocatable :: valueChar, refValueChar
-
-    !!... Convert values
-    valueChar = ""
-    if ( present(value) ) then
-        Call GetStrFromClass(value, valueStr)
-        valueChar    = valueStr%Chars()
-    end if
-
-    if ( present(refValue) ) then
-        Call GetStrFromClass(refValue, refValueStr)
-        refValueChar = refValueStr%Chars()
-    end if
-
     !!... Write Message
     Call WritePrefixMessage( &
     &   prefix      = PREIX_WARN,       &
     &   prefixColor = COLOR_WARN,       &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   errValue    = valueChar,        &
-    &   refValue    = refValueChar,     &
+    &   errValue    = value,            &
+    &   refValue    = refValue,         &
     &   unit        = this%logUnit_,    &
     &   isColor     = this%isColor_,    &
     &   isStop      = .FALSE.           )
-
-    !!... Free the memory
-    If ( Allocated(valueChar) ) Deallocate(valueChar)
-    If ( Allocated(refValueChar) ) Deallocate(refValueChar)
-    Call valueStr%Free()
-    Call refValueStr%Free()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
@@ -441,22 +404,8 @@ Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
     Class(*), intent(in), Optional         :: value
     Class(*), intent(in), Optional         :: refValue
 !! -------------------------------------------------------------------------- !!
-    Type(string) :: valueStr, refValueStr
-    Character(len=:), Allocatable :: valueChar, refValueChar
 
     If ( this%isDebug_ ) then
-
-        !!... Convert values
-        valueChar = ""
-        if ( present(value) ) then
-            Call GetStrFromClass(value, valueStr)
-            valueChar    = valueStr%Chars()
-        end if
-
-        if ( present(refValue) ) then
-            Call GetStrFromClass(refValue, refValueStr)
-            refValueChar = refValueStr%Chars()
-        end if
 
         !!... Write Message
         Call WritePrefixMessage( &
@@ -464,17 +413,11 @@ Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
         &   prefixColor = COLOR_DEBUG,      &
         &   msg         = msg,              &
         &   head        = head,             &
-        &   errValue    = valueChar,        &
-        &   refValue    = refValueChar,     &
+        &   errValue    = value,            &
+        &   refValue    = refValue,         &
         &   unit        = this%logUnit_,    &
         &   isColor     = this%isColor_,    &
         &   isStop      = .FALSE.           )
-
-        !!... Free the memory
-        If ( Allocated(valueChar) ) Deallocate(valueChar)
-        If ( Allocated(refValueChar) ) Deallocate(refValueChar)
-        Call valueStr%Free()
-        Call refValueStr%Free()
 
     End if
 

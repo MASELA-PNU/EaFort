@@ -18,7 +18,6 @@ Module modGURU
     Use modOS           !!... Use OS Command
 
     Use FACE, only: Colorize    !!... Third Party String Module (Colorize)
-    Use stringifor              !!... Third Party String Module
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
@@ -52,25 +51,11 @@ Implicit None
 !!... Write Messages
 #include "auxiliary/WriteMessage.proc"
 
-!!... Separate Path
-#include "auxiliary/SeparatePath.proc"
-
-!!... Get String from arbitrary input
-#include "auxiliary/GetCharFromClass.proc"
-
     !!... Private
     ! Private :: WriteMessage, WritePrefixMessage
 
 !!... Arguments Class Definition
 #include "argGURU/CommandArgument/CommandArgument.typ"
-
-!!... Arguments GURU Class Definition
-!#include "argGURU/argGURU.typ"
-
-    ! Type(typArgGURU), target :: argGURU
-
-!!... Arguments GURU Class Definition
-! #include "logGURU/logGURU.typ"
 
 #include "GURU.typ"
 
@@ -83,12 +68,6 @@ Contains
 
 !!... Write Messages
 #include "auxiliary/WriteMessage.inc"
-
-!!... Separate Path
-#include "auxiliary/SeparatePath.inc"
-
-!!... Get String from arbitrary input
-#include "auxiliary/GetCharFromClass.inc"
 
 !!... Arguments Class Functions
 #include "argGURU/CommandArgument/CommandArgument.inc"

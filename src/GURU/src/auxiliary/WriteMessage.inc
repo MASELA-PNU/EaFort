@@ -54,8 +54,8 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     Character(len=*), intent(in)            :: prefix
     Character(len=*), intent(in)            :: msg
     Character(len=*), intent(in), Optional  :: head
-    Character(len=*), intent(in), Optional  :: errValue
-    Character(len=*), intent(in), Optional  :: refValue
+    Class(*), intent(in), Optional          :: errValue
+    Class(*), intent(in), Optional          :: refValue
     Integer, intent(in), optional           :: unit
     Logical, intent(in), optional           :: isColor
     Character(len=*), optional, intent(in)  :: prefixColor
@@ -68,6 +68,23 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     type(string), Allocatable :: strVect(:)
     Integer :: nMsgLine, iMsg
     Logical :: isStop_, isEndEmptyLine
+    !!...
+    Type(string) :: errValueStr, refValueStr
+    Character(len=:), Allocatable :: errValueChar, refValueChar
+
+    !!... Convert values
+    errValueChar = ""
+    if ( present(errValue) ) then
+        Call GetStrFromClass(errValue, errValueStr)
+        errValueChar = errValueStr%Chars()
+    end if
+
+    refValueChar = ""
+    if ( present(refValue) ) then
+        Call GetStrFromClass(refValue, refValueStr)
+        refValueChar = refValueStr%Chars()
+    end if
+
 
     isColor_ = .FALSE.
     if ( Present(isColor) ) isColor_ = isColor
@@ -94,11 +111,11 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
 
     isEndEmptyLine = .FALSE.
     if (present(errValue)) then
-        if (len_trim(errValue).ge.1) isEndEmptyLine = .TRUE.
+        if (len_trim(errValueChar).ge.1) isEndEmptyLine = .TRUE.
     end if
 
     if (present(refValue)) then
-        if (len_trim(refValue).ge.1) isEndEmptyLine = .TRUE.
+        if (len_trim(refValueChar).ge.1) isEndEmptyLine = .TRUE.
     end if
 
     !!----- File
@@ -116,13 +133,13 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
 
         !!... Write Given Value
         If ( Present(errValue) ) then
-            if (len_trim(errValue).ge.1) write(unit_,"(a)") INDENT//PREFIX_GIVEN//errValue
+            if (len_trim(errValueChar).ge.1) write(unit_,"(a)") INDENT//PREFIX_GIVEN//errValueChar
 
         End if
 
         !!... Write Reference Value
         If ( Present(refValue) ) then
-            if (len_trim(refValue).ge.1) write(unit_,"(a)") INDENT//PREFIX_REF//refValue
+            if (len_trim(refValueChar).ge.1) write(unit_,"(a)") INDENT//PREFIX_REF//refValueChar
         End if
 
         if ( isEndEmptyLine ) then
@@ -146,12 +163,12 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
 
         !!... Write Given Value
         If ( Present(errValue) ) then
-            if (len_trim(errValue).ge.1) write(*,"(a)") INDENT//PREFIX_GIVEN//errValue
+            if (len_trim(errValueChar).ge.1) write(*,"(a)") INDENT//PREFIX_GIVEN//errValueChar
         End if
 
         !!... Write Reference Value
         If ( Present(refValue) ) then
-            if (len_trim(refValue).ge.1) write(*,"(a)") INDENT//PREFIX_REF//refValue
+            if (len_trim(refValueChar).ge.1) write(*,"(a)") INDENT//PREFIX_REF//refValueChar
         End if
 
         if ( isEndEmptyLine ) then
@@ -173,6 +190,11 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
         Call strVect%Free()
     end do
     If (Allocated(strVect)) deallocate(strVect)
+
+    If ( Allocated(errValueChar) ) Deallocate(errValueChar)
+    If ( Allocated(refValueChar) ) Deallocate(refValueChar)
+    Call errValueStr%Free()
+    Call refValueStr%Free()
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine

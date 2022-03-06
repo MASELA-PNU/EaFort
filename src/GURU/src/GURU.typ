@@ -71,14 +71,25 @@ Contains
     !!... Found Key
     Procedure :: IsFoundKey => ARG_IsFoundKey_typGURU
 
-    ! !!... Get the number of argument
-    ! Procedure :: GetNArgument => GetNArgument_typInfoArg
-    !
+    !!... Get the number of argument
+    Procedure :: GetNArg => ARG_GetNArg_typGURU
+
+    !!... Get key for given index
+    Procedure :: GetKey => ARG_GetKey_typGURU
+
+    !!... Get Arguments
+    Procedure :: GetArgInteger => ARG_GetArgInteger_typGURU
+    ! Procedure :: GetArgReal    => ARG_GetArg_Integer_typGURU
+    ! Procedure :: GetArgDble    => ARG_GetArg_Dble_typGURU
+    ! Procedure :: GetArgLogical => ARG_GetArg_Logical_typGURU
+    ! Procedure :: GetArgChar    => ARG_GetArg_Char_typGURU
+    ! Procedure :: GetArgString  => ARG_GetArg_String_typGURU
+
     ! !!... Get argument
-    ! Procedure :: GetArgument => GetArgument_typInfoArg
+    ! Procedure :: GetArg => GetArg_typInfoArg
     !
     ! !!... Get argument or default
-    ! Procedure :: GetArgumentOrDefault => GetArgumentOrDefault_typInfoArg
+    ! Procedure :: GetArgOrDefault => GetArgOrDefault_typInfoArg
 
     !!... Update and Print
     Procedure :: UpdateAndPrint => ARG_UpdateAndPrint_typGURU
@@ -95,6 +106,13 @@ Contains
     !!... Destroy the class
     Procedure :: Destroy_ARG => ARG_Destroy_typGURU
 
+    !!... Get Argument
+    ! Generic :: GetArg => GetArgInteger,     &
+    ! &                    GetArgReal,        &
+    ! &                    GetArgDble,        &
+    ! &                    GetArgLogical,     &
+    ! &                    GetArgChar,        &
+    ! &                    GetArgString
 
 !! -------------------------------------------------------------------------- !!
 !!  Logging Routines

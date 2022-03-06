@@ -10,6 +10,9 @@
 Module modEaFort
 !! -------------------------------------------------------------------------- !!
 
+    !!... String Module
+    Use stringifor              !!... Third Party String Module
+
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
@@ -22,6 +25,35 @@ Implicit None
 
     !!... Complex Precision
     Integer, Parameter :: CP = RP
+
+
+!!... Get String from arbirary class
+#include "auxilary/GetStrFromClass.proc"
+
+!!... Character Function
+#include "auxilary/CharacterFunctions.proc"
+
+!!... Convert from character to variables
+#include "auxilary/GetValueFromChar.proc"
+
+!!... Separate file path
+#include "auxilary/SeparatePath.proc"
+
+!! -------------------------------------------------------------------------- !!
+Contains
+!! -------------------------------------------------------------------------- !!
+
+!!... Get String from arbirary class
+#include "auxilary/GetStrFromClass.inc"
+
+!!... Character Function
+#include "auxilary/CharacterFunctions.inc"
+
+!!... Convert from character to variables
+#include "auxilary/GetValueFromChar.inc"
+
+!!... Separate file path
+#include "auxilary/SeparatePath.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

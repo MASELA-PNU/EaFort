@@ -19,13 +19,13 @@ Type typCommandArgument
     Logical :: isFound = .FALSE.
 
     !!... The number of required argument
-    Integer :: nRequiredArg = 0
+    Integer :: nRequiredWord = 0
 
     !!... The number of arguments
-    Integer :: nArguments = 0
+    Integer :: nWord = 0
 
     !!... Required Argument
-    Type(string), Allocatable :: arguments(:)
+    Type(string), Allocatable :: words(:)
 
 Contains
 

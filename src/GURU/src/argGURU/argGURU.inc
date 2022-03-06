@@ -37,22 +37,22 @@ Subroutine ARG_Initialize_typGURU( &
     &   key           = "help",                   &
     &   description   = "Print help messages",    &
     &   isRequiredKey = .FALSE.                   )
-
-    Call this%arguments(2)%Initialize( &
-    &   key           = "log",               &
-    &   description   = "Log File Path",     &
-    &   isRequiredKey = .FALSE.,             &
-    &   nRequiredArg  = 1                    )
-
-    Call this%arguments(3)%Initialize( &
-    &   key           = "color",             &
-    &   isRequiredKey = .FALSE.,             &
-    &   description   = "Color Mode"         )
-
-    Call this%arguments(4)%Initialize( &
-    &   key           = "debug",             &
-    &   isRequiredKey = .FALSE.,             &
-    &   description   = "Debug Mode"         )
+    !
+    ! Call this%arguments(2)%Initialize( &
+    ! &   key           = "log",               &
+    ! &   description   = "Log File Path",     &
+    ! &   isRequiredKey = .FALSE.,             &
+    ! &   nRequiredArg  = 1                    )
+    !
+    ! Call this%arguments(3)%Initialize( &
+    ! &   key           = "color",             &
+    ! &   isRequiredKey = .FALSE.,             &
+    ! &   description   = "Color Mode"         )
+    !
+    ! Call this%arguments(4)%Initialize( &
+    ! &   key           = "debug",             &
+    ! &   isRequiredKey = .FALSE.,             &
+    ! &   description   = "Debug Mode"         )
 
     !!... Update Basic arguments
     Call this%Update()
@@ -66,30 +66,93 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function ARG_IsFoundKey_typGURU( this, key ) result(isFound)
+Subroutine ARG_IsFoundKey_typGURU( this, key, isFound, index )
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(in) :: this
-    Character(len=*), intent(in)  :: key
-    Logical :: isFound
+    Class(typGURU), intent(in)     :: this
+    Character(len=*), intent(in)   :: key
+    Logical, intent(out)           :: isFound
+    Integer, intent(out), optional :: index
 !! -------------------------------------------------------------------------- !!
     Integer :: iArg
     isFound = .FALSE.
+    index   = 0
     do iArg = 1, this%nArguments
         if ( this%arguments(iArg)%key.EQ.key ) then
             if ( this%arguments(iArg)%isFound ) then
+                index   = iArg
                 isFound = .TRUE.
                 return
             end if
         end if
     end do
 !! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Function ARG_GetNArg_typGURU(this) result( nArg )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in) :: this
+    Integer :: nArg
+!! -------------------------------------------------------------------------- !!
+    nArg = this%nArguments
+!! -------------------------------------------------------------------------- !!
 End Function
 !! -------------------------------------------------------------------------- !!
 
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetKey_typGURU( this, index, key )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Integer, intent(in)           :: index
+    Character(len=:), Allocatable :: key
+!! -------------------------------------------------------------------------- !!
+    !!... Check index
+    if ( (index.le.0).or.(index.gt.this%nArguments) ) then
+        Call this%Error( &
+        &   msg      = "Given 'index' is less than 0 or larger than the number of arguments.", &
+        &   head     = "ARG_GetKey_typGURU", &
+        &   value    = index, &
+        &   refValue = this%nArguments )
+    end if
+    key = this%arguments(index)%key
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
 
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgInteger_typGURU(this, key, value, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Integer, intent(out)          :: value
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isFound_, isError_
+    Integer :: index
 
+    !!... Check
+    Call this%IsFoundKey(key, isFound_, index)
+
+    isError_ = .TRUE.
+    If ( isFound_ ) then
+        If ( this%arguments(index)%nWord.ge.1 ) then
+            !this%words(index)
+            isError_ = .FALSE.
+        endif
+    end if
+
+    if (isError_) value   = 0
+    if (present(isError)) isError = isError_
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
 Subroutine ARG_Destroy_typGURU(this)
@@ -105,11 +168,7 @@ Subroutine ARG_Destroy_typGURU(this)
     Call this%date%Free()
     Call this%version%Free()
 
-    ! this%isColor_ = .TRUE.
-    ! this%isDebug_ = .FALSE.
-
     this%nArguments = 0
-
     If ( Allocated(this%arguments) ) then
         nArg = size(this%arguments)
         do iArg =1, nArg
@@ -122,12 +181,12 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_UpdateAndPrint_typGURU(this)
+Subroutine ARG_UpdateAndPrint_typGURU( this )
 !! -------------------------------------------------------------------------- !!
-Implicit None
+    Implicit None
+    Class(typGURU), intent(inout) :: this
 !! -------------------------------------------------------------------------- !!
-Class(typGURU), intent(inout) :: this
-!! -------------------------------------------------------------------------- !!
+    Logical :: isFound
 
     !!... Update Key
     Call this%Update()
@@ -135,8 +194,10 @@ Class(typGURU), intent(inout) :: this
     !!... Print Description
     Call this%PrintDescription()
 
+    Call this%IsFoundKey( key = "help", isFound = isFound )
+
     !!... If --help is given, print help message and stop
-    If ( this%IsFoundKey( key = "help" ) ) then
+    If ( isFound ) then
         Call this%PrintHelp()
         stop
     end if
@@ -149,7 +210,7 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintDescription_typGURU(this, ioUnit)
+Subroutine ARG_PrintDescription_typGURU( this, ioUnit )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
@@ -160,11 +221,9 @@ Subroutine ARG_PrintDescription_typGURU(this, ioUnit)
     Integer :: ioUnit_
 
     !!... Set Print Mode
-    ! isColor = this%isColor_
     ioUnit_ = 6
     if ( present(ioUnit) ) then
         if (ioUnit.EQ.6) then
-            ! isColor = this%isColor_
             isColor = .FALSE.
         else
             isColor = .FALSE.
@@ -197,7 +256,7 @@ Subroutine ARG_PrintDescription_typGURU(this, ioUnit)
         If ( Allocated(this%description%raw) ) then
 
             !!... Split the description into the multiple lines and print
-            Call this%description%Split( multipleLines, "\\" )
+            Call this%description%Split( multipleLines, lineSep )
             nStr = size( multipleLines )
 
             color1 = ""
@@ -225,7 +284,7 @@ Subroutine ARG_PrintDescription_typGURU(this, ioUnit)
         If ( Allocated(this%authors%raw) ) then
 
             !!... Split the description into the multiple lines and print
-            Call this%authors%Split( multipleLines, "\\" )
+            Call this%authors%Split( multipleLines, lineSep )
             nStr = size( multipleLines )
 
             color1 = ""
@@ -385,7 +444,7 @@ End Subroutine
 
 !! -------------------------------------------------------------------------- !!
 Subroutine ARG_AddKey_typGURU( &
-    &   this, key, singleKey, description, isRequiredKey, nRequiredArg )
+    &   this, key, singleKey, description, isRequiredKey, nRequiredWord )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
@@ -394,7 +453,7 @@ Subroutine ARG_AddKey_typGURU( &
     Character(len=*), Optional, intent(in)   :: singleKey
     Character(len=*), Optional, intent(in)   :: description
     Logical, intent(in), Optional            :: isRequiredKey
-    Integer, intent(in), Optional            :: nRequiredArg
+    Integer, intent(in), Optional            :: nRequiredWord
 !! -------------------------------------------------------------------------- !!
     Logical :: isRequiredKey_
     Integer :: iArg, nPreviousArg
@@ -464,31 +523,34 @@ Subroutine ARG_AddKey_typGURU( &
     &   singleKey     = singleKey,        &
     &   description   = description,      &
     &   isRequiredKey = isRequiredKey,    &
-    &   nRequiredArg  = nRequiredArg      )
+    &   nRequiredWord = nRequiredWord     )
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintHelp_typGURU(this, ioUnit)
+Subroutine ARG_PrintHelp_typGURU(this, ioUnit, isColor)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typGURU), intent(in) :: this
-    Integer, optional             :: ioUnit
+    Integer, optional          :: ioUnit
+    Logical, optional          :: isColor
 !! -------------------------------------------------------------------------- !!
-    Logical :: isColor
+    Logical :: isColor_
     Integer :: ioUnit_, iArg
 
     !!... Set Print Mode
     ! isColor = this%isColor_
     ioUnit_ = 6
+
+    isColor_ = .FALSE.
     if ( present(ioUnit) ) then
         if (ioUnit.EQ.6) then
-            ! isColor = this%isColor_
+            isColor_ = isColor
         else
-            isColor = .FALSE.
+            isColor_ = .FALSE.
         end if
         ioUnit_ = ioUnit
     end if
@@ -507,7 +569,7 @@ Subroutine ARG_PrintHelp_typGURU(this, ioUnit)
             if ( nArg.GE.1 ) then
 
                 color1 = ""
-                If ( isColor ) color1 = "GREEN"
+                If ( isColor_ ) color1 = "GREEN"
                 Write(ioUnit_, "(a)") INDENT//Colorize("Required", color1)
                 Write(ioUnit_, "(a)") ""
 
@@ -535,7 +597,7 @@ Subroutine ARG_PrintHelp_typGURU(this, ioUnit)
             End do
 
             color1 = ""
-            If ( isColor ) color1 = "GREEN"
+            If ( isColor_ ) color1 = "GREEN"
             Write(ioUnit_, "(a)") INDENT//Colorize("Optional", color1)
             Write(ioUnit_, "(a)") ""
 

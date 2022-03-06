@@ -1,11 +1,13 @@
 !! -------------------------------------------------------------------------- !!
-Subroutine GetStrFromClass( arg, str )
+Subroutine GetStrFromClass( arg, str, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(*), intent(in) :: arg
     type(string)         :: str
+    Logical, Optional    :: isError
 !! -------------------------------------------------------------------------- !!
 
+    isError = .FALSE.
     Select Type (arg)
 
         Type is ( Character(len=*) )
@@ -24,6 +26,7 @@ Subroutine GetStrFromClass( arg, str )
             end if
         Class default
             str = ""
+            isError = .TRUE.
     End Select
 
 !! -------------------------------------------------------------------------- !!
