@@ -77,6 +77,11 @@ Contains
     !!... Get key for given index
     Procedure :: GetKey => ARG_GetKey_typGURU
 
+    !!... Get nWord for given key
+    Procedure :: GetNWord_Key => ARG_GetNWord_Key_typGURU
+    Procedure :: GetNWord_iKey => ARG_GetNWord_iKey_typGURU
+    Generic   :: GetNWord => GetNWord_Key, GetNWord_iKey
+
     !!... Get Arguments by keyword and its index(option)
     Procedure :: GetArgInt     => ARG_GetArgInt_typGURU
     Procedure :: GetArgReal    => ARG_GetArgReal_typGURU
@@ -90,6 +95,20 @@ Contains
     Procedure :: GetArgDbleOrDefault    => ARG_GetArgDbleOrDefault_typGURU
     Procedure :: GetArgLogicalOrDefault => ARG_GetArgLogicalOrDefault_typGURU
     Procedure :: GetArgCharOrDefault    => ARG_GetArgCharOrDefault_typGURU
+
+    !!... Get Arguments vector by keyword
+    Procedure :: GetArgIntVector     => ARG_GetArgIntVector_typGURU
+    Procedure :: GetArgRealVector    => ARG_GetArgRealVector_typGURU
+    Procedure :: GetArgDbleVector    => ARG_GetArgDbleVector_typGURU
+    Procedure :: GetArgLogicalVector => ARG_GetArgLogicalVector_typGURU
+    Procedure :: GetArgCharVector    => ARG_GetArgCharVector_typGURU
+
+    !!... Get Arguments vector by keyword or default
+    Procedure :: GetArgIntVectorOrDefault     => ARG_GetArgIntVectorOrDefault_typGURU
+    Procedure :: GetArgRealVectorOrDefault    => ARG_GetArgRealVectorOrDefault_typGURU
+    Procedure :: GetArgDbleVectorOrDefault    => ARG_GetArgDbleVectorOrDefault_typGURU
+    Procedure :: GetArgLogicalVectorOrDefault => ARG_GetArgLogicalVectorOrDefault_typGURU
+    Procedure :: GetArgCharVectorOrDefault    => ARG_GetArgCharVectorOrDefault_typGURU
 
     !!... Update and Print
     Procedure :: UpdateAndPrint => ARG_UpdateAndPrint_typGURU

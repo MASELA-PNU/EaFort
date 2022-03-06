@@ -23,7 +23,8 @@ Implicit None
     ! Call Test_LogGURU()
 
     !!... Test Argument GURU
-     Call Test_ArgGURU()
+    ! Call Test_ArgGURU()
+    Call Test_ArgGURUVector()
 
 !! -------------------------------------------------------------------------- !!
 End Program

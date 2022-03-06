@@ -211,11 +211,11 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetIntVectorFromChar( char, vector, isError )
+    Subroutine GetIntVectorFromChar( char, value, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Integer, allocatable           :: vector(:)
+    Integer, allocatable           :: value(:)
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     type(string), allocatable :: strVector(:)
@@ -223,7 +223,7 @@ End Subroutine
     Logical :: isError_
     Integer :: singleValue
 
-    If ( Allocated(vector) ) Deallocate(vector)
+    If ( Allocated(value) ) Deallocate(value)
 
     !!... Get Separated String
     Call GetSeperatedString( char, strVector, nString )
@@ -231,20 +231,20 @@ End Subroutine
     isError_ = .FALSE.
     if ( nString.ge.1 ) then
 
-        Allocate( vector(nString) ); vector(:) = 0
+        Allocate( value(nString) ); value(:) = 0
 
         loopString: do iString = 1, nString
 
             !!... Single Conversion
             Call GetIntFromChar( strVector(iString)%raw, singleValue, isError_ )
             if ( isError_ ) exit loopString
-            vector(iString) = singleValue
+            value(iString) = singleValue
 
         end do loopString
     end if
 
     If ( isError_ ) then
-        If ( Allocated(vector) ) Deallocate(vector)
+        If ( Allocated(value) ) Deallocate(value)
     end if
 
     If ( present(isError) ) isError = isError_
@@ -255,11 +255,11 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetRealVectorFromChar( char, vector, isError )
+    Subroutine GetRealVectorFromChar( char, value, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(4), allocatable           :: vector(:)
+    Real(4), allocatable           :: value(:)
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     type(string), allocatable :: strVector(:)
@@ -267,7 +267,7 @@ End Subroutine
     Logical :: isError_
     Real(4) :: singleValue
 
-    If ( Allocated(vector) ) Deallocate(vector)
+    If ( Allocated(value) ) Deallocate(value)
 
     !!... Get Separated String
     Call GetSeperatedString( char, strVector, nString )
@@ -275,20 +275,20 @@ End Subroutine
     isError_ = .FALSE.
     if ( nString.ge.1 ) then
 
-        Allocate( vector(nString) ); vector(:) = 0
+        Allocate( value(nString) ); value(:) = 0.0
 
         loopString: do iString = 1, nString
 
             !!... Single Conversion
             Call GetRealFromChar( strVector(iString)%raw, singleValue, isError_ )
             if ( isError_ ) exit loopString
-            vector(iString) = singleValue
+            value(iString) = singleValue
 
         end do loopString
     end if
 
     If ( isError_ ) then
-        If ( Allocated(vector) ) Deallocate(vector)
+        If ( Allocated(value) ) Deallocate(value)
     end if
 
     If (present(isError)) isError = isError_
@@ -299,11 +299,11 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetDbleVectorFromChar( char, vector, isError )
+    Subroutine GetDbleVectorFromChar( char, value, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(8), allocatable           :: vector(:)
+    Real(8), allocatable           :: value(:)
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     type(string), allocatable :: strVector(:)
@@ -311,7 +311,7 @@ End Subroutine
     Logical :: isError_
     Real(8) :: singleValue
 
-    If ( Allocated(vector) ) Deallocate(vector)
+    If ( Allocated(value) ) Deallocate(value)
 
     !!... Get Separated String
     Call GetSeperatedString( char, strVector, nString )
@@ -319,20 +319,20 @@ End Subroutine
     isError_ = .FALSE.
     if ( nString.ge.1 ) then
 
-        Allocate( vector(nString) ); vector(:) = 0
+        Allocate( value(nString) ); value(:) = 0.D0
 
         loopString: do iString = 1, nString
 
             !!... Single Conversion
             Call GetDbleFromChar( strVector(iString)%raw, singleValue, isError_ )
             if ( isError_ ) exit loopString
-            vector(iString) = singleValue
+            value(iString) = singleValue
 
         end do loopString
     end if
 
     If ( isError_ ) then
-        If ( Allocated(vector) ) Deallocate(vector)
+        If ( Allocated(value) ) Deallocate(value)
     end if
 
     If (present(isError)) isError = isError_
@@ -343,11 +343,11 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetLogicalVectorFromChar( char, vector, isError )
+    Subroutine GetLogicalVectorFromChar( char, value, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Logical, allocatable           :: vector(:)
+    Logical, allocatable           :: value(:)
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     type(string), allocatable :: strVector(:)
@@ -355,7 +355,7 @@ End Subroutine
     Logical :: isError_
     Logical :: singleValue
 
-    If ( Allocated(vector) ) Deallocate(vector)
+    If ( Allocated(value) ) Deallocate(value)
 
     !!... Get Separated String
     Call GetSeperatedString( char, strVector, nString )
@@ -363,20 +363,20 @@ End Subroutine
     isError_ = .FALSE.
     if ( nString.ge.1 ) then
 
-        Allocate( vector(nString) ); vector(:) = 0
+        Allocate( value(nString) ); value(:) = 0
 
         loopString: do iString = 1, nString
 
             !!... Single Conversion
             Call GetLogicalFromChar( strVector(iString)%raw, singleValue, isError_ )
             if ( isError_ ) exit loopString
-            vector(iString) = singleValue
+            value(iString) = singleValue
 
         end do loopString
     end if
 
     If ( isError_ ) then
-        If ( Allocated(vector) ) Deallocate(vector)
+        If ( Allocated(value) ) Deallocate(value)
     end if
 
     If (present(isError)) isError = isError_
@@ -387,21 +387,21 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetIntVectorFromCharOrDefault( char, vector, refValue, isError )
+    Subroutine GetIntVectorFromCharOrDefault( char, value, refValue, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)     :: char
-    Integer, allocatable             :: vector(:)
+    Integer, allocatable             :: value(:)
     Integer, dimension(:),intent(in) :: refValue
     Logical, Optional                :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Integer :: nElement
-    Call GetIntVectorFromChar( char, vector, isError_ )
+    Call GetIntVectorFromChar( char, value, isError_ )
     If ( isError_ ) then
-        if ( Allocated(vector) ) Deallocate(vector)
+        if ( Allocated(value) ) Deallocate(value)
         nElement = size( refValue )
-        if (nElement.ge.1) Allocate(vector, source = refValue )
+        if (nElement.ge.1) Allocate(value, source = refValue )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -409,21 +409,21 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetRealVectorFromCharOrDefault( char, vector, refValue, isError )
+    Subroutine GetRealVectorFromCharOrDefault( char, value, refValue, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(4), allocatable           :: vector(:)
+    Real(4), allocatable           :: value(:)
     Real(4), dimension(:)          :: refValue
     Logical, Optional              :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Integer :: nElement
-    Call GetRealVectorFromChar( char, vector, isError_ )
+    Call GetRealVectorFromChar( char, value, isError_ )
     If ( isError_ ) then
-        if ( Allocated(vector) ) Deallocate(vector)
+        if ( Allocated(value) ) Deallocate(value)
         nElement = size( refValue )
-        if (nElement.ge.1) Allocate(vector, source = refValue )
+        if (nElement.ge.1) Allocate(value, source = refValue )
     end if
     if (present(isError)) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -431,21 +431,21 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetDbleVectorFromCharOrDefault( char, vector, refValue, isError )
+    Subroutine GetDbleVectorFromCharOrDefault( char, value, refValue, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(8), allocatable           :: vector(:)
+    Real(8), allocatable           :: value(:)
     Real(8), dimension(:)          :: refValue
     Logical, Optional              :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Integer :: nElement
-    Call GetDbleVectorFromChar( char, vector, isError_ )
+    Call GetDbleVectorFromChar( char, value, isError_ )
     If ( isError_ ) then
-        if ( Allocated(vector) ) Deallocate(vector)
+        if ( Allocated(value) ) Deallocate(value)
         nElement = size( refValue )
-        if (nElement.ge.1) Allocate(vector, source = refValue )
+        if (nElement.ge.1) Allocate(value, source = refValue )
     end if
     if (present(isError)) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -453,21 +453,21 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine GetLogicalVectorFromCharOrDefault( char, vector, refValue, isError )
+    Subroutine GetLogicalVectorFromCharOrDefault( char, value, refValue, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Logical, allocatable           :: vector(:)
+    Logical, allocatable           :: value(:)
     Logical, dimension(:)          :: refValue
     Logical, Optional              :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Integer :: nElement
-    Call GetLogicalVectorFromChar( char, vector, isError_ )
+    Call GetLogicalVectorFromChar( char, value, isError_ )
     If ( isError_ ) then
-        if ( Allocated(vector) ) Deallocate(vector)
+        if ( Allocated(value) ) Deallocate(value)
         nElement = size( refValue )
-        if (nElement.ge.1) Allocate(vector, source = refValue )
+        if (nElement.ge.1) Allocate(value, source = refValue )
     end if
     if (present(isError)) isError = isError_
 !! -------------------------------------------------------------------------- !!

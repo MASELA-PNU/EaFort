@@ -26,6 +26,8 @@ Contains
 !!... Test Arg GURU
 #include "tests/test_argGURU.inc"
 
+#include "tests/test_argGURUVector.inc"
+
 !!... Test Log GURU
 #include "tests/test_logGURU.inc"
 
