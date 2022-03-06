@@ -71,20 +71,20 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     !!...
     Type(string) :: errValueStr, refValueStr
     Character(len=:), Allocatable :: errValueChar, refValueChar
-
+    Logical :: isError
     !!... Convert values
+
     errValueChar = ""
     if ( present(errValue) ) then
-        Call GetStrFromClass(errValue, errValueStr)
-        errValueChar = errValueStr%Chars()
+        Call GetStrFromClass(errValue, errValueStr, isError)
+        if (isError.EQV..FALSE. ) errValueChar = errValueStr%Chars()
     end if
 
     refValueChar = ""
     if ( present(refValue) ) then
-        Call GetStrFromClass(refValue, refValueStr)
-        refValueChar = refValueStr%Chars()
+        Call GetStrFromClass(refValue, refValueStr, isError)
+        if (isError.EQV..FALSE. ) refValueChar = refValueStr%Chars()
     end if
-
 
     isColor_ = .FALSE.
     if ( Present(isColor) ) isColor_ = isColor

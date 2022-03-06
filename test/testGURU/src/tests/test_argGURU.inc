@@ -16,20 +16,20 @@ Implicit None
     &   version     = "0.0.1"               )
 
     !!... Add Arguments
-    ! Call GURU%AddKey( &
-    ! &   key           = "input",              &
-    ! &   singleKey     = "i",                  &
-    ! &   description   = "Input File Path",    &
-    ! &   isRequiredKey = .TRUE.,               &
-    ! &   nRequiredArg  = 1                     )
-    !
-    ! !!... Add Arguments
-    ! Call GURU%AddKey(             &
-    ! &   key           = "output",             &
-    ! &   singleKey     = "o",                  &
-    ! &   description   = "Output File Path",   &
-    ! &   isRequiredKey = .FALSE.               )
-    !
+    Call GURU%AddKey( &
+    &   key           = "input",              &
+    &   singleKey     = "i",                  &
+    &   description   = "Input File Path",    &
+    &   isRequiredKey = .TRUE.,               &
+    &   nRequiredWord = 1                     )
+
+    !!... Add Arguments
+    Call GURU%AddKey(             &
+    &   key           = "output",             &
+    &   singleKey     = "o",                  &
+    &   description   = "Output File Path",   &
+    &   isRequiredKey = .FALSE.               )
+
     ! !!... Add Arguments
     ! Call GURU%AddKey(                   &
     ! &   key           = "print",                    &
@@ -39,6 +39,79 @@ Implicit None
 
     !!... Update Key
     Call GURU%UpdateAndPrint()
+
+    Block
+        Integer :: intValue
+        Real(8) :: dbleValue
+        Logical :: logValue
+        Character(len=:), Allocatable :: charValue
+        Logical :: isError, isFound
+
+        Call GURU%GetArgInt( "input", intValue, 2, isError )
+        write(*,*) " intValue : ", intValue
+        write(*,*) " isError  : ", isError
+        write(*,*)
+
+        Call GURU%IsFoundKey( "output", isFound )
+        write(*,*) " isFound  : ", isFound
+        write(*,*)
+
+        Call GURU%GetArgInt( "output", intValue, 2, isError )
+        write(*,*) " intValue : ", intValue
+        write(*,*) " isError  : ", isError
+        write(*,*)
+
+        Call GURU%GetArgDble( "output", dbleValue, 1, isError )
+        write(*,*) " dbleValue : ", dbleValue
+        write(*,*) " isError  : ", isError
+        write(*,*)
+
+        Call GURU%GetArgLogical( "output", logValue, 1, isError )
+        write(*,*) " logValue : ", logValue
+        write(*,*) " isError  : ", isError
+        write(*,*)
+
+        Call GURU%GetArgChar( "output", charValue, 1, isError )
+        write(*,*) " charValue : ", charValue
+        write(*,*) " isError  : ", isError
+        write(*,*)
+
+    End Block
+
+    Block
+        Integer :: intValue
+        Real(4) :: realValue
+        Real(8) :: dbleValue
+        Logical :: logValue
+        Character(len=:), Allocatable :: charValue
+        Logical :: isError, isFound
+
+        write(*,*) "Testing GetOrDefault"
+        write(*,*)
+
+        Call GURU%ToggleDebugMode(.TRUE.)
+
+        Call GURU%GetArgIntOrDefault( "input", intValue, 2 )
+        write(*,*) " intValue : ", intValue
+        write(*,*)
+
+        Call GURU%GetArgRealOrDefault( "output", realValue, 2.0 )
+        write(*,*) " realValue : ", realValue
+        write(*,*)
+
+        Call GURU%GetArgDbleOrDefault( "output", dbleValue, 5.D0 )
+        write(*,*) " dbleValue : ", dbleValue
+        write(*,*)
+
+        Call GURU%GetArgLogicalOrDefault( "output", logValue, .true. )
+        write(*,*) " logValue : ", logValue
+        write(*,*)
+
+        Call GURU%GetArgCharOrDefault( "output", charValue, "a" )
+        write(*,*) " charValue : ", charValue
+        write(*,*)
+
+    End Block
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine

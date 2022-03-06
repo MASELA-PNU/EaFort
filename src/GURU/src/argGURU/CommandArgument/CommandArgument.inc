@@ -109,7 +109,7 @@ Subroutine PrintInfo_typCommandArgument(this, ioUnit, isColor)
     keyToPrint = INDENT2//"--"//Colorize(this%key, colorKey)
 
     if ( this%isSingleKeyGiven ) then
-        keyToPrint = keyToPrint//", -"//Colorize(this%singleKey, colorKey)
+        keyToPrint = keyToPrint//", --"//Colorize(this%singleKey, colorKey)
     end if
 
     If ( this%isFound ) then
@@ -195,7 +195,7 @@ Implicit None
     Integer             :: iArg, jArg, nChArg, nGivenArg
     Character(len=1024) :: arg
     Integer             :: indStart, indEnd
-    Logical             :: isActive, isFound, isMultiple
+    Logical             :: isActive, isFound
     Integer             :: nLength
 
     indStart = -1
@@ -208,8 +208,6 @@ Implicit None
     isFound  = .FALSE.
 
     this%isFound = .FALSE.
-
-    ! write(*,*) "key", this%key
 
     !!... Find the corresponding keyword
     Do iArg = 0, nTotalArg
@@ -233,13 +231,6 @@ Implicit None
 
             end if
 
-        else if ( nChArg.GE.2 ) then
-
-            if ( isActive.AND.arg(1:1).EQ."-" ) then
-                indEnd   = iArg-1
-                isActive = .FALSE.
-            end if
-
         end if
 
         if ( (iArg.EQ.nTotalArg).AND.isActive ) Then
@@ -248,6 +239,7 @@ Implicit None
         end if
 
     End do
+
 
     !!... If Found, Save the following arguments
     If ( isFound ) Then
@@ -288,13 +280,12 @@ Implicit None
     End if
 
     !!... Find the corresponding single keyword
-    isMultiple = .FALSE.
     SingleKeyLoop: Do iArg = 0, nTotalArg
 
         CALL GET_COMMAND_ARGUMENT( iArg,  arg )
         nChArg = len_trim(arg)
 
-        if ( nChArg.GE.2 ) then
+        if ( nChArg.GE.3 ) then
 
             if ( arg(1:2).EQ."--" ) then
 
@@ -304,26 +295,11 @@ Implicit None
                     exit SingleKeyLoop
                 end if
 
-            else if ( arg(1:1).EQ."-" ) then
-
-                if (isActive) then
-                    indEnd   = iArg - 1
-                    isActive = .FALSE.
-                    exit SingleKeyLoop
-                end if
-
-                do iCh = 2, nChArg
-                    if ( arg(iCh:iCh).EQ.this%singleKey ) then
-                        indStart = iArg
-                        isActive = .TRUE.
-                        isFound  = .TRUE.
-                        this%isFound = .TRUE.
-                    end if
-                end do
-
-                if ( nChArg.GE.3 ) then
-                    isMultiple = .TRUE.
-                    exit SingleKeyLoop
+                if ( arg(3:3).EQ.this%singleKey ) then
+                    indStart = iArg
+                    isActive = .TRUE.
+                    isFound  = .TRUE.
+                    this%isFound = .TRUE.
                 end if
 
             end if
@@ -338,7 +314,7 @@ Implicit None
     End do SingleKeyLoop
 
     !!... Save
-    if ( (isFound).AND.(.NOT.isMultiple) ) then
+    if (isFound) then
 
         nGivenArg = indEnd - indStart
 
@@ -367,13 +343,6 @@ Implicit None
                 jArg = jArg + 1
                 this%words(jArg) = trim(arg)
             end do
-
-            ! write(*,*) this%nArguments
-
-            ! do iArg = 1, this%nArguments
-            !     write(*,*) iArg, this%arguments(iArg)%Chars()
-            ! end do
-
         end if
 
     end if

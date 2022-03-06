@@ -71,25 +71,25 @@ Contains
     !!... Found Key
     Procedure :: IsFoundKey => ARG_IsFoundKey_typGURU
 
-    !!... Get the number of argument
-    Procedure :: GetNArg => ARG_GetNArg_typGURU
+    !!... Get the number of keys
+    Procedure :: GetNKey => ARG_GetNKey_typGURU
 
     !!... Get key for given index
     Procedure :: GetKey => ARG_GetKey_typGURU
 
-    !!... Get Arguments
-    Procedure :: GetArgInteger => ARG_GetArgInteger_typGURU
-    ! Procedure :: GetArgReal    => ARG_GetArg_Integer_typGURU
-    ! Procedure :: GetArgDble    => ARG_GetArg_Dble_typGURU
-    ! Procedure :: GetArgLogical => ARG_GetArg_Logical_typGURU
-    ! Procedure :: GetArgChar    => ARG_GetArg_Char_typGURU
-    ! Procedure :: GetArgString  => ARG_GetArg_String_typGURU
+    !!... Get Arguments by keyword and its index(option)
+    Procedure :: GetArgInt     => ARG_GetArgInt_typGURU
+    Procedure :: GetArgReal    => ARG_GetArgReal_typGURU
+    Procedure :: GetArgDble    => ARG_GetArgDble_typGURU
+    Procedure :: GetArgLogical => ARG_GetArgLogical_typGURU
+    Procedure :: GetArgChar    => ARG_GetArgChar_typGURU
 
-    ! !!... Get argument
-    ! Procedure :: GetArg => GetArg_typInfoArg
-    !
-    ! !!... Get argument or default
-    ! Procedure :: GetArgOrDefault => GetArgOrDefault_typInfoArg
+    !!... Get Arguments by keyword and its index(option) or default value
+    Procedure :: GetArgIntOrDefault     => ARG_GetArgIntOrDefault_typGURU
+    Procedure :: GetArgRealOrDefault    => ARG_GetArgRealOrDefault_typGURU
+    Procedure :: GetArgDbleOrDefault    => ARG_GetArgDbleOrDefault_typGURU
+    Procedure :: GetArgLogicalOrDefault => ARG_GetArgLogicalOrDefault_typGURU
+    Procedure :: GetArgCharOrDefault    => ARG_GetArgCharOrDefault_typGURU
 
     !!... Update and Print
     Procedure :: UpdateAndPrint => ARG_UpdateAndPrint_typGURU
@@ -107,12 +107,11 @@ Contains
     Procedure :: Destroy_ARG => ARG_Destroy_typGURU
 
     !!... Get Argument
-    ! Generic :: GetArg => GetArgInteger,     &
-    ! &                    GetArgReal,        &
-    ! &                    GetArgDble,        &
-    ! &                    GetArgLogical,     &
-    ! &                    GetArgChar,        &
-    ! &                    GetArgString
+    Generic :: GetArg => GetArgInt,     &
+    &                    GetArgReal,    &
+    &                    GetArgDble,    &
+    &                    GetArgLogical, &
+    &                    GetArgChar
 
 !! -------------------------------------------------------------------------- !!
 !!  Logging Routines

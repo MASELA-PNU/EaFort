@@ -66,39 +66,43 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_IsFoundKey_typGURU( this, key, isFound, index )
+Subroutine ARG_IsFoundKey_typGURU( this, key, isFound, ikey )
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typGURU), intent(in)     :: this
     Character(len=*), intent(in)   :: key
     Logical, intent(out)           :: isFound
-    Integer, intent(out), optional :: index
+    Integer, intent(out), optional :: ikey
 !! -------------------------------------------------------------------------- !!
-    Integer :: iArg
+    Integer :: iArg, ikey_
     isFound = .FALSE.
-    index   = 0
-    do iArg = 1, this%nArguments
+
+    ikey_ = 0
+    loopFind: do iArg = 1, this%nArguments
         if ( this%arguments(iArg)%key.EQ.key ) then
             if ( this%arguments(iArg)%isFound ) then
-                index   = iArg
+                ikey_  = iArg
                 isFound = .TRUE.
-                return
+                exit loopFind
             end if
         end if
-    end do
+    end do loopFind
+
+    if (present(ikey)) ikey = ikey_
+
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function ARG_GetNArg_typGURU(this) result( nArg )
+Function ARG_GetNKey_typGURU(this) result( nKey )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in) :: this
-    Integer :: nArg
+    Integer :: nKey
 !! -------------------------------------------------------------------------- !!
-    nArg = this%nArguments
+    nKey = this%nArguments
 !! -------------------------------------------------------------------------- !!
 End Function
 !! -------------------------------------------------------------------------- !!
@@ -125,31 +129,361 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgInteger_typGURU(this, key, value, isError)
+Subroutine ARG_GetArgInt_typGURU(this, key, value, index, isError)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
     Integer, intent(out)          :: value
+    Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isFound_, isError_
-    Integer :: index
+    Integer :: ikey, index_
 
     !!... Check
-    Call this%IsFoundKey(key, isFound_, index)
+    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
 
     isError_ = .TRUE.
+    index_   = 1
     If ( isFound_ ) then
-        If ( this%arguments(index)%nWord.ge.1 ) then
-            !this%words(index)
-            isError_ = .FALSE.
+        if ( present(index) ) index_ = index
+
+        If ( (this%arguments(ikey)%nWord.ge.1).and.&
+        &    (index_.le.this%arguments(ikey)%nWord) ) then
+
+            Call GetIntFromChar( &
+            &   char    = this%arguments(ikey)%words(index_)%raw , &
+            &   value   = value ,&
+            &   isError = isError_ )
+
         endif
     end if
 
     if (isError_) value   = 0
-    if (present(isError)) isError = isError_
+    if ( present(isError) ) then
+        isError = isError_
+    else
+        Call this%Error( &
+        &   msg      = "Failed to get integer.", &
+        &   head     = "ARG_GetArgInt_typGURU", &
+        &   value    = key )
+    end if
 
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgReal_typGURU(this, key, value, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Real(4), intent(out)          :: value
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isFound_, isError_
+    Integer :: ikey, index_
+
+    !!... Check
+    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
+
+    isError_ = .TRUE.
+    index_   = 1
+    If ( isFound_ ) then
+        if ( present(index) ) index_ = index
+
+        If ( (this%arguments(ikey)%nWord.ge.1).and.&
+        &    (index_.le.this%arguments(ikey)%nWord) ) then
+
+            Call GetRealFromChar( &
+            &   char    = this%arguments(ikey)%words(index_)%raw , &
+            &   value   = value ,   &
+            &   isError = isError_  )
+
+        endif
+    end if
+
+    if (isError_) value   = 0.0
+    if ( present(isError) ) then
+        isError = isError_
+    else
+        Call this%Error( &
+        &   msg      = "Failed to get real.", &
+        &   head     = "ARG_GetArgReal_typGURU", &
+        &   value    = key )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgDble_typGURU(this, key, value, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Real(8), intent(out)          :: value
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isFound_, isError_
+    Integer :: ikey, index_
+
+    !!... Check
+    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
+
+    isError_ = .TRUE.
+    index_   = 1
+    If ( isFound_ ) then
+        if ( present(index) ) index_ = index
+
+        If ( (this%arguments(ikey)%nWord.ge.1).and.&
+        &    (index_.le.this%arguments(ikey)%nWord) ) then
+
+            Call GetDbleFromChar( &
+            &   char    = this%arguments(ikey)%words(index_)%raw , &
+            &   value   = value ,   &
+            &   isError = isError_  )
+
+        endif
+    end if
+
+    if (isError_) value   = 0.D0
+    if ( present(isError) ) then
+        isError = isError_
+    else
+        Call this%Error( &
+        &   msg      = "Failed to get double precision.", &
+        &   head     = "ARG_GetArgDble_typGURU", &
+        &   value    = key )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgLogical_typGURU(this, key, value, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Logical, intent(out)          :: value
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isFound_, isError_
+    Integer :: ikey, index_
+
+    !!... Check
+    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
+
+    isError_ = .TRUE.
+    index_   = 1
+    If ( isFound_ ) then
+        if ( present(index) ) index_ = index
+
+        If ( (this%arguments(ikey)%nWord.ge.1).and.&
+        &    (index_.le.this%arguments(ikey)%nWord) ) then
+
+            Call GetLogicalFromChar( &
+            &   char    = this%arguments(ikey)%words(index_)%raw , &
+            &   value   = value ,   &
+            &   isError = isError_  )
+
+        endif
+    end if
+
+    if (isError_) value   = .FALSE.
+    if ( present(isError) ) then
+        isError = isError_
+    else
+        Call this%Error( &
+        &   msg      = "Failed to get logical.", &
+        &   head     = "ARG_GetArgLogical_typGURU", &
+        &   value    = key )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgChar_typGURU(this, key, value, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Character(len=:), Allocatable, intent(out) :: value
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isFound_, isError_
+    Integer :: ikey, index_
+
+    !!... Check
+    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
+
+    if (Allocated(value)) deallocate(value)
+
+    isError_ = .TRUE.
+    index_   = 1
+    If ( isFound_ ) then
+        if ( present(index) ) index_ = index
+
+        If ( (this%arguments(ikey)%nWord.ge.1).and.&
+        &    (index_.le.this%arguments(ikey)%nWord) ) then
+            if (len(this%arguments(ikey)%words(index_)%raw).ge.1) then
+                value    = this%arguments(ikey)%words(index_)%raw
+                isError_ = .FALSE.
+            end if
+        endif
+    end if
+
+    if (isError_) value   = ""
+    if ( present(isError) ) then
+        isError = isError_
+    else
+        Call this%Error( &
+        &   msg      = "Failed to get character.", &
+        &   head     = "ARG_GetArgChar_typGURU", &
+        &   value    = key )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgIntOrDefault_typGURU(this, key, value, refValue, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Integer, intent(out)          :: value
+    Integer, intent(in)           :: refValue
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isError_
+    Call this%GetArgInt( key, value, index, isError_ )
+    if ( isError_ ) then
+        value = refValue
+        Call this%Debug( &
+        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   head     = "ARG_GetArgIntOrDefault_typGURU", &
+        &   value    = key, &
+        &   refValue = refValue )
+    end if
+    if ( present(isError) ) isError = isError_
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgRealOrDefault_typGURU(this, key, value, refValue, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Real(4), intent(out)          :: value
+    Real(4), intent(in)           :: refValue
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isError_
+    Call this%GetArgReal( key, value, index, isError_ )
+    if ( isError_ ) then
+        value = refValue
+        Call this%Debug( &
+        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   head     = "ARG_GetArgRealOrDefault_typGURU", &
+        &   value    = key, &
+        &   refValue = refValue )
+    end if
+    if ( present(isError) ) isError = isError_
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgDbleOrDefault_typGURU(this, key, value, refValue, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Real(8), intent(out)          :: value
+    Real(8), intent(in)           :: refValue
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isError_
+    Call this%GetArgDble( key, value, index, isError_ )
+    if ( isError_ ) then
+        value = refValue
+        Call this%Debug( &
+        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   head     = "ARG_GetArgDbleOrDefault_typGURU", &
+        &   value    = key, &
+        &   refValue = refValue )
+    end if
+    if ( present(isError) ) isError = isError_
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgLogicalOrDefault_typGURU(this, key, value, refValue, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)    :: this
+    Character(len=*), intent(in)  :: key
+    Logical, intent(out)          :: value
+    Logical, intent(in)           :: refValue
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isError_
+    Call this%GetArgLogical( key, value, index, isError_ )
+    if ( isError_ ) then
+        value = refValue
+        Call this%Debug( &
+        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   head     = "ARG_GetArgLogicalOrDefault_typGURU", &
+        &   value    = key, &
+        &   refValue = refValue )
+    end if
+    if ( present(isError) ) isError = isError_
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine ARG_GetArgCharOrDefault_typGURU(this, key, value, refValue, index, isError)
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                 :: this
+    Character(len=*), intent(in)               :: key
+    Character(len=:), allocatable, intent(out) :: value
+    Character(len=*), intent(in)               :: refValue
+    Integer, intent(in), optional :: index
+    Logical, optional             :: isError
+!! -------------------------------------------------------------------------- !!
+    Logical :: isError_
+    Call this%GetArgChar( key, value, index, isError_ )
+    if ( isError_ ) then
+        value = refValue
+        Call this%Debug( &
+        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   head     = "ARG_GetArgLogicalOrDefault_typGURU", &
+        &   value    = key, &
+        &   refValue = refValue )
+    end if
+    if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
@@ -210,33 +544,32 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintDescription_typGURU( this, ioUnit )
+Subroutine ARG_PrintDescription_typGURU( this, ioUnit, isColor )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
-    Class(typGURU), intent(in) :: this
-    Integer, optional             :: ioUnit
+    Class(typGURU), intent(in)   :: this
+    Integer, optional            :: ioUnit
+    Logical, intent(in),Optional :: isColor
 !! -------------------------------------------------------------------------- !!
-    Logical :: isColor
+    Logical :: isColor_
     Integer :: ioUnit_
 
     !!... Set Print Mode
     ioUnit_ = 6
-    if ( present(ioUnit) ) then
-        if (ioUnit.EQ.6) then
-            isColor = .FALSE.
-        else
-            isColor = .FALSE.
-        end if
-        ioUnit_ = ioUnit
-    end if
+    if ( present(ioUnit) ) ioUnit_ = ioUnit
+
+    isColor_ = .FALSE.
+    if ( present(isColor) ) isColor_ = isColor
+
+    if (ioUnit_.NE.6) isColor_ = .FALSE.
 
     !!... Write Project Name
     blkWriteProjectName : Block
         Character(len=17) :: color1, color2
         color1 = ""
         color2 = ""
-        If ( isColor ) then
+        If ( isColor_ ) then
             color1 = "Green"
             color2 = "Yellow"
         end if
@@ -260,7 +593,7 @@ Subroutine ARG_PrintDescription_typGURU( this, ioUnit )
             nStr = size( multipleLines )
 
             color1 = ""
-            If ( isColor ) color1 = "CYAN"
+            If ( isColor_ ) color1 = "CYAN"
             Write(ioUnit_, "(a)") INDENT//Colorize("Description", color1)
             Write(ioUnit_, "(a)") ""
 
@@ -288,7 +621,7 @@ Subroutine ARG_PrintDescription_typGURU( this, ioUnit )
             nStr = size( multipleLines )
 
             color1 = ""
-            If ( isColor ) color1 = "CYAN"
+            If ( isColor_ ) color1 = "CYAN"
             Write(ioUnit_, "(a)") INDENT//Colorize("Authors", color1)
             Write(ioUnit_, "(a)") ""
 
@@ -308,7 +641,7 @@ Subroutine ARG_PrintDescription_typGURU( this, ioUnit )
         Character(len=17) :: color1
 
         color1 = ""
-        If ( isColor ) color1 = "CYAN"
+        If ( isColor_ ) color1 = "CYAN"
 
         If ( Allocated(this%version%raw) ) then
             Write(ioUnit_, "(a)") INDENT//Colorize("Version", color1)//" : "//this%version%Chars()
@@ -327,27 +660,25 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintGivenKey_typGURU(this, ioUnit)
+Subroutine ARG_PrintGivenKey_typGURU( this, ioUnit, isColor )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typGURU), intent(in) :: this
-    Integer, optional             :: ioUnit
+    Integer, optional          :: ioUnit
+    Logical, optional          :: isColor
 !! -------------------------------------------------------------------------- !!
-    Logical :: isColor
+    Logical :: isColor_
     Integer :: ioUnit_
 
     !!... Set Print Mode
-    ! isColor = this%isColor_
     ioUnit_ = 6
-    if ( present(ioUnit) ) then
-        if (ioUnit.EQ.6) then
-            ! isColor = this%isColor_
-        else
-            isColor = .FALSE.
-        end if
-        ioUnit_ = ioUnit
-    end if
+    if ( present(ioUnit) ) ioUnit_ = ioUnit
+
+    isColor_ = .FALSE.
+    if ( present(isColor) ) isColor_ = isColor
+
+    if (ioUnit_.NE.6) isColor_ = .FALSE.
 
     !!... Write Required Key Information
     blkWriteRequiredKey : Block
@@ -364,7 +695,7 @@ Subroutine ARG_PrintGivenKey_typGURU(this, ioUnit)
             if ( nArg.GE.1 ) then
 
                 color = ""
-                If ( isColor ) color = "MAGENTA_INTENSE"
+                If ( isColor_ ) color = "MAGENTA_INTENSE"
                 Write(ioUnit_, "(a)") INDENT//Colorize("Required", color)
                 Write(ioUnit_, "(a)") ""
 
@@ -394,7 +725,7 @@ Subroutine ARG_PrintGivenKey_typGURU(this, ioUnit)
             if ( nArg.GE.1 ) then
 
                 color = ""
-                If ( isColor ) color = "MAGENTA_INTENSE"
+                If ( isColor_ ) color = "MAGENTA_INTENSE"
                 Write(ioUnit_, "(a)") INDENT//Colorize("Optional", color)
                 Write(ioUnit_, "(a)") ""
 

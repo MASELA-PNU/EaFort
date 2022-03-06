@@ -406,7 +406,6 @@ Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
 !! -------------------------------------------------------------------------- !!
 
     If ( this%isDebug_ ) then
-
         !!... Write Message
         Call WritePrefixMessage( &
         &   prefix      = PREIX_DEBUG,      &
