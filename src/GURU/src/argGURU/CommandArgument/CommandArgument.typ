@@ -7,13 +7,13 @@ Type typCommandArgument
     Logical :: isSingleKeyGiven = .FALSE.
 
     !!... Single Key
-    Character(len=1) :: singleKey = " "
+    Character(len=1) :: singleKey = ""
 
     !!... Description
     Type(string) :: description
 
     !!... isRequireKey
-    Logical :: isRequiredKey = .TRUE.
+    Logical :: isRequiredKey = .FALSE.
 
     !!... is keyword found
     Logical :: isFound = .FALSE.

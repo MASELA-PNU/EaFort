@@ -24,7 +24,10 @@ Implicit None
 
     !!... Test Argument GURU
     ! Call Test_ArgGURU()
-    Call Test_ArgGURUVector()
+    ! Call Test_ArgGURUVector()
+
+    !!... Test GURU
+    Call Test_GURU()
 
 !! -------------------------------------------------------------------------- !!
 End Program

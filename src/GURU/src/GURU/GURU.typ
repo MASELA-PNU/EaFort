@@ -34,13 +34,13 @@ Type typGURU
 !! -------------------------------------------------------------------------- !!
 
     !!... Write the message to the log file
-    Logical :: isLogFile_ = .FALSE.
+    Logical :: isLogFile = .FALSE.
 
     !!... Log File Path
     character(len=:), Allocatable :: logFilePath_
 
     !!... Default Output
-    Integer :: logUnit_ = 11
+    Integer, Public :: logUnit = 11
 
     !!... Is Debug Mode (Write the message when the debug mode is enabled)
     Logical :: isDebug_ = .FALSE.
@@ -55,6 +55,9 @@ Type typGURU
 Contains
 !! -------------------------------------------------------------------------- !!
 
+    !!... Initialize GURU Class (Easy version to Initialize)
+    Procedure :: Initialize => Initialize_typGURU
+
 !! -------------------------------------------------------------------------- !!
 !!  Arguments Routines
 !! -------------------------------------------------------------------------- !!
@@ -66,7 +69,22 @@ Contains
     Procedure :: AddKey => ARG_AddKey_typGURU
 
     !!... Update Arguments
-    Procedure :: Update => ARG_Update_typGURU
+    Procedure :: Update_ARG => ARG_Update_ARG_typGURU
+
+    !!... Update and Print
+    Procedure :: UpdateAndPrint => ARG_UpdateAndPrint_typGURU
+
+    !!... Print the description
+    Procedure :: PrintDescription => ARG_PrintDescription_typGURU
+
+    !!... Print Help
+    Procedure :: PrintHelp => ARG_PrintHelp_typGURU
+
+    !!... Print the description
+    Procedure :: PrintGivenKey => ARG_PrintGivenKey_typGURU
+
+    !!... Destroy the class
+    Procedure :: Destroy_ARG => ARG_Destroy_typGURU
 
     !!... Found Key
     Procedure :: IsFoundKey => ARG_IsFoundKey_typGURU
@@ -109,21 +127,6 @@ Contains
     Procedure :: GetArgDbleVectorOrDefault    => ARG_GetArgDbleVectorOrDefault_typGURU
     Procedure :: GetArgLogicalVectorOrDefault => ARG_GetArgLogicalVectorOrDefault_typGURU
     Procedure :: GetArgCharVectorOrDefault    => ARG_GetArgCharVectorOrDefault_typGURU
-
-    !!... Update and Print
-    Procedure :: UpdateAndPrint => ARG_UpdateAndPrint_typGURU
-
-    !!... Print the description
-    Procedure :: PrintDescription => ARG_PrintDescription_typGURU
-
-    !!... Print Help
-    Procedure :: PrintHelp => ARG_PrintHelp_typGURU
-
-    !!... Print the description
-    Procedure :: PrintGivenKey => ARG_PrintGivenKey_typGURU
-
-    !!... Destroy the class
-    Procedure :: Destroy_ARG => ARG_Destroy_typGURU
 
     !!... Get Argument
     Generic :: GetArg => GetArgInt,     &

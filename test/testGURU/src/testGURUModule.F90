@@ -31,6 +31,9 @@ Contains
 !!... Test Log GURU
 #include "tests/test_logGURU.inc"
 
+!!... Test GURU
+#include "tests/test_GURU.inc"
+
 !! -------------------------------------------------------------------------- !!
 End Module
 !! -------------------------------------------------------------------------- !!

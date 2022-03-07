@@ -26,7 +26,7 @@ Subroutine LOG_Initialize_typGURU( &
     If ( this%MPI_isMaster ) then
 
     !!... Set log file
-    this%isLogFile_ = .FALSE.
+    this%isLogFile = .FALSE.
 
     !!... Deallocate log file path
     If (Allocated(this%logFilePath_)) Deallocate(this%logFilePath_)
@@ -192,9 +192,12 @@ Subroutine LOG_Initialize_typGURU( &
 
         !!... Create Log File
         Open( &
-        &   newunit = this%logUnit_,     &
+        &   newunit = this%logUnit,     &
         &   file    = this%logFilePath_, &
         &   status  = "replace"          )
+
+        !!... Write Log File
+        this%isLogFile = .TRUE.
 
     End Block blcCreateLogFile
 
@@ -276,7 +279,7 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
             If ( this%MPI_isMaster ) then
                 Call WriteMessage( &
                 &   msg       = tmpMsg,         &
-                &   unit      = this%logUnit_,  &
+                &   unit      = this%logUnit,  &
                 &   color     = color           )
             else
                 Call WriteMessage(              &
@@ -287,7 +290,7 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
             If ( this%MPI_isMaster ) then
                 Call WriteMessage( &
                 &   msg       = tmpMsg,         &
-                &   unit      = this%logUnit_,  &
+                &   unit      = this%logUnit,  &
                 &   color     = color,          &
                 &   isAdvance = isAdvance       )
             else
@@ -360,7 +363,7 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     &   head        = head,             &
     &   errValue    = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit_,    &
+    &   unit        = this%logUnit,    &
     &   isColor     = this%isColor_,    &
     &   isStop      = isStop_           )
 
@@ -386,7 +389,7 @@ Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
     &   head        = head,             &
     &   errValue    = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit_,    &
+    &   unit        = this%logUnit,    &
     &   isColor     = this%isColor_,    &
     &   isStop      = .FALSE.           )
 
@@ -414,7 +417,7 @@ Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
         &   head        = head,             &
         &   errValue    = value,            &
         &   refValue    = refValue,         &
-        &   unit        = this%logUnit_,    &
+        &   unit        = this%logUnit,    &
         &   isColor     = this%isColor_,    &
         &   isStop      = .FALSE.           )
 
@@ -430,7 +433,7 @@ End Subroutine
     Implicit None
     Class(typGURU), intent(in) :: this
 !! -------------------------------------------------------------------------- !!
-    if ( this%isLogFile_ ) Flush(this%logUnit_)
+    if ( this%isLogFile ) Flush(this%logUnit)
 !! -------------------------------------------------------------------------- !!
     End Subroutine
 !! -------------------------------------------------------------------------- !!
@@ -445,13 +448,13 @@ End Subroutine
     Call this%Flush()   !!... Write Log file
 
     !!... Write the message to the log file
-    this%isLogFile_ = .FALSE.
+    this%isLogFile = .FALSE.
 
     !!... Log File Path
     this%logFilePath_ = ""
 
     !!... Default Output
-    this%logUnit_ = 11
+    this%logUnit = 11
 
     !!... Is Debug Mode (Write the message when the debug mode is enabled)
     this%isDebug_ = .FALSE.

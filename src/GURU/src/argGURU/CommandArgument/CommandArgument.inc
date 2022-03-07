@@ -240,26 +240,23 @@ Implicit None
 
     End do
 
-
     !!... If Found, Save the following arguments
     If ( isFound ) Then
         this%isFound = .TRUE.
 
         nGivenArg = indEnd - indStart
 
-        If (this%nWord.GE.1) then
-            if ( (indEnd.GE.indStart).AND.(nGivenArg.LT.this%nRequiredWord) ) then
-                Call WritePrefixMessage( &
-                &   prefix      = PREIX_ERROR,                              &
-                &   prefixColor = COLOR_ERROR,                              &
-                &   head        = "Update_typCommandArgument",              &
-                &   msg         = "The number of words after keyword is less than the requirement.\n&
-                                &* Required number of words is given in the below.", &
-                &   errValue    = trim(this%key),                           &
-                &   refValue    = this%nRequiredWord,                       &
-                &   isColor     = .FALSE.,                                  &
-                &   isStop      = .TRUE.                                    )
-            end if
+        if (nGivenArg.LT.this%nRequiredWord) then
+            Call WritePrefixMessage( &
+            &   prefix      = PREIX_ERROR,                              &
+            &   prefixColor = COLOR_ERROR,                              &
+            &   head        = "Update_typCommandArgument",              &
+            &   msg         = "The number of words after keyword is less than the requirement.\n&
+                            &* Required number of words is given in the below.", &
+            &   errValue    = trim(this%key),                           &
+            &   refValue    = this%nRequiredWord,                       &
+            &   isColor     = .FALSE.,                                  &
+            &   isStop      = .TRUE.                                    )
         end if
 
         If ( nGivenArg.GE.1 ) then
@@ -420,7 +417,7 @@ Subroutine Destroy_typCommandArgument(this)
     end if
 
     this%nWord          = 0
-    this%isRequiredKey  = .TRUE.
+    this%isRequiredKey  = .FALSE.
     this%nRequiredWord  = 0
 
 !! -------------------------------------------------------------------------- !!

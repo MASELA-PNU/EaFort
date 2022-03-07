@@ -29,38 +29,6 @@ Subroutine ARG_Initialize_typGURU( &
     if ( present(date) )        this%date        = date
     if ( present(version) )     this%version     = version
 
-    !!... Set basic arguments
-    this%nArguments = 1
-    Allocate( this%arguments(this%nArguments) )
-
-    Call this%arguments(1)%Initialize( &
-    &   key           = "help",                   &
-    &   description   = "Print help messages",    &
-    &   isRequiredKey = .FALSE.                   )
-    !
-    ! Call this%arguments(2)%Initialize( &
-    ! &   key           = "log",               &
-    ! &   description   = "Log File Path",     &
-    ! &   isRequiredKey = .FALSE.,             &
-    ! &   nRequiredArg  = 1                    )
-    !
-    ! Call this%arguments(3)%Initialize( &
-    ! &   key           = "color",             &
-    ! &   isRequiredKey = .FALSE.,             &
-    ! &   description   = "Color Mode"         )
-    !
-    ! Call this%arguments(4)%Initialize( &
-    ! &   key           = "debug",             &
-    ! &   isRequiredKey = .FALSE.,             &
-    ! &   description   = "Debug Mode"         )
-
-    !!... Update Basic arguments
-    Call this%Update()
-
-    ! !!... Color & Debug Mode
-    ! If ( this%IsFoundKey( key = "color" ) ) this%isColor_ = .TRUE.
-    ! If ( this%IsFoundKey( key = "debug" ) ) this%isDebug_ = .TRUE.
-
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
@@ -391,12 +359,13 @@ Subroutine ARG_GetArgChar_typGURU(this, key, value, index, isError)
                 isError_ = .FALSE.
             end if
         endif
+
     end if
 
-    if (isError_) value   = ""
-    if ( present(isError) ) then
-        isError = isError_
-    else
+    if ( present(isError) ) isError = isError_
+
+    if (isError_) then
+        value   = ""
         Call this%Error( &
         &   msg      = "Failed to get character.", &
         &   head     = "ARG_GetArgChar_typGURU", &
@@ -936,34 +905,36 @@ Subroutine ARG_UpdateAndPrint_typGURU( this )
     Logical :: isFound
 
     !!... Update Key
-    Call this%Update()
+    Call this%Update_ARG()
 
     !!... Print Description
     Call this%PrintDescription()
+    if ( this%isLogFile ) Call this%PrintDescription( this%logUnit )
 
     Call this%IsFoundKey( key = "help", isFound = isFound )
 
     !!... If --help is given, print help message and stop
     If ( isFound ) then
         Call this%PrintHelp()
+        if ( this%isLogFile ) Call this%PrintHelp( this%logUnit )
         stop
     end if
 
     !!... Print Given Key Information
     Call this%PrintGivenKey()
+    if ( this%isLogFile ) Call this%PrintGivenKey( this%logUnit )
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintDescription_typGURU( this, ioUnit, isColor )
+Subroutine ARG_PrintDescription_typGURU( this, ioUnit )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typGURU), intent(in)   :: this
     Integer, optional            :: ioUnit
-    Logical, intent(in),Optional :: isColor
 !! -------------------------------------------------------------------------- !!
     Logical :: isColor_
     Integer :: ioUnit_
@@ -972,8 +943,7 @@ Subroutine ARG_PrintDescription_typGURU( this, ioUnit, isColor )
     ioUnit_ = 6
     if ( present(ioUnit) ) ioUnit_ = ioUnit
 
-    isColor_ = .FALSE.
-    if ( present(isColor) ) isColor_ = isColor
+    isColor_ = this%isColor_
 
     if (ioUnit_.NE.6) isColor_ = .FALSE.
 
@@ -1073,13 +1043,12 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintGivenKey_typGURU( this, ioUnit, isColor )
+Subroutine ARG_PrintGivenKey_typGURU( this, ioUnit )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typGURU), intent(in) :: this
     Integer, optional          :: ioUnit
-    Logical, optional          :: isColor
 !! -------------------------------------------------------------------------- !!
     Logical :: isColor_
     Integer :: ioUnit_
@@ -1088,9 +1057,7 @@ Subroutine ARG_PrintGivenKey_typGURU( this, ioUnit, isColor )
     ioUnit_ = 6
     if ( present(ioUnit) ) ioUnit_ = ioUnit
 
-    isColor_ = .FALSE.
-    if ( present(isColor) ) isColor_ = isColor
-
+    isColor_ = this%isColor_
     if (ioUnit_.NE.6) isColor_ = .FALSE.
 
     !!... Write Required Key Information
@@ -1114,7 +1081,7 @@ Subroutine ARG_PrintGivenKey_typGURU( this, ioUnit, isColor )
 
                 do iArg = 1, this%nArguments
                     If ( this%arguments(iArg)%isRequiredKey ) then
-                        Call this%arguments(iArg)%PrintInfo(ioUnit, isColor)
+                        Call this%arguments(iArg)%PrintInfo(ioUnit, isColor_)
                     end if
                 end do
             end if
@@ -1144,7 +1111,7 @@ Subroutine ARG_PrintGivenKey_typGURU( this, ioUnit, isColor )
 
                 do iArg = 1, this%nArguments
                     If ( .NOT.this%arguments(iArg)%isRequiredKey ) then
-                        Call this%arguments(iArg)%PrintInfo(ioUnit, isColor)
+                        Call this%arguments(iArg)%PrintInfo(ioUnit, isColor_)
                     end if
                 end do
             end if
@@ -1158,7 +1125,7 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_Update_typGURU(this)
+Subroutine ARG_Update_ARG_typGURU(this)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
@@ -1212,25 +1179,33 @@ Subroutine ARG_AddKey_typGURU( &
     nPreviousArg  = this%nArguments
     If ( nPreviousArg.GE.1 ) then
         do iArg = 1, nPreviousArg
+
+            !!... Check key already exists
             if ( this%arguments(iArg)%key.EQ.key ) then
                 Call WritePrefixMessage( &
                 &   prefix      = PREIX_ERROR,                              &
                 &   prefixColor = COLOR_ERROR,                              &
                 &   head        = "ARG_AddKey_typGURU",                     &
-                &   msg         = "Given 'singleKey' exist already.",       &
-                &   errValue    = trim(singleKey),                          &
-                &   isColor     = this%isColor_,                            &
-                &   isStop      = .TRUE.                                    )
-            else if ( this%arguments(iArg)%singleKey.EQ.singleKey ) then
-                Call WritePrefixMessage( &
-                &   prefix      = PREIX_ERROR,                              &
-                &   prefixColor = COLOR_ERROR,                              &
-                &   head        = "ARG_AddKey_typGURU",                     &
-                &   msg         = "Given 'singleKey' exist already.",       &
+                &   msg         = "Given 'key' exist already.",             &
                 &   errValue    = trim(singleKey),                          &
                 &   isColor     = this%isColor_,                            &
                 &   isStop      = .TRUE.                                    )
             end if
+
+            !!... Check singleKey already exists
+            If ( Present(singleKey) ) then
+                if ( this%arguments(iArg)%singleKey.EQ.singleKey ) then
+                    Call WritePrefixMessage( &
+                    &   prefix      = PREIX_ERROR,                              &
+                    &   prefixColor = COLOR_ERROR,                              &
+                    &   head        = "ARG_AddKey_typGURU",                     &
+                    &   msg         = "Given 'singleKey' exist already.",       &
+                    &   errValue    = trim(singleKey),                          &
+                    &   isColor     = this%isColor_,                            &
+                    &   isStop      = .TRUE.                                    )
+                end if
+            End if
+
         end do
     end if
 
@@ -1274,25 +1249,22 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_PrintHelp_typGURU(this, ioUnit, isColor)
+Subroutine ARG_PrintHelp_typGURU(this, ioUnit)
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Class(typGURU), intent(in) :: this
     Integer, optional          :: ioUnit
-    Logical, optional          :: isColor
 !! -------------------------------------------------------------------------- !!
     Logical :: isColor_
     Integer :: ioUnit_, iArg
 
     !!... Set Print Mode
-    ! isColor = this%isColor_
     ioUnit_ = 6
-
-    isColor_ = .FALSE.
+    isColor_ = this%isColor_
     if ( present(ioUnit) ) then
         if (ioUnit.EQ.6) then
-            isColor_ = isColor
+            isColor_ = this%isColor_
         else
             isColor_ = .FALSE.
         end if
@@ -1319,7 +1291,7 @@ Subroutine ARG_PrintHelp_typGURU(this, ioUnit, isColor)
 
                 do iArg = 1, this%nArguments
                     If ( this%arguments(iArg)%isRequiredKey ) then
-                        Call this%arguments(iArg)%PrintHelp( ioUnit, isColor )
+                        Call this%arguments(iArg)%PrintHelp( ioUnit, isColor_ )
                     End if
                 end do
 
@@ -1347,7 +1319,7 @@ Subroutine ARG_PrintHelp_typGURU(this, ioUnit, isColor)
 
             do iArg = 1, this%nArguments
                 If ( .NOT.this%arguments(iArg)%isRequiredKey ) then
-                    Call this%arguments(iArg)%PrintHelp( ioUnit, isColor )
+                    Call this%arguments(iArg)%PrintHelp( ioUnit, isColor_ )
                 End if
             end do
 

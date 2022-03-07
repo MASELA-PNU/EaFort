@@ -1,11 +1,10 @@
-!                                   EaFort:String                             !!
+!                                   EaFort:GURU                               !!
 !! -------------------------------------------------------------------------- !!
 !   GURU to handle the fortran program
 !
 !    - Error / Warning Message
 !    - Argument by command line
 !    - Explanation of program
-!    - File I/O Handling
 !
 !   author: Young-Myung Choi
 !   date: 2021-10-20
@@ -57,7 +56,8 @@ Implicit None
 !!... Arguments Class Definition
 #include "argGURU/CommandArgument/CommandArgument.typ"
 
-#include "GURU.typ"
+!!... Class Definition
+#include "GURU/GURU.typ"
 
     Type(typGURU), target :: GURU
 
@@ -77,6 +77,9 @@ Contains
 
 !!... Log GURU Class Functions
 #include "logGURU/logGURU.inc"
+
+!!... Class Functions
+#include "GURU/GURU.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module
