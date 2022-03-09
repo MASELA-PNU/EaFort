@@ -29,7 +29,32 @@ Contains
     !!... Get integer vector from raw character
     Procedure :: GetIntVector => GetIntVector_typString
 
+    !!... Get integer vector from raw character
+    Procedure :: GetRealVector => GetRealVector_typString
 
+    !!... Get integer vector from raw character
+    Procedure :: GetDbleVector => GetDbleVector_typString
+
+    !!... Get integer vector from raw character
+    Procedure :: GetLogicalVector => GetLogicalVector_typString
+
+    !!... Get string vector
+    Procedure :: GetStringVector => GetStringVector_typString
+
+    !!... Get integer vector or default value
+    Procedure :: GetIntVectorOrDefault => GetIntVectorOrDefault_typString
+
+    !!... Get Real vector or default value
+    Procedure :: GetRealVectorOrDefault => GetRealVectorOrDefault_typString
+
+    !!... Get Dble vector or default value
+    Procedure :: GetDbleVectorOrDefault => GetDbleVectorOrDefault_typString
+
+    !!... Get Logical vector or default value
+    Procedure :: GetLogicalVectorOrDefault => GetLogicalVectorOrDefault_typString
+
+    !!... Get String vector or default value
+    Procedure :: GetStringVectorOrDefault => GetStringVectorOrDefault_typString
 
     !!... Split itself into typString vector
     Procedure, Private :: Split_typString

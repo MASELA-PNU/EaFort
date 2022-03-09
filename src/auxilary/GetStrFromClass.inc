@@ -32,3 +32,177 @@ Subroutine GetStrFromClass( arg, str, isError )
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine GetStrFromClassVector( arg, str, isError )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(*), Dimension(:), intent(in) :: arg
+    type(string)                       :: str
+    Logical, Optional                  :: isError
+!! -------------------------------------------------------------------------- !!
+    Integer :: nArg, iArg
+    Logical :: isLong
+    type(string) :: tmpStr
+
+    nArg = size(arg)
+
+    isLong = .FALSE.
+    if (nArg.ge.6) isLong = .TRUE.
+
+    isError = .FALSE.
+    Select Type (arg)
+        Type is ( Character(len=*) )
+
+            str%raw = "[ "
+            if (isLong) then
+                tmpStr  = arg(1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(2)
+                str%raw = str%raw//tmpStr%raw//", "
+                str%raw = str%raw//" ... , "
+                tmpStr  = arg(nArg-1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            else
+                do iArg = 1, nArg-1
+                    tmpStr  = arg(iArg)
+                    str%raw = str%raw//tmpStr%raw//", "
+                End do
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            end if
+            str%raw = str%raw//" ]"
+
+        Type is ( Integer )
+
+            str%raw = "[ "
+            if (isLong) then
+                tmpStr  = arg(1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(2)
+                str%raw = str%raw//tmpStr%raw//", "
+                str%raw = str%raw//" ... , "
+                tmpStr  = arg(nArg-1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            else
+                do iArg = 1, nArg-1
+                    tmpStr  = arg(iArg)
+                    str%raw = str%raw//tmpStr%raw//", "
+                End do
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            end if
+            str%raw = str%raw//" ]"
+
+        Type is ( real(4) )
+            str%raw = "[ "
+            if (isLong) then
+                tmpStr  = arg(1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(2)
+                str%raw = str%raw//tmpStr%raw//", "
+                str%raw = str%raw//" ... , "
+                tmpStr  = arg(nArg-1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            else
+                do iArg = 1, nArg-1
+                    tmpStr  = arg(iArg)
+                    str%raw = str%raw//tmpStr%raw//", "
+                End do
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            end if
+            str%raw = str%raw//" ]"
+        Type is ( Double Precision )
+            str%raw = "[ "
+            if (isLong) then
+                tmpStr  = arg(1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(2)
+                str%raw = str%raw//tmpStr%raw//", "
+                str%raw = str%raw//" ... , "
+                tmpStr  = arg(nArg-1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            else
+                do iArg = 1, nArg-1
+                    tmpStr  = arg(iArg)
+                    str%raw = str%raw//tmpStr%raw//", "
+                End do
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            end if
+            str%raw = str%raw//" ]"
+        Type is ( Logical )
+
+            Block
+                Logical :: logArg
+
+                str%raw = "[ "
+                if (isLong) then
+                    logArg  = arg(1)
+                    Call GetStrFromClass( logArg, tmpStr, isError )
+                    str%raw = str%raw//tmpStr%raw//", "
+
+                    logArg  = arg(2)
+                    Call GetStrFromClass( logArg, tmpStr, isError )
+                    str%raw = str%raw//tmpStr%raw//", "
+
+                    str%raw = str%raw//" ... , "
+
+                    logArg  = arg(nArg-1)
+                    Call GetStrFromClass( logArg, tmpStr, isError )
+                    str%raw = str%raw//tmpStr%raw//", "
+
+                    logArg  = arg(nArg)
+                    str%raw = str%raw//tmpStr%raw
+                else
+                    do iArg = 1, nArg-1
+                        logArg  = arg(iArg)
+                        Call GetStrFromClass( logArg, tmpStr, isError )
+                        str%raw = str%raw//tmpStr%raw//", "
+                    End do
+                    logArg  = arg(nArg)
+                    Call GetStrFromClass( logArg, tmpStr, isError )
+                    str%raw = str%raw//tmpStr%raw
+                end if
+                str%raw = str%raw//" ]"
+
+            End Block
+
+        Type is ( string )
+            str%raw = "[ "
+            if (isLong) then
+                tmpStr  = arg(1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(2)
+                str%raw = str%raw//tmpStr%raw//", "
+                str%raw = str%raw//" ... , "
+                tmpStr  = arg(nArg-1)
+                str%raw = str%raw//tmpStr%raw//", "
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            else
+                do iArg = 1, nArg-1
+                    tmpStr  = arg(iArg)
+                    str%raw = str%raw//tmpStr%raw//", "
+                End do
+                tmpStr  = arg(nArg)
+                str%raw = str%raw//tmpStr%raw
+            end if
+            str%raw = str%raw//" ]"
+        Class default
+            str = ""
+            isError = .TRUE.
+    End Select
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!

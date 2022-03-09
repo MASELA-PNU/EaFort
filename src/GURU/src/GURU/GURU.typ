@@ -44,6 +44,7 @@ Type typGURU
 
     !!... Is Debug Mode (Write the message when the debug mode is enabled)
     Logical :: isDebug_ = .FALSE.
+    ! Logical :: isDebug_ = .TRUE.
 
     !!... Is Color Mode (Write the message when the debug mode is enabled)
     Logical :: isColor_ = .FALSE.
@@ -158,13 +159,16 @@ Contains
     Procedure :: WriteDebug => LOG_WriteDebug_typGURU
 
     !!... Write Message
-    Procedure :: Error => LOG_Error_typGURU
+    Procedure :: Error       => LOG_Error_typGURU
+    Procedure :: ErrorVector => LOG_ErrorVector_typGURU
 
     !!... Write Message
-    Procedure :: Warn => LOG_Warn_typGURU
+    Procedure :: Warn       => LOG_Warn_typGURU
+    Procedure :: WarnVector => LOG_WarnVector_typGURU
 
     !!... Write Message
-    Procedure :: Debug => LOG_Debug_typGURU
+    Procedure :: Debug       => LOG_Debug_typGURU
+    Procedure :: DebugVector => LOG_DebugVector_typGURU
 
     !!... Flush File IO
     Procedure :: Flush => LOG_Flush_typGURU

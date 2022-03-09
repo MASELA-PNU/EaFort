@@ -11,6 +11,7 @@ Module modString
 
     Use modEaFort       !!... Global variables of EaFort
     Use stringifor      !!... StringIFor Module
+    Use modGURU         !!... GURU Module
 
 !! -------------------------------------------------------------------------- !!
 Implicit None

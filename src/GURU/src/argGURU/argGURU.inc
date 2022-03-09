@@ -184,7 +184,7 @@ Subroutine ARG_GetArgInt_typGURU(this, key, value, index, isError)
         Call this%Error( &
         &   msg      = "Failed to get integer.", &
         &   head     = "ARG_GetArgInt_typGURU", &
-        &   value    = key )
+        &   refValue = key )
     end if
 
 !! -------------------------------------------------------------------------- !!
@@ -377,25 +377,25 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgIntOrDefault_typGURU(this, key, value, refValue, index, isError)
+Subroutine ARG_GetArgIntOrDefault_typGURU(this, key, value, default, index, isError)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
     Integer, intent(out)          :: value
-    Integer, intent(in)           :: refValue
+    Integer, intent(in)           :: default
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Call this%GetArgInt( key, value, index, isError_ )
     if ( isError_ ) then
-        value = refValue
+        value = default
         Call this%Debug( &
-        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   msg      = "Failed to get value, 'default' is returned.", &
         &   head     = "ARG_GetArgIntOrDefault_typGURU", &
         &   value    = key, &
-        &   refValue = refValue )
+        &   refValue = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -403,25 +403,25 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgRealOrDefault_typGURU(this, key, value, refValue, index, isError)
+Subroutine ARG_GetArgRealOrDefault_typGURU(this, key, value, default, index, isError)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
     Real(4), intent(out)          :: value
-    Real(4), intent(in)           :: refValue
+    Real(4), intent(in)           :: default
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Call this%GetArgReal( key, value, index, isError_ )
     if ( isError_ ) then
-        value = refValue
+        value = default
         Call this%Debug( &
-        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   msg      = "Failed to get value, 'default' is returned.", &
         &   head     = "ARG_GetArgRealOrDefault_typGURU", &
         &   value    = key, &
-        &   refValue = refValue )
+        &   refValue = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -429,25 +429,25 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgDbleOrDefault_typGURU(this, key, value, refValue, index, isError)
+Subroutine ARG_GetArgDbleOrDefault_typGURU(this, key, value, default, index, isError)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
     Real(8), intent(out)          :: value
-    Real(8), intent(in)           :: refValue
+    Real(8), intent(in)           :: default
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Call this%GetArgDble( key, value, index, isError_ )
     if ( isError_ ) then
-        value = refValue
+        value = default
         Call this%Debug( &
-        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   msg      = "Failed to get value, 'default' is returned.", &
         &   head     = "ARG_GetArgDbleOrDefault_typGURU", &
         &   value    = key, &
-        &   refValue = refValue )
+        &   refValue = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -455,25 +455,25 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgLogicalOrDefault_typGURU(this, key, value, refValue, index, isError)
+Subroutine ARG_GetArgLogicalOrDefault_typGURU(this, key, value, default, index, isError)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
     Logical, intent(out)          :: value
-    Logical, intent(in)           :: refValue
+    Logical, intent(in)           :: default
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Call this%GetArgLogical( key, value, index, isError_ )
     if ( isError_ ) then
-        value = refValue
+        value = default
         Call this%Debug( &
-        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   msg      = "Failed to get value, 'default' is returned.", &
         &   head     = "ARG_GetArgLogicalOrDefault_typGURU", &
         &   value    = key, &
-        &   refValue = refValue )
+        &   refValue = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -481,25 +481,25 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgCharOrDefault_typGURU(this, key, value, refValue, index, isError)
+Subroutine ARG_GetArgCharOrDefault_typGURU(this, key, value, default, index, isError)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)                 :: this
     Character(len=*), intent(in)               :: key
     Character(len=:), allocatable, intent(out) :: value
-    Character(len=*), intent(in)               :: refValue
+    Character(len=*), intent(in)               :: default
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Call this%GetArgChar( key, value, index, isError_ )
     if ( isError_ ) then
-        value = refValue
+        value = default
         Call this%Debug( &
-        &   msg      = "Failed to get value, 'refValue' is returned.", &
+        &   msg      = "Failed to get value, 'default' is returned.", &
         &   head     = "ARG_GetArgLogicalOrDefault_typGURU", &
         &   value    = key, &
-        &   refValue = refValue )
+        &   refValue = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -756,13 +756,13 @@ End Subroutine
 
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgIntVectorOrDefault_typGURU( this, key, value, refValue, isError )
+Subroutine ARG_GetArgIntVectorOrDefault_typGURU( this, key, value, default, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)        :: this
     Character(len=*), intent(in)      :: key
     Integer, allocatable              :: value(:)
-    Integer, intent(in), dimension(:) :: refValue
+    Integer, intent(in), dimension(:) :: default
     Logical, optional                 :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
@@ -770,8 +770,8 @@ Subroutine ARG_GetArgIntVectorOrDefault_typGURU( this, key, value, refValue, isE
     Call this%GetArgIntVector( key, value, isError_ )
     If ( isError_ ) then
         if ( Allocated(value) ) Deallocate(value)
-        nElem = size(refValue)
-        if (nElem.ge.1) Allocate( value, source = refValue )
+        nElem = size(default)
+        if (nElem.ge.1) Allocate( value, source = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -779,13 +779,13 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgRealVectorOrDefault_typGURU( this, key, value, refValue, isError )
+Subroutine ARG_GetArgRealVectorOrDefault_typGURU( this, key, value, default, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)        :: this
     Character(len=*), intent(in)      :: key
     Real(4), allocatable              :: value(:)
-    Real(4), intent(in), dimension(:) :: refValue
+    Real(4), intent(in), dimension(:) :: default
     Logical, optional                 :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
@@ -793,8 +793,8 @@ Subroutine ARG_GetArgRealVectorOrDefault_typGURU( this, key, value, refValue, is
     Call this%GetArgRealVector( key, value, isError_ )
     If ( isError_ ) then
         if ( Allocated(value) ) Deallocate(value)
-        nElem = size(refValue)
-        if (nElem.ge.1) Allocate( value, source = refValue )
+        nElem = size(default)
+        if (nElem.ge.1) Allocate( value, source = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -802,13 +802,13 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgDbleVectorOrDefault_typGURU( this, key, value, refValue, isError )
+Subroutine ARG_GetArgDbleVectorOrDefault_typGURU( this, key, value, default, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)        :: this
     Character(len=*), intent(in)      :: key
     Real(8), allocatable              :: value(:)
-    Real(8), intent(in), dimension(:) :: refValue
+    Real(8), intent(in), dimension(:) :: default
     Logical, optional                 :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
@@ -816,8 +816,8 @@ Subroutine ARG_GetArgDbleVectorOrDefault_typGURU( this, key, value, refValue, is
     Call this%GetArgDbleVector( key, value, isError_ )
     If ( isError_ ) then
         if ( Allocated(value) ) Deallocate(value)
-        nElem = size(refValue)
-        if (nElem.ge.1) Allocate( value, source = refValue )
+        nElem = size(default)
+        if (nElem.ge.1) Allocate( value, source = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -825,13 +825,13 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgLogicalVectorOrDefault_typGURU( this, key, value, refValue, isError )
+Subroutine ARG_GetArgLogicalVectorOrDefault_typGURU( this, key, value, default, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)        :: this
     Character(len=*), intent(in)      :: key
     Logical, allocatable              :: value(:)
-    Logical, intent(in), dimension(:) :: refValue
+    Logical, intent(in), dimension(:) :: default
     Logical, optional                 :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
@@ -839,8 +839,8 @@ Subroutine ARG_GetArgLogicalVectorOrDefault_typGURU( this, key, value, refValue,
     Call this%GetArgLogicalVector( key, value, isError_ )
     If ( isError_ ) then
         if ( Allocated(value) ) Deallocate(value)
-        nElem = size(refValue)
-        if (nElem.ge.1) Allocate( value, source = refValue )
+        nElem = size(default)
+        if (nElem.ge.1) Allocate( value, source = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -848,13 +848,13 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgCharVectorOrDefault_typGURU( this, key, value, refValue, isError )
+Subroutine ARG_GetArgCharVectorOrDefault_typGURU( this, key, value, default, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)                  :: this
     Character(len=*), intent(in)                :: key
     Character(len=:), allocatable, dimension(:) :: value
-    Character(len=:), allocatable, dimension(:) :: refValue
+    Character(len=:), allocatable, dimension(:) :: default
     Logical, optional                           :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
@@ -862,8 +862,8 @@ Subroutine ARG_GetArgCharVectorOrDefault_typGURU( this, key, value, refValue, is
     Call this%GetArgCharVector( key, value, isError_ )
     If ( isError_ ) then
          if ( Allocated(value) ) Deallocate(value)
-         ! nElem = size(refValue)
-         ! if (nElem.ge.1) Allocate( value, source = refValue )
+         ! nElem = size(default)
+         ! if (nElem.ge.1) Allocate( value, source = default )
     end if
     if ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -1140,11 +1140,10 @@ Subroutine ARG_Update_ARG_typGURU(this)
     do iArg = 1, this%nArguments
         if ( this%arguments(iArg)%isRequiredKey.AND.&
         &    (.NOT.this%arguments(iArg)%isFound) ) then
-            write(*,"(a)") PREIX_ERROR//" Update_typArgGURU"
-            write(*,"(a)")
-            write(*,"(a)") INDENT//"Required key is not given."
-            write(*,"(a)") INDENT//"key: --"//this%arguments(iArg)%key
-            write(*,"(a)")
+            Call GURU%Error( &
+            &   msg   = "Required key is not given.", &
+            &   head  = "Update_typArgGURU", &
+            &   value = this%arguments(iArg)%key )
             stop
         end if
     end do
@@ -1187,7 +1186,7 @@ Subroutine ARG_AddKey_typGURU( &
                 &   prefixColor = COLOR_ERROR,                              &
                 &   head        = "ARG_AddKey_typGURU",                     &
                 &   msg         = "Given 'key' exist already.",             &
-                &   errValue    = trim(singleKey),                          &
+                &   value       = trim(singleKey),                          &
                 &   isColor     = this%isColor_,                            &
                 &   isStop      = .TRUE.                                    )
             end if
@@ -1200,7 +1199,7 @@ Subroutine ARG_AddKey_typGURU( &
                     &   prefixColor = COLOR_ERROR,                              &
                     &   head        = "ARG_AddKey_typGURU",                     &
                     &   msg         = "Given 'singleKey' exist already.",       &
-                    &   errValue    = trim(singleKey),                          &
+                    &   value       = trim(singleKey),                          &
                     &   isColor     = this%isColor_,                            &
                     &   isStop      = .TRUE.                                    )
                 end if

@@ -24,21 +24,12 @@ Implicit None
     !!... file index (output port)
     Integer, Parameter :: FID_OUT_DEFAULT = 6
 
-!!... Global File IO Class definitions
-#include "globalFileIO/globalFileIO.typ"
-
-    !!... Global File IO
-    Type(typGlobalFileIO) :: globalFileIO
-
 !!... File IO Class definitions
 #include "fileIO/fileIO.typ"
 
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
-
-!!... Global File IO Class definitions
-#include "globalFileIO/globalFileIO.inc"
 
 !!... File IO Class functions
 #include "fileIO/fileIO.inc"

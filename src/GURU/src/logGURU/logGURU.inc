@@ -94,7 +94,7 @@ Subroutine LOG_Initialize_typGURU( &
                     &   prefixColor = COLOR_ERROR,              &
                     &   head        = "LOG_Initialize_typGURU",  &
                     &   msg         = "Failed to create the directory for log file.", &
-                    &   errValue    = baseDir,                  &
+                    &   value    = baseDir,                  &
                     &   isColor     = this%isColor_,            &
                     &   isStop      = .TRUE.                    )
                 End if
@@ -131,7 +131,7 @@ Subroutine LOG_Initialize_typGURU( &
                     &   prefixColor = COLOR_ERROR,              &
                     &   head        = "LOG_Initialize_typGURU",  &
                     &   msg         = "Given 'logFilePath' is already opened.", &
-                    &   errValue    = this%logFilePath_,        &
+                    &   value    = this%logFilePath_,        &
                     &   isColor     = this%isColor_,            &
                     &   isStop      = .TRUE.                    )
                 end if
@@ -361,7 +361,39 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     &   prefixColor = COLOR_ERROR,      &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   errValue    = value,            &
+    &   value    = value,            &
+    &   refValue    = refValue,         &
+    &   unit        = this%logUnit,    &
+    &   isColor     = this%isColor_,    &
+    &   isStop      = isStop_           )
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_ErrorVector_typGURU( this, msg, head, value, refValue, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), Dimension(:), intent(in), Optional :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+    Logical, intent(in), Optional                :: isStop
+!! -------------------------------------------------------------------------- !!
+    Logical :: isStop_
+
+    isStop_ = .true.
+    if (present(isStop)) isStop_ = isStop
+
+    !!... Write Message
+    Call WritePrefixMessageVector( &
+    &   prefix      = PREIX_ERROR,      &
+    &   prefixColor = COLOR_ERROR,      &
+    &   msg         = msg,              &
+    &   head        = head,             &
+    &   value    = value,            &
     &   refValue    = refValue,         &
     &   unit        = this%logUnit,    &
     &   isColor     = this%isColor_,    &
@@ -387,7 +419,33 @@ Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
     &   prefixColor = COLOR_WARN,       &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   errValue    = value,            &
+    &   value    = value,            &
+    &   refValue    = refValue,         &
+    &   unit        = this%logUnit,    &
+    &   isColor     = this%isColor_,    &
+    &   isStop      = .FALSE.           )
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_WarnVector_typGURU( this, msg, head, value, refValue )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), Dimension(:), intent(in), Optional :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+!! -------------------------------------------------------------------------- !!
+    !!... Write Message
+    Call WritePrefixMessageVector( &
+    &   prefix      = PREIX_WARN,       &
+    &   prefixColor = COLOR_WARN,       &
+    &   msg         = msg,              &
+    &   head        = head,             &
+    &   value    = value,            &
     &   refValue    = refValue,         &
     &   unit        = this%logUnit,    &
     &   isColor     = this%isColor_,    &
@@ -415,9 +473,39 @@ Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
         &   prefixColor = COLOR_DEBUG,      &
         &   msg         = msg,              &
         &   head        = head,             &
-        &   errValue    = value,            &
+        &   value    = value,            &
         &   refValue    = refValue,         &
         &   unit        = this%logUnit,    &
+        &   isColor     = this%isColor_,    &
+        &   isStop      = .FALSE.           )
+
+    End if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_DebugVector_typGURU( this, msg, head, value, refValue )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), Dimension(:), intent(in), Optional :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+!! -------------------------------------------------------------------------- !!
+
+    If ( this%isDebug_ ) then
+        !!... Write Message
+        Call WritePrefixMessageVector( &
+        &   prefix      = PREIX_DEBUG,      &
+        &   prefixColor = COLOR_DEBUG,      &
+        &   msg         = msg,              &
+        &   head        = head,             &
+        &   value       = value,            &
+        &   refValue    = refValue,         &
+        &   unit        = this%logUnit,     &
         &   isColor     = this%isColor_,    &
         &   isStop      = .FALSE.           )
 

@@ -27,7 +27,7 @@ Subroutine Initialize_typCommandArgument( &
         &   prefixColor = COLOR_ERROR,                              &
         &   head        = "Initialize_typCommandArgument",          &
         &   msg         = "Wrong 'key' is given. ",                 &
-        &   errValue    = trim(key),                                &
+        &   value    = trim(key),                                &
         &   isColor     = .FALSE.,                                  &
         &   isStop      = .TRUE.                                    )
     End if
@@ -49,7 +49,7 @@ Subroutine Initialize_typCommandArgument( &
             &   prefixColor = COLOR_ERROR,                              &
             &   head        = "Initialize_typCommandArgument",          &
             &   msg         = "Wrong 'singleKey' is given. ",           &
-            &   errValue    = trim(key),                                &
+            &   value    = trim(key),                                &
             &   isColor     = .FALSE.,                                  &
             &   isStop      = .TRUE.                                    )
         elseif (len_trim(cleanKey).GE.2) Then
@@ -58,7 +58,7 @@ Subroutine Initialize_typCommandArgument( &
             &   prefixColor = COLOR_ERROR,                              &
             &   head        = "Initialize_typCommandArgument",          &
             &   msg         = "The 'singleKey' should be single character.", &
-            &   errValue    = trim(key),                                &
+            &   value    = trim(key),                                &
             &   isColor     = .FALSE.,                                  &
             &   isStop      = .TRUE.                                    )
         else
@@ -253,7 +253,7 @@ Implicit None
             &   head        = "Update_typCommandArgument",              &
             &   msg         = "The number of words after keyword is less than the requirement.\n&
                             &* Required number of words is given in the below.", &
-            &   errValue    = trim(this%key),                           &
+            &   value    = trim(this%key),                           &
             &   refValue    = this%nRequiredWord,                       &
             &   isColor     = .FALSE.,                                  &
             &   isStop      = .TRUE.                                    )
@@ -323,7 +323,7 @@ Implicit None
                 &   head        = "Update_typCommandArgument",              &
                 &   msg         = "The number of argument after keyword is less than the requirement.\n&
                                 &* Required number of words is given in the below.", &
-                &   errValue    = trim(this%key),                           &
+                &   value    = trim(this%key),                           &
                 &   refValue    = this%nRequiredWord,                       &
                 &   isColor     = .FALSE.,                                  &
                 &   isStop      = .TRUE.                                    )

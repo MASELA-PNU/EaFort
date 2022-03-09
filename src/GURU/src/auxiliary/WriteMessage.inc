@@ -46,15 +46,89 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
+Subroutine WritePrefixMessageVector( prefix, prefixColor, msg, head, &
+    &   value, refValue, unit, isColor, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+!! -------------------------------------------------------------------------- !!
+    Character(len=*), intent(in)                 :: prefix
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), dimension(:), intent(in), Optional :: value
+    Class(*), dimension(:), intent(in), Optional :: refValue
+    Integer, intent(in), optional                :: unit
+    Logical, intent(in), optional                :: isColor
+    Character(len=*), optional, intent(in)       :: prefixColor
+    Logical, intent(in), optional                :: isStop
+!! -------------------------------------------------------------------------- !!
+    type(string) :: errStr, refStr
+    Logical :: isError
+
+    if ( present(value) ) then
+        Call GetStrFromClassVector( value, errStr, isError )
+    end if
+
+    if ( present(refValue) ) then
+        Call GetStrFromClassVector( refValue, refStr, isError )
+    end if
+
+    if ( present(value).AND.present(refValue) ) then
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   value    = errStr%raw,   &
+        &   refValue    = refStr%raw,   &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    else if ( present(value) )  then
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   value    = errStr%raw,   &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    else if  ( present(refValue) )  then
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   refValue    = refStr%raw,   &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    else
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+
+!! -------------------------------------------------------------------------- !!
 Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
-    &   errValue, refValue, unit, isColor, isStop )
+    &   value, refValue, unit, isColor, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None
 !! -------------------------------------------------------------------------- !!
     Character(len=*), intent(in)            :: prefix
     Character(len=*), intent(in)            :: msg
     Character(len=*), intent(in), Optional  :: head
-    Class(*), intent(in), Optional          :: errValue
+    Class(*), intent(in), Optional          :: value
     Class(*), intent(in), Optional          :: refValue
     Integer, intent(in), optional           :: unit
     Logical, intent(in), optional           :: isColor
@@ -69,15 +143,15 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     Integer :: nMsgLine, iMsg
     Logical :: isStop_, isEndEmptyLine
     !!...
-    Type(string) :: errValueStr, refValueStr
-    Character(len=:), Allocatable :: errValueChar, refValueChar
+    Type(string) :: valueStr, refValueStr
+    Character(len=:), Allocatable :: valueChar, refValueChar
     Logical :: isError
     !!... Convert values
 
-    errValueChar = ""
-    if ( present(errValue) ) then
-        Call GetStrFromClass(errValue, errValueStr, isError)
-        if (isError.EQV..FALSE. ) errValueChar = errValueStr%Chars()
+    valueChar = ""
+    if ( present(value) ) then
+        Call GetStrFromClass(value, valueStr, isError)
+        if (isError.EQV..FALSE. ) valueChar = valueStr%Chars()
     end if
 
     refValueChar = ""
@@ -110,8 +184,8 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     if ( present(head) ) headStr = head
 
     isEndEmptyLine = .FALSE.
-    if (present(errValue)) then
-        if (len_trim(errValueChar).ge.1) isEndEmptyLine = .TRUE.
+    if (present(value)) then
+        if (len_trim(valueChar).ge.1) isEndEmptyLine = .TRUE.
     end if
 
     if (present(refValue)) then
@@ -132,8 +206,8 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
         write(unit_,"(a)")
 
         !!... Write Given Value
-        If ( Present(errValue) ) then
-            if (len_trim(errValueChar).ge.1) write(unit_,"(a)") INDENT//PREFIX_GIVEN//errValueChar
+        If ( Present(value) ) then
+            if (len_trim(valueChar).ge.1) write(unit_,"(a)") INDENT//PREFIX_GIVEN//valueChar
 
         End if
 
@@ -162,8 +236,8 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
         write(*,"(a)")
 
         !!... Write Given Value
-        If ( Present(errValue) ) then
-            if (len_trim(errValueChar).ge.1) write(*,"(a)") INDENT//PREFIX_GIVEN//errValueChar
+        If ( Present(value) ) then
+            if (len_trim(valueChar).ge.1) write(*,"(a)") INDENT//PREFIX_GIVEN//valueChar
         End if
 
         !!... Write Reference Value
@@ -191,9 +265,9 @@ Subroutine WritePrefixMessage( prefix, prefixColor, msg, head, &
     end do
     If (Allocated(strVect)) deallocate(strVect)
 
-    If ( Allocated(errValueChar) ) Deallocate(errValueChar)
+    If ( Allocated(valueChar) ) Deallocate(valueChar)
     If ( Allocated(refValueChar) ) Deallocate(refValueChar)
-    Call errValueStr%Free()
+    Call valueStr%Free()
     Call refValueStr%Free()
 
 !! -------------------------------------------------------------------------- !!

@@ -11,16 +11,16 @@ Subroutine Test_String_SingleConversion()
         write(*,"(a)") "Testing Numeric Values"
 
         str       = 3
-        intValue  = str%GetInt()
-        realValue = str%GetReal()
+        Call str%GetInt(intValue)
+        Call str%GetReal(realValue)
 
         write(*,*) "intValue", intValue
         write(*,*) "realValue", realValue
 
         write(*,*)
         str       = 4.0
-        intValue  = str%GetInt()
-        realValue = str%GetReal()
+        Call str%GetInt( intValue )
+        Call str%GetReal( realValue )
 
         write(*,*) "intValue", intValue
         write(*,*) "realValue", realValue
@@ -34,15 +34,15 @@ Subroutine Test_String_SingleConversion()
         write(*,"(a)") "Testing Logical Values (TRUE)"
 
         str = 'T'
-        logValue = str%GetLogical()
+        Call str%GetLogical( logValue )
         write(*,*) "logValue", logValue
 
         str = 'TRue'
-        logValue = str%GetLogical()
+        Call str%GetLogical( logValue )
         write(*,*) "logValue", logValue
 
         str = '.TRue.'
-        logValue = str%GetLogical()
+        Call str%GetLogical( logValue )
         write(*,*) "logValue", logValue
 
     End Block
@@ -55,27 +55,27 @@ Subroutine Test_String_SingleConversion()
         write(*,"(a)") "Testing Logical Values (FALSE)"
 
         str = 'F'
-        logValue = str%GetLogical()
+        Call str%GetLogical( logValue )
         write(*,*) "logValue", logValue
 
         str = 'FALse'
-        logValue = str%GetLogical()
+        Call str%GetLogical( logValue )
         write(*,*) "logValue", logValue
 
         str = '.FALSe.'
-        logValue = str%GetLogical()
+        Call str%GetLogical( logValue )
         write(*,*) "logValue", logValue
     End Block
 
     Block
         Type(typString)   :: str
-        Character(len=10) :: charValue
+        Character(len=:), Allocatable :: charValue
 
         write(*,*)
         write(*,"(a)") "Testing Char Values"
 
         str = 'asds'
-        charValue = str%GetChar()
+        Call str%GetChar( charValue )
         write(*,*) 'charValue', charValue
     End Block
 
@@ -84,22 +84,22 @@ Subroutine Test_String_SingleConversion()
         Integer           :: intValue
         Real(RP)          :: realValue
         Logical           :: logValue
-        Character(len=10) :: charValue
+        Character(len=:), Allocatable :: charValue
 
         write(*,*)
         write(*,"(a)") "Testing Get Or Default"
 
         str       = "tmp"
-        intValue  = str%GetIntOrDefault( 5 )
+        Call str%GetIntOrDefault( intValue, 5 )
         write(*,*) "intValue", intValue
 
-        realValue  = str%GetRealOrDefault( 2.0_RP )
+        Call str%GetRealOrDefault( realValue, 2.0_RP )
         write(*,*) "realValue", realValue
 
-        logValue  = str%GetLogicalOrDefault( .TRUE. )
+        Call str%GetLogicalOrDefault( logValue, .TRUE. )
         write(*,*) "logValue", logValue
 
-        charValue = str%GetCharOrDefault('Tested')
+        Call str%GetCharOrDefault( charValue, 'Tested')
         write(*,*) 'charValue', charValue
     End Block
 

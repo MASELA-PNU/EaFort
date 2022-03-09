@@ -9,7 +9,7 @@ Implicit None
     &   head     = "Test_GURUAuxilary", &
     &   msg      = "Message1&
     &\nMessage2", &
-    &   errValue = "a", &
+    &   value = "a", &
     &   refValue = 'b', &
     &   unit     = 6,       &
     &   isColor  = .TRUE.   )
@@ -25,7 +25,7 @@ Implicit None
         &   head     = "Test_GURUAuxilary", &
         &   msg      = "Message1&
                      &\nMessage2", &
-        &   errValue = "a", &
+        &   value = "a", &
         &   refValue = 'b', &
         &   unit     = iUnit,       &
         &   isColor  = .TRUE.   )
