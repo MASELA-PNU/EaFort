@@ -26,6 +26,8 @@ Contains
 
 #include "tests/test_String_VectorConversion.inc"
 
+#include "tests/test_VarToStringConv.inc"
+
 !! -------------------------------------------------------------------------- !!
 End Module
 !! -------------------------------------------------------------------------- !!

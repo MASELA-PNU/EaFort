@@ -514,3 +514,9 @@ Subroutine GetStringVectorOrDefault_typString( this, value, default, isError )
     if (present(isError)) isError = isError_
 
 End Subroutine
+
+Subroutine Destroy_typString(this)
+    Implicit None
+    Class(typString), intent(inout) :: this
+    Call this%Free()
+End Subroutine

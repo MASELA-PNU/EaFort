@@ -92,7 +92,7 @@ End Subroutine
     if ( len_trim(filePath).GE.1 ) Then
 
         !!... Check the directory exists
-        isExist_ = IsExistDir( filePath )
+        isExist_ = IsExistFile( filePath )
 
         If ( isExist_ ) then
 #ifdef __OS_LINUX__
@@ -101,7 +101,7 @@ End Subroutine
             Call System( "del /s /q "//trim(filePath) )
 #endif
             !!... Check the directory exists
-            isExist_ = IsExistDir( filePath )
+            isExist_ = IsExistFile( filePath )
         end if
 
         isDelete_ = .NOT.isExist_

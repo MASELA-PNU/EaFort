@@ -69,4 +69,7 @@ Contains
     !!... Split
     Generic :: Split => Split_typString
 
+    !!... Destroy
+    Procedure :: Destroy => Destroy_typString
+
 End Type

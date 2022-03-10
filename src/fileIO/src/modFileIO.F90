@@ -13,16 +13,25 @@ Module modFileIO
 
     Use modEaFort       !!... Global variables of EaFort
     Use modGURU         !!... GURU Module
+    Use modString       !!... String Module
+    Use modOS           !!... OS Module
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
     !!... file index (input port)
-    Integer, Parameter :: FID_IN_DEFAULT = 5
+    Integer, Parameter :: F_UNIT_IN_DEFAULT = 5
 
     !!... file index (output port)
-    Integer, Parameter :: FID_OUT_DEFAULT = 6
+    Integer, Parameter :: F_UNIT_OUT_DEFAULT = 6
+
+    !!... file index to begin
+    Integer, Parameter :: F_UNIT_BEGIN = 1317
+
+    Integer :: F_UNIT_CURRENT
+
+#include "auxilary/GetNewFileUnit.proc"
 
 !!... File IO Class definitions
 #include "fileIO/fileIO.typ"
@@ -30,6 +39,8 @@ Implicit None
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
+
+#include "auxilary/GetNewFileUnit.inc"
 
 !!... File IO Class functions
 #include "fileIO/fileIO.inc"

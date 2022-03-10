@@ -12,9 +12,10 @@ Module pkgEaFort
 
     Use modEaFort       !!... Global Variables
     Use modGURU         !!... GURU Module
-    Use modJSON         !!... JSON Module
     Use modString       !!... String Module
     Use modOS           !!... OS Module
+    Use modFileIO       !!... File IO Module
+    Use modJSON         !!... JSON Module
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
