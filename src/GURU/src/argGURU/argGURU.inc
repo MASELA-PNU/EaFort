@@ -917,7 +917,7 @@ Subroutine ARG_UpdateAndPrint_typGURU( this )
     If ( isFound ) then
         Call this%PrintHelp()
         if ( this%isLogFile ) Call this%PrintHelp( this%logUnit )
-        stop
+        Call this%Stop()
     end if
 
     !!... Print Given Key Information
@@ -1144,7 +1144,6 @@ Subroutine ARG_Update_ARG_typGURU(this)
             &   msg   = "Required key is not given.", &
             &   head  = "Update_typArgGURU", &
             &   value = this%arguments(iArg)%key )
-            stop
         end if
     end do
 

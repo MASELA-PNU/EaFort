@@ -34,7 +34,8 @@ Interface JSON_Clone
     Procedure :: JSON_Clone
 End Interface JSON_Clone
 
-!!... Destroy JSON
-Interface JSON_Destroy
-    Procedure :: JSON_Destroy
-End Interface JSON_Destroy
+!!... FIXME: Update later
+!!... Destroy JSON (Disable for now. It gives error)
+! Interface JSON_Destroy
+!     Procedure :: JSON_Destroy
+! End Interface JSON_Destroy

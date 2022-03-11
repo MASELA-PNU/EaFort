@@ -44,6 +44,10 @@ Implicit None
     Character(len=LEN_COLOR), Parameter, Private :: COLOR_DEBUG = "CYAN_INTENSE"
     Character(len=LEN_COLOR), Parameter, Private :: COLOR_HEAD  = "GREEN"
 
+    Character(len=5) :: INFO_ERROR = "error"
+    Character(len=5) :: INFO_DEBUG = "debug"
+    Character(len=4) :: INFO_WARN  = "warn"
+
     !!... Log File Max
     Integer, Parameter :: N_MAX_LOG_FILE = 100
 

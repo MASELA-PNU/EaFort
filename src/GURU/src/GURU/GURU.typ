@@ -159,23 +159,30 @@ Contains
     Procedure :: WriteDebug => LOG_WriteDebug_typGURU
 
     !!... Info Message
-    Procedure :: Info       => LOG_Info_typGURU
-    Procedure :: InfoVector => LOG_InfoVector_typGURU
+    Procedure :: Info             => LOG_Info_typGURU
+    Procedure :: InfoSingleVector => LOG_InfoSingleVector_typGURU
+    Procedure :: InfoVectorVector => LOG_InfoVectorVector_typGURU
 
     !!... Write Header Message
-    Procedure :: Error       => LOG_Error_typGURU
-    Procedure :: ErrorVector => LOG_ErrorVector_typGURU
+    Procedure :: Error             => LOG_Error_typGURU
+    Procedure :: ErrorSingleVector => LOG_ErrorSingleVector_typGURU
+    Procedure :: ErrorVectorVector => LOG_ErrorVectorVector_typGURU
 
     !!... Write Header Message
-    Procedure :: Warn       => LOG_Warn_typGURU
-    Procedure :: WarnVector => LOG_WarnVector_typGURU
+    Procedure :: Warn             => LOG_Warn_typGURU
+    Procedure :: WarnSingleVector => LOG_WarnSingleVector_typGURU
+    Procedure :: WarnVectorVector => LOG_WarnVectorVector_typGURU
 
     !!... Write Header Message
-    Procedure :: Debug       => LOG_Debug_typGURU
-    Procedure :: DebugVector => LOG_DebugVector_typGURU
+    Procedure :: Debug             => LOG_Debug_typGURU
+    Procedure :: DebugSingleVector => LOG_DebugSingleVector_typGURU
+    Procedure :: DebugVectorVector => LOG_DebugVectorVector_typGURU
 
     !!... Flush File IO
     Procedure :: Flush => LOG_Flush_typGURU
+
+    !!... Flush File IO
+    Procedure :: Stop => LOG_Stop_typGURU
 
     !!... Destroy
     Procedure :: Destroy_LOG => LOG_Destroy_typGURU

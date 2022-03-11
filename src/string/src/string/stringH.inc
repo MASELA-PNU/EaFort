@@ -113,7 +113,7 @@ Function Int2Char_Vector(var) result( varChar )
     end if ifGenStr
 
     if ( isError ) then
-        Call GURU%ErrorVector( &
+        Call GURU%ErrorVectorVector( &
         &   msg   = "Failed to convert to character.", &
         &   head  = "Int2Char", &
         &   value = var )
@@ -187,7 +187,7 @@ Function Real2Char_Vector(var) result( varChar )
     end if ifGenStr
 
     if ( isError ) then
-        Call GURU%ErrorVector( &
+        Call GURU%ErrorVectorVector( &
         &   msg   = "Failed to convert to character.", &
         &   head  = "Real2Char_Vector", &
         &   value = var )
@@ -261,7 +261,7 @@ Function Dble2Char_Vector(var) result( varChar )
     end if ifGenStr
 
     if ( isError ) then
-        Call GURU%ErrorVector( &
+        Call GURU%ErrorVectorVector( &
         &   msg   = "Failed to convert to character.", &
         &   head  = "Dble2Char_Vector", &
         &   value = var )
@@ -335,7 +335,7 @@ Function Logical2Char_Vector(var) result( varChar )
     end if ifGenStr
 
     if ( isError ) then
-        Call GURU%ErrorVector( &
+        Call GURU%ErrorVectorVector( &
         &   msg   = "Failed to convert to character.", &
         &   head  = "Dble2Char_Vector", &
         &   value = var )
@@ -415,7 +415,7 @@ Function String2Char_Vector(var) result( varChar )
     end if ifGenStr
 
     if ( isError ) then
-        Call GURU%ErrorVector( &
+        Call GURU%ErrorVectorVector( &
         &   msg   = "Failed to convert to character.", &
         &   head  = "Dble2Char_Vector", &
         &   value = var )

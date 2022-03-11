@@ -46,7 +46,80 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine WritePrefixMessageVector( prefix, prefixColor, msg, head, &
+Subroutine WritePrefixMessageSingleVector( prefix, prefixColor, msg, head, &
+    &   value, refValue, unit, isColor, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+!! -------------------------------------------------------------------------- !!
+    Character(len=*), intent(in)                 :: prefix
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), intent(in), Optional               :: value
+    Class(*), dimension(:), intent(in), Optional :: refValue
+    Integer, intent(in), optional                :: unit
+    Logical, intent(in), optional                :: isColor
+    Character(len=*), optional, intent(in)       :: prefixColor
+    Logical, intent(in), optional                :: isStop
+!! -------------------------------------------------------------------------- !!
+    type(string) :: errStr, refStr
+    Logical :: isError
+
+    if ( present(value) ) then
+        Call GetStrFromClass( value, errStr, isError )
+    end if
+
+    if ( present(refValue) ) then
+        Call GetStrFromClassVector( refValue, refStr, isError )
+    end if
+
+    if ( present(value).AND.present(refValue) ) then
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   value    = errStr%raw,   &
+        &   refValue    = refStr%raw,   &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    else if ( present(value) )  then
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   value    = errStr%raw,   &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    else if  ( present(refValue) )  then
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   refValue    = refStr%raw,   &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    else
+        Call WritePrefixMessage( &
+        &   prefix      = prefix,       &
+        &   prefixColor = prefixColor,  &
+        &   msg         = msg,          &
+        &   head        = head,         &
+        &   unit        = unit,         &
+        &   isColor     = isColor,      &
+        &   isStop      = isStop        )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine WritePrefixMessageVectorVector( prefix, prefixColor, msg, head, &
     &   value, refValue, unit, isColor, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None

@@ -8,11 +8,6 @@ Interface JSON_Remove
     Procedure :: JSON_Remove
 End Interface
 
-!!... Get Parent object
-Interface JSON_GetParent
-    Procedure :: JSON_GetParent
-End Interface
-
 !!... Get the number of child and name of JSON object ( JSON_GetNChild + JSON_GetName )
 Interface JSON_GetInfo
     Procedure :: JSON_GetInfo
@@ -30,5 +25,5 @@ End Interface
 
 !!... Rename the JSON object
 Interface JSON_Rename
-    Procedure :: JSON_GetName
+    Procedure :: JSON_Rename
 End Interface

@@ -23,7 +23,7 @@ Subroutine GetStrFromClass( arg, str, isError )
                 str = ".true."
             else
                 str = ".false."
-            end if
+            end if        
         Class default
             str = ""
             isError = .TRUE.
@@ -51,6 +51,9 @@ Subroutine GetStrFromClassVector( arg, str, isError )
     if (nArg.ge.6) isLong = .TRUE.
 
     isError = .FALSE.
+    if (nArg.le.0) isError = .TRUE.
+
+    if (.NOT.isError) then
     Select Type (arg)
         Type is ( Character(len=*) )
 
@@ -202,6 +205,9 @@ Subroutine GetStrFromClassVector( arg, str, isError )
             str = ""
             isError = .TRUE.
     End Select
+    else
+        str = ""
+    End if
 
 !! -------------------------------------------------------------------------- !!
 End Subroutine

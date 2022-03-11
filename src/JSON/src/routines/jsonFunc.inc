@@ -23,28 +23,6 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine JSON_GetParent(json, parent)
-    Implicit None
-    type(typJSON), pointer :: json
-    type(typJSON), pointer :: parent
-!! -------------------------------------------------------------------------- !!
-    !!... Local Variables
-    character(len=:), Allocatable :: parentName
-!! -------------------------------------------------------------------------- !!
-    Call jsonCore%Get_Parent( json, parent )
-    if ( associated(parent).EQV..FALSE. ) then
-        Call jsonCore%info( p = json, name = parentName )
-        Call GURU%Warn( &
-            msg   = "Obtained parent is not associated.", &
-            head  = "JSON_GetParent", &
-            value = trim(parentName) )
-    end if
-    if (Allocated(parentName)) Deallocate(parentName)
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
 Subroutine JSON_GetInfo(json, name, nChild)
 !! -------------------------------------------------------------------------- !!
     Implicit None

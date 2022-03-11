@@ -380,7 +380,6 @@ Subroutine GetIntVectorOrDefault_typString( this, value, default, isError )
     Logical, intent(out), Optional    :: isError
     !!... Local Variables
     Logical :: isError_
-    type(string), dimension(1) :: strArr
 
     !!... Split into string vector
     Call GetIntVectorFromCharOrDefault( &
@@ -388,11 +387,10 @@ Subroutine GetIntVectorOrDefault_typString( this, value, default, isError )
 
     if ( present(isError) ) isError = isError_
     if ( isError_.AND.( .NOT.present(isError) ) ) Then
-        strArr(1) = this%raw
-        Call GURU%DebugVector( &
+        Call GURU%DebugSingleVector( &
         &   msg      = "Conversion fails. 'default' is used.", &
         &   head     = "GetIntVectorOrDefault_typString",      &
-        &   value    = strArr,                                 &
+        &   value    = this%raw,                               &
         &   refValue = default                                 )
     end if
 
@@ -406,7 +404,6 @@ Subroutine GetRealVectorOrDefault_typString( this, value, default, isError )
     Logical, intent(out), Optional    :: isError
     !!... Local Variables
     Logical :: isError_
-    type(string), dimension(1) :: strArr
 
     !!... Split into string vector
     Call GetRealVectorFromCharOrDefault( &
@@ -414,11 +411,10 @@ Subroutine GetRealVectorOrDefault_typString( this, value, default, isError )
 
     if ( present(isError) ) isError = isError_
     if ( isError_.AND.( .NOT.present(isError) ) ) Then
-        strArr(1) = this%raw
-        Call GURU%DebugVector( &
+        Call GURU%DebugSingleVector( &
         &   msg      = "Conversion fails. 'default' is used.", &
         &   head     = "GetRealVectorOrDefault_typString",     &
-        &   value    = strArr,                                 &
+        &   value    = this%raw,                               &
         &   refValue = default                                 )
     end if
 
@@ -432,7 +428,6 @@ Subroutine GetDbleVectorOrDefault_typString( this, value, default, isError )
     Logical, intent(out), Optional    :: isError
     !!... Local Variables
     Logical :: isError_
-    type(string), dimension(1) :: strArr
 
     !!... Split into string vector
     Call GetDbleVectorFromCharOrDefault( &
@@ -440,11 +435,10 @@ Subroutine GetDbleVectorOrDefault_typString( this, value, default, isError )
 
     if ( present(isError) ) isError = isError_
     if ( isError_.AND.( .NOT.present(isError) ) ) Then
-        strArr(1) = this%raw
-        Call GURU%DebugVector( &
+        Call GURU%DebugSingleVector( &
         &   msg      = "Conversion fails. 'default' is used.", &
         &   head     = "GetDbleVectorOrDefault_typString",     &
-        &   value    = strArr,                                 &
+        &   value    = this%raw,                               &
         &   refValue = default                                 )
     end if
 
@@ -458,7 +452,6 @@ Subroutine GetLogicalVectorOrDefault_typString( this, value, default, isError )
     Logical, intent(out), Optional    :: isError
     !!... Local Variables
     Logical :: isError_
-    type(string), dimension(1) :: strArr
 
     !!... Split into string vector
     Call GetLogicalVectorFromCharOrDefault( &
@@ -466,11 +459,10 @@ Subroutine GetLogicalVectorOrDefault_typString( this, value, default, isError )
 
     if ( present(isError) ) isError = isError_
     if ( isError_.AND.( .NOT.present(isError) ) ) Then
-        strArr(1) = this%raw
-        Call GURU%DebugVector( &
+        Call GURU%DebugSingleVector( &
         &   msg      = "Conversion fails. 'default' is used.", &
         &   head     = "GetLogicalVectorOrDefault_typString",  &
-        &   value    = strArr,                                 &
+        &   value    = this%raw,                               &
         &   refValue = default                                 )
     end if
 

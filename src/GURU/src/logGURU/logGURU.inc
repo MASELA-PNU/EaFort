@@ -383,7 +383,50 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine LOG_InfoVector_typGURU( this, info, msg, head, value, refValue, isStop )
+Subroutine LOG_InfoSingleVector_typGURU( this, info, msg, head, value, refValue, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: info
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), intent(in), Optional               :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+    Logical, intent(in), Optional                :: isStop
+!! -------------------------------------------------------------------------- !!
+
+    if ( IsCharEqual(info, "error") ) then
+        Call this%ErrorSingleVector( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue,    &
+        &   isStop   = isStop       )
+    else if ( IsCharEqual(info, "warn") ) then
+        Call this%WarnSingleVector( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue     )
+    else if ( IsCharEqual(info, "debug") ) then
+        Call this%DebugSingleVector( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue     )
+    else
+        Call this%Error( &
+        &   msg      = "Given 'info' should be 'error', 'warn' or 'debug'.",    &
+        &   head     = "LOG_InfoSingleVector_typGURU",          &
+        &   value    = info                         )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_InfoVectorVector_typGURU( this, info, msg, head, value, refValue, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)                   :: this
@@ -396,20 +439,20 @@ Subroutine LOG_InfoVector_typGURU( this, info, msg, head, value, refValue, isSto
 !! -------------------------------------------------------------------------- !!
 
     if ( IsCharEqual(info, "error") ) then
-        Call this%ErrorVector( &
+        Call this%ErrorVectorVector( &
         &   msg      = msg,         &
         &   head     = head,        &
         &   value    = value,       &
         &   refValue = refValue,    &
         &   isStop   = isStop       )
     else if ( IsCharEqual(info, "warn") ) then
-        Call this%WarnVector( &
+        Call this%WarnVectorVector( &
         &   msg      = msg,         &
         &   head     = head,        &
         &   value    = value,       &
         &   refValue = refValue     )
     else if ( IsCharEqual(info, "debug") ) then
-        Call this%DebugVector( &
+        Call this%DebugVectorVector( &
         &   msg      = msg,         &
         &   head     = head,        &
         &   value    = value,       &
@@ -417,7 +460,7 @@ Subroutine LOG_InfoVector_typGURU( this, info, msg, head, value, refValue, isSto
     else
         Call this%Error( &
         &   msg      = "Given 'info' should be 'error', 'warn' or 'debug'.",    &
-        &   head     = "LOG_InfoVector_typGURU",          &
+        &   head     = "LOG_InfoVectorVector_typGURU",          &
         &   value    = info                         )
     end if
 
@@ -447,9 +490,9 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     &   prefixColor = COLOR_ERROR,      &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   value    = value,            &
+    &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,    &
+    &   unit        = this%logUnit,     &
     &   isColor     = this%isColor_,    &
     &   isStop      = isStop_           )
 
@@ -458,7 +501,39 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine LOG_ErrorVector_typGURU( this, msg, head, value, refValue, isStop )
+Subroutine LOG_ErrorSingleVector_typGURU( this, msg, head, value, refValue, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), intent(in), Optional               :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+    Logical, intent(in), Optional                :: isStop
+!! -------------------------------------------------------------------------- !!
+    Logical :: isStop_
+
+    isStop_ = .true.
+    if (present(isStop)) isStop_ = isStop
+
+    !!... Write Message
+    Call WritePrefixMessageSingleVector( &
+    &   prefix      = PREIX_ERROR,      &
+    &   prefixColor = COLOR_ERROR,      &
+    &   msg         = msg,              &
+    &   head        = head,             &
+    &   value       = value,            &
+    &   refValue    = refValue,         &
+    &   unit        = this%logUnit,     &
+    &   isColor     = this%isColor_,    &
+    &   isStop      = isStop_           )
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_ErrorVectorVector_typGURU( this, msg, head, value, refValue, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)                   :: this
@@ -474,14 +549,14 @@ Subroutine LOG_ErrorVector_typGURU( this, msg, head, value, refValue, isStop )
     if (present(isStop)) isStop_ = isStop
 
     !!... Write Message
-    Call WritePrefixMessageVector( &
+    Call WritePrefixMessageVectorVector( &
     &   prefix      = PREIX_ERROR,      &
     &   prefixColor = COLOR_ERROR,      &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   value    = value,            &
+    &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,    &
+    &   unit        = this%logUnit,     &
     &   isColor     = this%isColor_,    &
     &   isStop      = isStop_           )
 
@@ -493,7 +568,7 @@ End Subroutine
 Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typGURU), intent(in)          :: this
+    Class(typGURU), intent(in)             :: this
     Character(len=*), intent(in)           :: msg
     Character(len=*), intent(in), Optional :: head
     Class(*), intent(in), Optional         :: value
@@ -505,9 +580,9 @@ Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
     &   prefixColor = COLOR_WARN,       &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   value    = value,            &
+    &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,    &
+    &   unit        = this%logUnit,     &
     &   isColor     = this%isColor_,    &
     &   isStop      = .FALSE.           )
 
@@ -516,7 +591,33 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine LOG_WarnVector_typGURU( this, msg, head, value, refValue )
+Subroutine LOG_WarnSingleVector_typGURU( this, msg, head, value, refValue )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), intent(in), Optional               :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+!! -------------------------------------------------------------------------- !!
+    !!... Write Message
+    Call WritePrefixMessageSingleVector( &
+    &   prefix      = PREIX_WARN,       &
+    &   prefixColor = COLOR_WARN,       &
+    &   msg         = msg,              &
+    &   head        = head,             &
+    &   value       = value,            &
+    &   refValue    = refValue,         &
+    &   unit        = this%logUnit,     &
+    &   isColor     = this%isColor_,    &
+    &   isStop      = .FALSE.           )
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_WarnVectorVector_typGURU( this, msg, head, value, refValue )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)                   :: this
@@ -526,14 +627,14 @@ Subroutine LOG_WarnVector_typGURU( this, msg, head, value, refValue )
     Class(*), Dimension(:), intent(in), Optional :: refValue
 !! -------------------------------------------------------------------------- !!
     !!... Write Message
-    Call WritePrefixMessageVector( &
+    Call WritePrefixMessageVectorVector( &
     &   prefix      = PREIX_WARN,       &
     &   prefixColor = COLOR_WARN,       &
     &   msg         = msg,              &
     &   head        = head,             &
-    &   value    = value,            &
+    &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,    &
+    &   unit        = this%logUnit,     &
     &   isColor     = this%isColor_,    &
     &   isStop      = .FALSE.           )
 
@@ -572,19 +673,20 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine LOG_DebugVector_typGURU( this, msg, head, value, refValue )
+Subroutine LOG_DebugSingleVector_typGURU( this, msg, head, value, refValue )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)                   :: this
     Character(len=*), intent(in)                 :: msg
     Character(len=*), intent(in), Optional       :: head
-    Class(*), Dimension(:), intent(in), Optional :: value
+    Class(*), intent(in), Optional               :: value
     Class(*), Dimension(:), intent(in), Optional :: refValue
 !! -------------------------------------------------------------------------- !!
 
     If ( this%isDebug_ ) then
+
         !!... Write Message
-        Call WritePrefixMessageVector( &
+        Call WritePrefixMessageSingleVector( &
         &   prefix      = PREIX_DEBUG,      &
         &   prefixColor = COLOR_DEBUG,      &
         &   msg         = msg,              &
@@ -602,12 +704,52 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
+Subroutine LOG_DebugVectorVector_typGURU( this, msg, head, value, refValue )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), Dimension(:), intent(in), Optional :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+!! -------------------------------------------------------------------------- !!
+
+    If ( this%isDebug_ ) then
+        !!... Write Message
+        Call WritePrefixMessageVectorVector( &
+        &   prefix      = PREIX_DEBUG,      &
+        &   prefixColor = COLOR_DEBUG,      &
+        &   msg         = msg,              &
+        &   head        = head,             &
+        &   value       = value,            &
+        &   refValue    = refValue,         &
+        &   unit        = this%logUnit,     &
+        &   isColor     = this%isColor_,    &
+        &   isStop      = .FALSE.           )
+
+    End if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!\
+
+!! -------------------------------------------------------------------------- !!
     Subroutine LOG_Flush_typGURU(this)
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in) :: this
 !! -------------------------------------------------------------------------- !!
     if ( this%isLogFile ) Flush(this%logUnit)
+!! -------------------------------------------------------------------------- !!
+    End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+    Subroutine LOG_Stop_typGURU(this)
+    Implicit None
+    Class(typGURU), intent(in) :: this
+!! -------------------------------------------------------------------------- !!
+    Stop
 !! -------------------------------------------------------------------------- !!
     End Subroutine
 !! -------------------------------------------------------------------------- !!
