@@ -103,32 +103,8 @@ Subroutine OpenFile_typFileIO(this, unit)
         &    isStringEqual( this%status,"replace").OR. &
         &    isStringEqual( this%status,"scratch").OR. &
         &    isStringEqual( this%status,"unknown")     ) then
-
             !!... Check base Dir exist
-            If ( len_trim(this%baseDir).ge.1 ) then
-                blkCreateDir: Block
-                    Logical :: isBaseDirExist, isError, isCreate
-
-                    isBaseDirExist = IsExistDir( this%baseDir )
-
-                    if (.NOT.isBaseDirExist) then
-                        Call CreateDir( &
-                        &   dirPath  = this%baseDir, &
-                        &   isError  = isError, &
-                        &   isCreate = isCreate )
-
-                        If ( (isError.EQV..TRUE.).OR.(isCreate.EQV..FALSE.) ) then
-                            Call GURU%Error( &
-                            &   msg   = "Failed to create the base directory.", &
-                            &   head  = "OpenFile_typFileIO",                   &
-                            &   value = trim(this%filePath)                     )
-                        End if
-
-                    end if
-
-                End Block blkCreateDir
-            End if
-
+            Call CreateBaseDir( filePath = this%filePath )
         end if
 
         !!... Open File

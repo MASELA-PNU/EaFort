@@ -340,6 +340,92 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
+Subroutine LOG_Info_typGURU( this, info, msg, head, value, refValue, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)             :: this
+    Character(len=*), intent(in)           :: info
+    Character(len=*), intent(in)           :: msg
+    Character(len=*), intent(in), Optional :: head
+    Class(*), intent(in), Optional         :: value
+    Class(*), intent(in), Optional         :: refValue
+    Logical, intent(in), Optional          :: isStop
+!! -------------------------------------------------------------------------- !!
+
+    if ( IsCharEqual(info, "error") ) then
+        Call this%Error( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue,    &
+        &   isStop   = isStop       )
+    else if ( IsCharEqual(info, "warn") ) then
+        Call this%Warn( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue     )
+    else if ( IsCharEqual(info, "debug") ) then
+        Call this%Debug( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue     )
+    else
+        Call this%Error( &
+        &   msg      = "Given 'info' should be 'error', 'warn' or 'debug'.",    &
+        &   head     = "LOG_Info_typGURU",          &
+        &   value    = info                         )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Subroutine LOG_InfoVector_typGURU( this, info, msg, head, value, refValue, isStop )
+!! -------------------------------------------------------------------------- !!
+    Implicit None
+    Class(typGURU), intent(in)                   :: this
+    Character(len=*), intent(in)                 :: info
+    Character(len=*), intent(in)                 :: msg
+    Character(len=*), intent(in), Optional       :: head
+    Class(*), Dimension(:), intent(in), Optional :: value
+    Class(*), Dimension(:), intent(in), Optional :: refValue
+    Logical, intent(in), Optional                :: isStop
+!! -------------------------------------------------------------------------- !!
+
+    if ( IsCharEqual(info, "error") ) then
+        Call this%ErrorVector( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue,    &
+        &   isStop   = isStop       )
+    else if ( IsCharEqual(info, "warn") ) then
+        Call this%WarnVector( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue     )
+    else if ( IsCharEqual(info, "debug") ) then
+        Call this%DebugVector( &
+        &   msg      = msg,         &
+        &   head     = head,        &
+        &   value    = value,       &
+        &   refValue = refValue     )
+    else
+        Call this%Error( &
+        &   msg      = "Given 'info' should be 'error', 'warn' or 'debug'.",    &
+        &   head     = "LOG_InfoVector_typGURU",          &
+        &   value    = info                         )
+    end if
+
+!! -------------------------------------------------------------------------- !!
+End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
 Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
 !! -------------------------------------------------------------------------- !!
     Implicit None

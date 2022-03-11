@@ -10,34 +10,43 @@
 Module modJSON
 !! -------------------------------------------------------------------------- !!
 
-    Use json_module
+    Use modEaFort       !!... Global variables of EaFort
+    Use modGURU         !!... GURU Module
+    Use modString       !!... String Module
+
+    Use json_module, only: &
+    &   typJSONCore => json_core, &
+    &   typJSON     => json_value, &
+    &   typJSONFile => json_file
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
     !!... JSON Core
-    Type(json_core) :: JSON
+    Type(typJSONCore) :: jsonCore
 
-#include "json.routine"
+!!... Functions associated with JSON Core, File, Print, Clone, Close
+#include "routines/jsonCore.proc"
+
+!!... Functions associated with basic manipulations
+#include "routines/jsonFunc.proc"
+
+!!... Functions associated with variable manipulations
+#include "routines/jsonVarFunc.proc"
 
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
 
-Subroutine JSON_ReadFile_Char( filePath, json )
-    Implicit None
-    Character(len=*), intent(in) :: filePath
-    Type(json_value)             :: json
+!!... Functions associated with JSON Core, File, Print, Clone, Close
+#include "routines/jsonCore.inc"
 
-End Subroutine
+!!... Functions associated with basic manipulations
+#include "routines/jsonFunc.inc"
 
-Subroutine JSON_WriteFile_Char( filePath, json )
-    Implicit None
-    Character(len=*), intent(in) :: filePath
-    Type(json_value)             :: json
-
-End Subroutine
+!!... Functions associated with variable manipulations
+#include "routines/jsonVarFunc.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

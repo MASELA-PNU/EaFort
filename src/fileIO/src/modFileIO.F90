@@ -33,6 +33,8 @@ Implicit None
 
 #include "auxilary/GetNewFileUnit.proc"
 
+#include "auxilary/createBaseDir.proc"
+
 !!... File IO Class definitions
 #include "fileIO/fileIO.typ"
 
@@ -41,6 +43,8 @@ Contains
 !! -------------------------------------------------------------------------- !!
 
 #include "auxilary/GetNewFileUnit.inc"
+
+#include "auxilary/createBaseDir.inc"
 
 !!... File IO Class functions
 #include "fileIO/fileIO.inc"

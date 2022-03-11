@@ -158,15 +158,19 @@ Contains
     !!... Write Message
     Procedure :: WriteDebug => LOG_WriteDebug_typGURU
 
-    !!... Write Message
+    !!... Info Message
+    Procedure :: Info       => LOG_Info_typGURU
+    Procedure :: InfoVector => LOG_InfoVector_typGURU
+
+    !!... Write Header Message
     Procedure :: Error       => LOG_Error_typGURU
     Procedure :: ErrorVector => LOG_ErrorVector_typGURU
 
-    !!... Write Message
+    !!... Write Header Message
     Procedure :: Warn       => LOG_Warn_typGURU
     Procedure :: WarnVector => LOG_WarnVector_typGURU
 
-    !!... Write Message
+    !!... Write Header Message
     Procedure :: Debug       => LOG_Debug_typGURU
     Procedure :: DebugVector => LOG_DebugVector_typGURU
 

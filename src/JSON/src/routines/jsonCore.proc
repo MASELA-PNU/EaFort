@@ -1,0 +1,40 @@
+!!... Destroy JSON
+Interface JSON_InitializeCore
+    Procedure :: JSON_InitializeCore
+End Interface JSON_InitializeCore
+
+!!... Get JSON File
+Interface JSON_GetFile
+    Procedure :: JSON_GetFile
+End Interface
+
+!!... Get JSON File or get null JSON pointer
+Interface JSON_GetFileIfExist
+    Procedure :: JSON_GetFileIfExist
+End Interface
+
+!!... Close JSON file
+Interface JSON_CloseFile
+    Procedure :: JSON_CloseFile
+End Interface
+
+!!... Print JSON
+Interface JSON_Print
+    Procedure :: JSON_Print
+    Procedure :: JSON_PrintFilePath
+End Interface
+
+!!... Create Object
+Interface JSON_CreateObject
+    Procedure :: JSON_CreateObject
+End Interface JSON_CreateObject
+
+!!... Clone JSON
+Interface JSON_Clone
+    Procedure :: JSON_Clone
+End Interface JSON_Clone
+
+!!... Destroy JSON
+Interface JSON_Destroy
+    Procedure :: JSON_Destroy
+End Interface JSON_Destroy
