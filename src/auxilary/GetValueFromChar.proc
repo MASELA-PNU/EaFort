@@ -2,7 +2,6 @@
 Interface GetValueFromChar
     Procedure :: GetIntFromChar
     Procedure :: GetRealFromChar
-    Procedure :: GetDbleFromChar
     Procedure :: GetLogicalFromChar
 End Interface
 
@@ -14,10 +13,6 @@ Interface GetRealFromChar
     Procedure :: GetRealFromChar
 End Interface
 
-Interface GetDbleFromChar
-    Procedure :: GetDbleFromChar
-End Interface
-
 Interface GetLogicalFromChar
     Procedure :: GetLogicalFromChar
 End Interface
@@ -26,7 +21,6 @@ End Interface
 Interface GetValueFromCharOrDefault
     Procedure :: GetIntFromCharOrDefault
     Procedure :: GetRealFromCharOrDefault
-    Procedure :: GetDbleFromCharOrDefault
     Procedure :: GetLogicalFromCharOrDefault
 End Interface
 
@@ -36,10 +30,6 @@ End Interface
 
 Interface GetRealFromCharOrDefault
     Procedure :: GetRealFromCharOrDefault
-End Interface
-
-Interface GetDbleFromCharOrDefault
-    Procedure :: GetDbleFromCharOrDefault
 End Interface
 
 Interface GetLogicalFromCharOrDefault
@@ -52,7 +42,6 @@ Private :: GetSeperatedString
 Interface GetValueVectorFromChar
     Procedure :: GetIntVectorFromChar
     Procedure :: GetRealVectorFromChar
-    Procedure :: GetDbleVectorFromChar
     Procedure :: GetLogicalVectorFromChar
 End Interface
 
@@ -64,10 +53,6 @@ Interface GetRealVectorFromChar
     Procedure :: GetRealVectorFromChar
 End Interface
 
-Interface GetDbleVectorFromChar
-    Procedure :: GetDbleVectorFromChar
-End Interface
-
 Interface GetLogicalVectorFromChar
     Procedure :: GetLogicalVectorFromChar
 End Interface
@@ -76,7 +61,6 @@ End Interface
 Interface GetVectorFromCharOrDefault
     Procedure :: GetIntVectorFromCharOrDefault
     Procedure :: GetRealVectorFromCharOrDefault
-    Procedure :: GetDbleVectorFromCharOrDefault
     Procedure :: GetLogicalVectorFromCharOrDefault
 End Interface
 
@@ -86,10 +70,6 @@ End Interface
 
 Interface GetRealVectorFromCharOrDefault
     Procedure :: GetRealVectorFromCharOrDefault
-End Interface
-
-Interface GetDbleVectorFromCharOrDefault
-    Procedure :: GetDbleVectorFromCharOrDefault
 End Interface
 
 Interface GetLogicalVectorFromCharOrDefault

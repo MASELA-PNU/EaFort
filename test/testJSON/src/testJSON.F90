@@ -21,7 +21,11 @@ Implicit None
 
     !Call Test_JSONFunc()
 
-    Call Test_JSONGet()
+    !Call Test_JSONGet()
+
+    !Call Test_JSONAdd()
+
+    Call Test_JSONUpdate()
 
 !! -------------------------------------------------------------------------- !!
 End Program

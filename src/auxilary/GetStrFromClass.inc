@@ -12,18 +12,16 @@ Subroutine GetStrFromClass( arg, str, isError )
 
         Type is ( Character(len=*) )
             str = arg
-        Type is ( Integer )
+        Type is ( Integer(IP) )
             str = arg
-        Type is ( real(4) )
-            str = arg
-        Type is ( Double Precision )
+        Type is ( real(RP) )
             str = arg
         Type is ( Logical )
             if (arg.eqv..true.) then
                 str = ".true."
             else
                 str = ".false."
-            end if        
+            end if
         Class default
             str = ""
             isError = .TRUE.
@@ -78,7 +76,7 @@ Subroutine GetStrFromClassVector( arg, str, isError )
             end if
             str%raw = str%raw//" ]"
 
-        Type is ( Integer )
+        Type is ( Integer(IP) )
 
             str%raw = "[ "
             if (isLong) then
@@ -101,28 +99,7 @@ Subroutine GetStrFromClassVector( arg, str, isError )
             end if
             str%raw = str%raw//" ]"
 
-        Type is ( real(4) )
-            str%raw = "[ "
-            if (isLong) then
-                tmpStr  = arg(1)
-                str%raw = str%raw//tmpStr%raw//", "
-                tmpStr  = arg(2)
-                str%raw = str%raw//tmpStr%raw//", "
-                str%raw = str%raw//" ... , "
-                tmpStr  = arg(nArg-1)
-                str%raw = str%raw//tmpStr%raw//", "
-                tmpStr  = arg(nArg)
-                str%raw = str%raw//tmpStr%raw
-            else
-                do iArg = 1, nArg-1
-                    tmpStr  = arg(iArg)
-                    str%raw = str%raw//tmpStr%raw//", "
-                End do
-                tmpStr  = arg(nArg)
-                str%raw = str%raw//tmpStr%raw
-            end if
-            str%raw = str%raw//" ]"
-        Type is ( Double Precision )
+        Type is ( real(RP) )
             str%raw = "[ "
             if (isLong) then
                 tmpStr  = arg(1)

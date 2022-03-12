@@ -14,16 +14,9 @@ Subroutine Test_VarToStringConv()
     write(*,*)
 
     write(*,*) "Real"
-    varChar1 = Real2Char( 5.0 )
+    varChar1 = Real2Char( 5.0_RP )
     write(*,*) "varChar1: ", varChar1
-    varChar2 = Real2Char( [1.5, 5.5, 2.58] )
-    write(*,*) "varChar2: ", varChar2
-    write(*,*)
-
-    write(*,*) "Dble"
-    varChar1 = Dble2Char( 5.D0 )
-    write(*,*) "varChar1: ", varChar1
-    varChar2 = Dble2Char( [1.D2, 5.0D2, 2.D8] )
+    varChar2 = Real2Char( [1.0_RP, 5.0_RP, 2.0_RP] )
     write(*,*) "varChar2: ", varChar2
     write(*,*)
 

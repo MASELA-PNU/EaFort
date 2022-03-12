@@ -6,10 +6,9 @@ Implicit None
 
     Block
         Integer, Allocatable :: int1(:), int2(:)
-        Real(4), Allocatable :: real1(:), real2(:)
-        Double precision , Allocatable:: dble1(:), dble2(:)
+        Real(RP), Allocatable :: real1(:), real2(:)
         Logical, Allocatable :: log1(:), log2(:)
-        Real(4), Allocatable :: val1(:), val2(:)
+        Real(RP), Allocatable :: val1(:), val2(:)
         Logical :: isError
 
         write(*,*) "Test: GetIntFromChar"
@@ -41,22 +40,6 @@ Implicit None
 
         Call GetRealVectorFromChar( "A, B, 2.0", real1, isError )
         write(*,*) " value : ", real1
-        write(*,*) " error : ", isError
-        write(*,*)
-
-        write(*,*) "Test: GetDbleFromChar"
-        Call GetDbleVectorFromChar( "1 2 3 4", dble1, isError )
-        write(*,*) " value : ", dble1
-        write(*,*) " error : ", isError
-        write(*,*)
-
-        Call GetDbleVectorFromChar( "2.0,1,53,1", dble1, isError )
-        write(*,*) " value : ", dble1
-        write(*,*) " error : ", isError
-        write(*,*)
-
-        Call GetDbleVectorFromChar( "A,b,3", dble1, isError )
-        write(*,*) " value : ", dble1
         write(*,*) " error : ", isError
         write(*,*)
 

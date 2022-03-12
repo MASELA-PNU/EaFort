@@ -104,37 +104,32 @@ Contains
     !!... Get Arguments by keyword and its index(option)
     Procedure :: GetArgInt     => ARG_GetArgInt_typGURU
     Procedure :: GetArgReal    => ARG_GetArgReal_typGURU
-    Procedure :: GetArgDble    => ARG_GetArgDble_typGURU
     Procedure :: GetArgLogical => ARG_GetArgLogical_typGURU
     Procedure :: GetArgChar    => ARG_GetArgChar_typGURU
+
+    !!... Get Argument
+    Generic :: GetArg => GetArgInt,     &
+    &                    GetArgReal,    &
+    &                    GetArgLogical, &
+    &                    GetArgChar
 
     !!... Get Arguments by keyword and its index(option) or default value
     Procedure :: GetArgIntOrDefault     => ARG_GetArgIntOrDefault_typGURU
     Procedure :: GetArgRealOrDefault    => ARG_GetArgRealOrDefault_typGURU
-    Procedure :: GetArgDbleOrDefault    => ARG_GetArgDbleOrDefault_typGURU
     Procedure :: GetArgLogicalOrDefault => ARG_GetArgLogicalOrDefault_typGURU
     Procedure :: GetArgCharOrDefault    => ARG_GetArgCharOrDefault_typGURU
 
     !!... Get Arguments vector by keyword
     Procedure :: GetArgIntVector     => ARG_GetArgIntVector_typGURU
     Procedure :: GetArgRealVector    => ARG_GetArgRealVector_typGURU
-    Procedure :: GetArgDbleVector    => ARG_GetArgDbleVector_typGURU
     Procedure :: GetArgLogicalVector => ARG_GetArgLogicalVector_typGURU
     Procedure :: GetArgCharVector    => ARG_GetArgCharVector_typGURU
 
     !!... Get Arguments vector by keyword or default
     Procedure :: GetArgIntVectorOrDefault     => ARG_GetArgIntVectorOrDefault_typGURU
     Procedure :: GetArgRealVectorOrDefault    => ARG_GetArgRealVectorOrDefault_typGURU
-    Procedure :: GetArgDbleVectorOrDefault    => ARG_GetArgDbleVectorOrDefault_typGURU
     Procedure :: GetArgLogicalVectorOrDefault => ARG_GetArgLogicalVectorOrDefault_typGURU
     Procedure :: GetArgCharVectorOrDefault    => ARG_GetArgCharVectorOrDefault_typGURU
-
-    !!... Get Argument
-    Generic :: GetArg => GetArgInt,     &
-    &                    GetArgReal,    &
-    &                    GetArgDble,    &
-    &                    GetArgLogical, &
-    &                    GetArgChar
 
 !! -------------------------------------------------------------------------- !!
 !!  Logging Routines

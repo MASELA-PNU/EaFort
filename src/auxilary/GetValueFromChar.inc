@@ -6,18 +6,18 @@ Subroutine GetIntFromChar( char, value, isError )
     Integer, intent(out)           :: value
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
-    Integer :: ios
-    Logical :: isError_
-    Real(8) :: dbleValue
-    read(char, *, iostat = ios) dbleValue
+    Integer  :: ios
+    Logical  :: isError_
+    Real(RP) :: realValue
+    read(char, *, iostat = ios) realValue
 
     isError_ = .FALSE.
     If (ios.ne.0) then
         isError_  = .TRUE.
     else
         !!... Check the value is closed to the integer
-        if ( dabs( dbleValue - nint(dbleValue) ).le.1.d-24 ) then
-            value = nint(dbleValue)
+        if ( dabs( realValue - nint(realValue) ).le.1.d-24 ) then
+            value = nint(realValue)
         else
             isError_  = .TRUE.
         end if
@@ -35,30 +35,7 @@ Subroutine GetRealFromChar( char, value, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(4), intent(out)           :: value
-    Logical, intent(out), Optional :: isError
-!! -------------------------------------------------------------------------- !!
-    Integer :: ios
-    Logical :: isError_
-    read(char, *, iostat = ios) value
-
-    isError_ = .FALSE.
-    If (ios.ne.0) then
-        value   = 0
-        isError_  = .TRUE.
-    End if
-
-    if ( present(isError) ) isError = isError_
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine GetDbleFromChar( char, value, isError )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Character(len=*), intent(in)   :: char
-    Real(8), intent(out)           :: value
+    Real(RP), intent(out)          :: value
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     Integer :: ios
@@ -129,29 +106,12 @@ Subroutine GetRealFromCharOrDefault( char, value, refValue, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(4), intent(out)           :: value
-    Real(4), intent(in)            :: refValue
+    Real(RP), intent(out)          :: value
+    Real(RP), intent(in)           :: refValue
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Call GetRealFromChar( char, value, isError_ )
-    if ( isError_ ) value = refValue
-    If ( present(isError) ) isError = isError_
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine GetDbleFromCharOrDefault( char, value, refValue, isError )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Character(len=*), intent(in)   :: char
-    Real(8), intent(out)           :: value
-    Real(8), intent(in)            :: refValue
-    Logical, intent(out), Optional :: isError
-!! -------------------------------------------------------------------------- !!
-    Logical :: isError_
-    Call GetDbleFromChar( char, value, isError_ )
     if ( isError_ ) value = refValue
     If ( present(isError) ) isError = isError_
 !! -------------------------------------------------------------------------- !!
@@ -259,57 +219,13 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(4), allocatable           :: value(:)
+    Real(RP), allocatable          :: value(:)
     Logical, intent(out), Optional :: isError
 !! -------------------------------------------------------------------------- !!
     type(string), allocatable :: strVector(:)
     Integer :: nString, iString
     Logical :: isError_
-    Real(4) :: singleValue
-
-    If ( Allocated(value) ) Deallocate(value)
-
-    !!... Get Separated String
-    Call GetSeperatedString( char, strVector, nString )
-
-    isError_ = .FALSE.
-    if ( nString.ge.1 ) then
-
-        Allocate( value(nString) ); value(:) = 0.0
-
-        loopString: do iString = 1, nString
-
-            !!... Single Conversion
-            Call GetRealFromChar( strVector(iString)%raw, singleValue, isError_ )
-            if ( isError_ ) exit loopString
-            value(iString) = singleValue
-
-        end do loopString
-    end if
-
-    If ( isError_ ) then
-        If ( Allocated(value) ) Deallocate(value)
-    end if
-
-    If (present(isError)) isError = isError_
-    If ( Allocated(strVector) ) Deallocate(strVector)
-
-!! -------------------------------------------------------------------------- !!
-    End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-    Subroutine GetDbleVectorFromChar( char, value, isError )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Character(len=*), intent(in)   :: char
-    Real(8), allocatable           :: value(:)
-    Logical, intent(out), Optional :: isError
-!! -------------------------------------------------------------------------- !!
-    type(string), allocatable :: strVector(:)
-    Integer :: nString, iString
-    Logical :: isError_
-    Real(8) :: singleValue
+    Real(RP) :: singleValue
 
     If ( Allocated(value) ) Deallocate(value)
 
@@ -324,7 +240,7 @@ End Subroutine
         loopString: do iString = 1, nString
 
             !!... Single Conversion
-            Call GetDbleFromChar( strVector(iString)%raw, singleValue, isError_ )
+            Call GetRealFromChar( strVector(iString)%raw, singleValue, isError_ )
             if ( isError_ ) exit loopString
             value(iString) = singleValue
 
@@ -413,35 +329,13 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)   :: char
-    Real(4), allocatable           :: value(:)
-    Real(4), dimension(:)          :: refValue
+    Real(RP), allocatable          :: value(:)
+    Real(RP), dimension(:)         :: refValue
     Logical, Optional              :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Integer :: nElement
     Call GetRealVectorFromChar( char, value, isError_ )
-    If ( isError_ ) then
-        if ( Allocated(value) ) Deallocate(value)
-        nElement = size( refValue )
-        if (nElement.ge.1) Allocate(value, source = refValue )
-    end if
-    if (present(isError)) isError = isError_
-!! -------------------------------------------------------------------------- !!
-    End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-    Subroutine GetDbleVectorFromCharOrDefault( char, value, refValue, isError )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Character(len=*), intent(in)   :: char
-    Real(8), allocatable           :: value(:)
-    Real(8), dimension(:)          :: refValue
-    Logical, Optional              :: isError
-!! -------------------------------------------------------------------------- !!
-    Logical :: isError_
-    Integer :: nElement
-    Call GetDbleVectorFromChar( char, value, isError_ )
     If ( isError_ ) then
         if ( Allocated(value) ) Deallocate(value)
         nElement = size( refValue )

@@ -275,7 +275,7 @@ End Subroutine
 Subroutine GetRealVector_typString( this, value, isError )
     Implicit None
     Class(typString), intent(in) :: this
-    Real(4), Allocatable         :: value(:)
+    Real(RP), Allocatable        :: value(:)
     Logical, Optional            :: isError
     !!... Local Variables
     Logical :: isError_
@@ -290,29 +290,6 @@ Subroutine GetRealVector_typString( this, value, isError )
         Call GURU%Error( &
         &   msg      = "Conversion to real vector fails.", &
         &   head     = "GetRealVector_typString", &
-        &   value    = this%raw )
-    end if
-
-End Subroutine
-
-Subroutine GetDbleVector_typString( this, value, isError )
-    Implicit None
-    Class(typString), intent(in) :: this
-    Real(8), Allocatable         :: value(:)
-    Logical, Optional            :: isError
-    !!... Local Variables
-    Logical :: isError_
-
-    !!... Split into string vector
-    Call GetDbleVectorFromChar( &
-    &   char = this%raw, value = value, isError = isError_)
-
-    if ( present(isError) ) isError = isError_
-
-    if ( isError_.AND.( .NOT.present(isError) ) ) Then
-        Call GURU%Error( &
-        &   msg      = "Conversion to dble vector fails.", &
-        &   head     = "GetDbleVector_typString", &
         &   value    = this%raw )
     end if
 
@@ -398,10 +375,10 @@ End Subroutine
 
 Subroutine GetRealVectorOrDefault_typString( this, value, default, isError )
     Implicit None
-    Class(typString), intent(in)      :: this
-    Real(4), Allocatable, intent(out) :: value(:)
-    Real(4), Dimension(:), intent(in) :: default
-    Logical, intent(out), Optional    :: isError
+    Class(typString), intent(in)       :: this
+    Real(RP), Allocatable, intent(out) :: value(:)
+    Real(RP), Dimension(:), intent(in) :: default
+    Logical, intent(out), Optional     :: isError
     !!... Local Variables
     Logical :: isError_
 
@@ -414,30 +391,6 @@ Subroutine GetRealVectorOrDefault_typString( this, value, default, isError )
         Call GURU%DebugSingleVector( &
         &   msg      = "Conversion fails. 'default' is used.", &
         &   head     = "GetRealVectorOrDefault_typString",     &
-        &   value    = this%raw,                               &
-        &   refValue = default                                 )
-    end if
-
-End Subroutine
-
-Subroutine GetDbleVectorOrDefault_typString( this, value, default, isError )
-    Implicit None
-    Class(typString), intent(in)      :: this
-    Real(8), Allocatable, intent(out) :: value(:)
-    Real(8), Dimension(:), intent(in) :: default
-    Logical, intent(out), Optional    :: isError
-    !!... Local Variables
-    Logical :: isError_
-
-    !!... Split into string vector
-    Call GetDbleVectorFromCharOrDefault( &
-    &   char = this%raw, value = value, refValue = default, isError = isError_)
-
-    if ( present(isError) ) isError = isError_
-    if ( isError_.AND.( .NOT.present(isError) ) ) Then
-        Call GURU%DebugSingleVector( &
-        &   msg      = "Conversion fails. 'default' is used.", &
-        &   head     = "GetDbleVectorOrDefault_typString",     &
         &   value    = this%raw,                               &
         &   refValue = default                                 )
     end if

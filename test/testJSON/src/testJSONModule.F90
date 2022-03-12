@@ -26,9 +26,9 @@ Contains
 
 #include "tests/test_JSONVarFuncGet.inc"
 
-! #include "tests/test_JSONVarFuncAdd.inc"
-!
-! #include "tests/test_JSONVarFuncUpdate.inc"
+#include "tests/test_JSONVarFuncAdd.inc"
+
+#include "tests/test_JSONVarFuncUpdate.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

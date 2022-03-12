@@ -34,8 +34,8 @@ Subroutine Test_String_VectorConversion()
 
     blkRealVector: Block
         Type(typString)   :: str
-        Real(4), Allocatable :: intVec1(:)
-        Real(4), Allocatable :: intVec2(:)
+        Real(RP), Allocatable :: intVec1(:)
+        Real(RP), Allocatable :: intVec2(:)
         Integer :: iVar, nVar
 
         write(*,*)
@@ -51,7 +51,7 @@ Subroutine Test_String_VectorConversion()
 
         !str = "7, 6, 5, 4, 3 2 1"
         str = "sa, asd"
-        Call str%GetRealVectorOrDefault( intVec2, [5.0, 3.2, 8.7] )
+        Call str%GetRealVectorOrDefault( intVec2, [5.0_RP, 3.2_RP, 8.7_RP] )
         nVar    = size(intVec2)
         do iVar = 1, nVar
             write(*,*) iVar, intVec2(iVar)
@@ -62,15 +62,15 @@ Subroutine Test_String_VectorConversion()
 
     blkDbleVector: Block
         Type(typString)   :: str
-        Real(8), Allocatable :: intVec1(:)
-        Real(8), Allocatable :: intVec2(:)
+        Real(RP), Allocatable :: intVec1(:)
+        Real(RP), Allocatable :: intVec2(:)
         Integer :: iVar, nVar
 
         write(*,*)
         write(*,"(a)") "Testing Split Functions"
 
         str = "1 2 3 4 5 6 7"
-        Call str%GetDbleVector( intVec1 )
+        Call str%GetRealVector( intVec1 )
         nVar    = size(intVec1)
         do iVar = 1, nVar
             write(*,*) iVar, intVec1(iVar)
@@ -79,7 +79,7 @@ Subroutine Test_String_VectorConversion()
 
         !str = "7, 6, 5, 4, 3 2 1"
         str = "sa, asd"
-        Call str%GetDbleVectorOrDefault( intVec2, [1.D0, 5.D0, 3.D0] )
+        Call str%GetRealVectorOrDefault( intVec2, [1.D0, 5.D0, 3.D0] )
         nVar    = size(intVec2)
         do iVar = 1, nVar
             write(*,*) iVar, intVec2(iVar)

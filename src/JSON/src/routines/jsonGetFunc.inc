@@ -213,7 +213,7 @@ Subroutine JSON_GetReal( json, path, value, isFound )
     Implicit None
     Type(typJSON), Pointer       :: json
     Character(len=*), intent(in) :: path
-    Real(4), intent(out)         :: value
+    Real(RP), intent(out)         :: value
     Logical, optional            :: isFound
 !! -------------------------------------------------------------------------- !!
     Logical :: isFound_
@@ -222,28 +222,6 @@ Subroutine JSON_GetReal( json, path, value, isFound )
         Call GURU%Error( &
         &   msg   = "Failed to get value for given 'path'.", &
         &   head  = "JSON_GetReal", &
-        &   value = path )
-    End if
-    if ( present(isFound) ) isFound = isFound_
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine JSON_GetDble( json, path, value, isFound )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Type(typJSON), Pointer       :: json
-    Character(len=*), intent(in) :: path
-    Real(8), intent(out)         :: value
-    Logical, optional            :: isFound
-!! -------------------------------------------------------------------------- !!
-    Logical :: isFound_
-    Call jsonCore%Get( json, trim(path), value, isFound_ )
-    if ( (.NOT.isFound_).AND.(present(isFound).EQV..FALSE.) ) then
-        Call GURU%Error( &
-        &   msg   = "Failed to get value for given 'path'.", &
-        &   head  = "JSON_GetDble", &
         &   value = path )
     End if
     if ( present(isFound) ) isFound = isFound_
@@ -345,14 +323,13 @@ Subroutine JSON_GetIntVector( json, path, value, isFound )
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
-
 !! -------------------------------------------------------------------------- !!
 Subroutine JSON_GetRealVector( json, path, value, isFound )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     type(typJSON), pointer       :: json
     Character(len=*), intent(in) :: path
-    Real(4), allocatable         :: value(:)
+    Real(RP), allocatable        :: value(:)
     Logical, optional            :: isFound
 !! -------------------------------------------------------------------------- !!
     Logical :: isFound_
@@ -362,29 +339,6 @@ Subroutine JSON_GetRealVector( json, path, value, isFound )
         Call GURU%Error( &
         &   msg   = "Failed to get value for given 'path'.", &
         &   head  = "JSON_GetRealVector", &
-        &   value = path )
-    End if
-    if ( present(isFound) ) isFound = isFound_
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine JSON_GetDbleVector( json, path, value, isFound )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    type(typJSON), pointer       :: json
-    Character(len=*), intent(in) :: path
-    Real(8), allocatable         :: value(:)
-    Logical, optional            :: isFound
-!! -------------------------------------------------------------------------- !!
-    Logical :: isFound_
-    If ( Allocated(value) ) Deallocate(value)
-    Call jsonCore%Get( json, trim(path), value, isFound_)
-    if ( (.NOT.isFound_).AND.(present(isFound).EQV..FALSE.) ) then
-        Call GURU%Error( &
-        &   msg   = "Failed to get value for given 'path'.", &
-        &   head  = "JSON_GetDbleVector", &
         &   value = path )
     End if
     if ( present(isFound) ) isFound = isFound_
@@ -539,8 +493,8 @@ End Subroutine
     Implicit None
     type(typJSON), pointer       :: json
     Character(len=*), intent(in) :: path
-    Real(4), intent(out)         :: value
-    Real(4), intent(in)          :: default
+    Real(RP), intent(out)        :: value
+    Real(RP), intent(in)         :: default
     Logical, optional            :: isFound
 !! -------------------------------------------------------------------------- !!
     Logical :: isFound_
@@ -550,30 +504,6 @@ End Subroutine
         Call GURU%Debug( &
         &   msg      = "Failed to get 'value'. 'default' is returned.", &
         &   head     = "JSON_GetRealOrDefault", &
-        &   value    = path, &
-        &   refValue = default )
-    end if
-!! -------------------------------------------------------------------------- !!
-    End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-    Subroutine JSON_GetDbleOrDefault( json, path, value, default, isFound)
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    type(typJSON), pointer       :: json
-    Character(len=*), intent(in) :: path
-    Real(8), intent(out)         :: value
-    Real(8), intent(in)          :: default
-    Logical, optional            :: isFound
-!! -------------------------------------------------------------------------- !!
-    Logical :: isFound_
-    Call JSON_GetDble( json = json, path = path, value = value, isFound = isFound_)
-    if (.NOT.isFound_) then
-        value = default
-        Call GURU%Debug( &
-        &   msg      = "Failed to get 'value'. 'default' is returned.", &
-        &   head     = "JSON_GetDbleOrDefault", &
         &   value    = path, &
         &   refValue = default )
     end if
@@ -629,9 +559,7 @@ End Subroutine
                 str = default
             Type is ( Integer )
                 str = default
-            Type is ( real(4) )
-                str = default
-            Type is ( Double Precision )
+            Type is ( Real(RP) )
                 str = default
             Type is ( Logical )
                 if (default.eqv..true.) then
@@ -692,9 +620,7 @@ End Subroutine
                 str = default
             Type is ( Integer )
                 str = default
-            Type is ( real(4) )
-                str = default
-            Type is ( Double Precision )
+            Type is ( real(RP) )
                 str = default
             Type is ( Logical )
                 if (default.eqv..true.) then
@@ -770,16 +696,15 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
     End Subroutine
 !! -------------------------------------------------------------------------- !!
-
 !! -------------------------------------------------------------------------- !!
     Subroutine JSON_GetRealVectorOrDefault( json, path, value, default, isFound)
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    type(typJSON), pointer            :: json
-    Character(len=*), intent(in)      :: path
-    Real(4), Allocatable              :: value(:)
-    Real(4), dimension(:), intent(in) :: default
-    Logical, optional                 :: isFound
+    type(typJSON), pointer             :: json
+    Character(len=*), intent(in)       :: path
+    Real(RP), Allocatable              :: value(:)
+    Real(RP), dimension(:), intent(in) :: default
+    Logical, optional                  :: isFound
 !! -------------------------------------------------------------------------- !!
     Logical :: isFound_
     Integer :: nArg
@@ -791,56 +716,17 @@ End Subroutine
         nArg = size(default)
 
         If ( nArg.ge.1 ) then
-            Allocate( value(nArg) ); value(:) = 0.0
-            value(:) = default(:)
-            Call GURU%DebugSingleVector( &
-            &   msg      = "Conversion fails. 'default' is used.", &
-            &   head     = "JSON_GetRealVectorOrDefault",          &
-            &   value    = path,                                   &
-            &   refValue = default                                 )
-        else
-            Call GURU%Error( &
-            &   msg      = "The size of 'default' is less than 0", &
-            &   head     = "JSON_GetRealVectorOrDefault",          &
-            &   value    = path                                    )
-        end if
-
-    end if
-!! -------------------------------------------------------------------------- !!
-    End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-    Subroutine JSON_GetDbleVectorOrDefault( json, path, value, default, isFound)
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    type(typJSON), pointer            :: json
-    Character(len=*), intent(in)      :: path
-    Real(8), Allocatable              :: value(:)
-    Real(8), dimension(:), intent(in) :: default
-    Logical, optional                 :: isFound
-!! -------------------------------------------------------------------------- !!
-    Logical :: isFound_
-    Integer :: nArg
-
-    Call JSON_GetDbleVector( json = json, path = path, value = value, isFound = isFound_)
-
-    if (.NOT.isFound_) then
-
-        nArg = size(default)
-
-        If ( nArg.ge.1 ) then
             Allocate( value(nArg) ); value(:) = 0.D0
             value(:) = default(:)
             Call GURU%DebugSingleVector( &
             &   msg      = "Conversion fails. 'default' is used.", &
-            &   head     = "JSON_GetDbleVectorOrDefault",          &
+            &   head     = "JSON_GetRealVectorOrDefault",          &
             &   value    = path,                                   &
             &   refValue = default                                 )
         else
             Call GURU%Error( &
             &   msg      = "The size of 'default' is less than 0", &
-            &   head     = "JSON_GetDbleVectorOrDefault",          &
+            &   head     = "JSON_GetRealVectorOrDefault",          &
             &   value    = path                                    )
         end if
 
@@ -924,11 +810,7 @@ End Subroutine
                     do iArg = 1, nArg
                         tmpStr(iArg) = default(iArg)
                     end do
-                Type is ( real(4) )
-                    do iArg = 1, nArg
-                        tmpStr(iArg) = default(iArg)
-                    end do
-                Type is ( Double Precision )
+                Type is ( real(RP) )
                     do iArg = 1, nArg
                         tmpStr(iArg) = default(iArg)
                     end do
@@ -1034,11 +916,7 @@ End Subroutine
                     do iArg = 1, nArg
                         tmpStr(iArg) = default(iArg)
                     end do
-                Type is ( real(4) )
-                    do iArg = 1, nArg
-                        tmpStr(iArg) = default(iArg)
-                    end do
-                Type is ( Double Precision )
+                Type is ( real(RP) )
                     do iArg = 1, nArg
                         tmpStr(iArg) = default(iArg)
                     end do

@@ -42,7 +42,7 @@ Implicit None
 
     Block
         Integer :: intValue
-        Real(8) :: dbleValue
+        Real(RP) :: realValue
         Logical :: logValue
         Character(len=:), Allocatable :: charValue
         Logical :: isError, isFound
@@ -61,8 +61,8 @@ Implicit None
         write(*,*) " isError  : ", isError
         write(*,*)
 
-        Call GURU%GetArgDble( "output", dbleValue, 1, isError )
-        write(*,*) " dbleValue : ", dbleValue
+        Call GURU%GetArgReal( "output", realValue, 1, isError )
+        write(*,*) " realValue : ", realValue
         write(*,*) " isError  : ", isError
         write(*,*)
 
@@ -80,8 +80,7 @@ Implicit None
 
     Block
         Integer :: intValue
-        Real(4) :: realValue
-        Real(8) :: dbleValue
+        Real(RP) :: realValue
         Logical :: logValue
         Character(len=:), Allocatable :: charValue
         Logical :: isError, isFound
@@ -95,12 +94,8 @@ Implicit None
         write(*,*) " intValue : ", intValue
         write(*,*)
 
-        Call GURU%GetArgRealOrDefault( "output", realValue, 2.0 )
+        Call GURU%GetArgRealOrDefault( "output", realValue, 2.0_RP )
         write(*,*) " realValue : ", realValue
-        write(*,*)
-
-        Call GURU%GetArgDbleOrDefault( "output", dbleValue, 5.D0 )
-        write(*,*) " dbleValue : ", dbleValue
         write(*,*)
 
         Call GURU%GetArgLogicalOrDefault( "output", logValue, .true. )

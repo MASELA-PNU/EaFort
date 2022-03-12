@@ -6,10 +6,9 @@ Implicit None
 
     Block
         Integer :: int1, int2
-        Real(4) :: real1, real2
-        Double precision :: dble1, dble2
+        Real(RP) :: real1, re
         Logical :: log1, log2
-        Real(4) :: val1, val2
+        Real(RP) :: val1, val2
         Logical :: isError
 
         write(*,*) "Test: GetIntFromChar"
@@ -41,22 +40,6 @@ Implicit None
 
         Call GetRealFromChar( "A", real1, isError )
         write(*,*) " value : ", real1
-        write(*,*) " error : ", isError
-        write(*,*)
-
-        write(*,*) "Test: GetDbleFromChar"
-        Call GetDbleFromChar( "1", dble1, isError )
-        write(*,*) " value : ", dble1
-        write(*,*) " error : ", isError
-        write(*,*)
-
-        Call GetDbleFromChar( "2.0", dble1, isError )
-        write(*,*) " value : ", dble1
-        write(*,*) " error : ", isError
-        write(*,*)
-
-        Call GetDbleFromChar( "A", dble1, isError )
-        write(*,*) " value : ", dble1
         write(*,*) " error : ", isError
         write(*,*)
 

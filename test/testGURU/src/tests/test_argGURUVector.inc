@@ -35,9 +35,9 @@ Implicit None
     Call GURU%UpdateAndPrint()
 
     Block
-        Integer, Allocatable :: intValue(:)
-        Real(8), Allocatable :: dbleValue(:)
-        Logical, Allocatable :: logValue(:)
+        Integer, Allocatable  :: intValue(:)
+        Real(RP), Allocatable :: realValue(:)
+        Logical, Allocatable  :: logValue(:)
         Character(len=:), Allocatable, dimension(:) :: charValue
         Logical :: isError, isFound
 
@@ -51,8 +51,8 @@ Implicit None
         write(*,*) " isError  : ", isError
         write(*,*)
 
-        Call GURU%GetArgDbleVector( "output", dbleValue, isError )
-        write(*,*) " dbleValue : ", dbleValue
+        Call GURU%GetArgrealVector( "output", realValue, isError )
+        write(*,*) " realValue : ", realValue
         write(*,*) " isError  : ", isError
         write(*,*)
 
@@ -69,10 +69,9 @@ Implicit None
     End Block
 
     Block
-        Integer, Allocatable :: intValue(:)
-        Real(4), Allocatable :: realValue(:)
-        Real(8), Allocatable :: dbleValue(:)
-        Logical, Allocatable :: logValue(:)
+        Integer, Allocatable  :: intValue(:)
+        Real(RP), Allocatable :: realValue(:)
+        Logical, Allocatable  :: logValue(:)
         Character(len=:), Allocatable, dimension(:) :: charValue
         Character(len=:), Allocatable, dimension(:) :: refChar
         Logical :: isError
@@ -87,13 +86,8 @@ Implicit None
         write(*,*) " isError  : ", isError
         write(*,*)
 
-        Call GURU%GetArgRealVectorOrDefault( "output", realValue, [1.0, 2.2, 4.5], isError )
+        Call GURU%GetArgRealVectorOrDefault( "output", realValue, [1.0_RP, 2.2_RP, 4.5_RP], isError )
         write(*,*) " realValue : ", realValue
-        write(*,*) " isError   : ", isError
-        write(*,*)
-
-        Call GURU%GetArgDbleVectorOrDefault( "output", dbleValue, [5.D0, 1.D0], isError )
-        write(*,*) " dbleValue : ", dbleValue
         write(*,*) " isError   : ", isError
         write(*,*)
 

@@ -18,7 +18,7 @@ Subroutine Test_String_SingleConversion()
         write(*,*) "realValue", realValue
 
         write(*,*)
-        str       = 4.0
+        str       = 4.0_RP
         Call str%GetInt( intValue )
         Call str%GetReal( realValue )
 

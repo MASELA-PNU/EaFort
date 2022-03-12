@@ -11,8 +11,6 @@ Interface Var2Char
     Procedure :: Int2Char_Vector
     Procedure :: Real2Char
     Procedure :: Real2Char_Vector
-    Procedure :: Dble2Char
-    Procedure :: Dble2Char_Vector
     Procedure :: Logical2Char
     Procedure :: Logical2Char_Vector
     Procedure :: String2Char
@@ -29,12 +27,6 @@ End Interface
 Interface Real2Char
     Procedure :: Real2Char
     Procedure :: Real2Char_Vector
-End Interface
-
-!!... Dble 2 Character
-Interface Dble2Char
-    Procedure :: Dble2Char
-    Procedure :: Dble2Char_Vector
 End Interface
 
 !!... Logical 2 Character

@@ -33,9 +33,6 @@ Contains
     Procedure :: GetRealVector => GetRealVector_typString
 
     !!... Get integer vector from raw character
-    Procedure :: GetDbleVector => GetDbleVector_typString
-
-    !!... Get integer vector from raw character
     Procedure :: GetLogicalVector => GetLogicalVector_typString
 
     !!... Get string vector
@@ -46,9 +43,6 @@ Contains
 
     !!... Get Real vector or default value
     Procedure :: GetRealVectorOrDefault => GetRealVectorOrDefault_typString
-
-    !!... Get Dble vector or default value
-    Procedure :: GetDbleVectorOrDefault => GetDbleVectorOrDefault_typString
 
     !!... Get Logical vector or default value
     Procedure :: GetLogicalVectorOrDefault => GetLogicalVectorOrDefault_typString

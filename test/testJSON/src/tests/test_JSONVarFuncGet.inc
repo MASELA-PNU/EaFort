@@ -39,7 +39,7 @@ Implicit None
     !
     !     Call JSON_GetInt( jsonApple, "weight", intVal )
     !     Call JSON_GetReal( jsonApple, "diameter", realVal )
-    !     Call JSON_GetDble( jsonApple, "diameter", dbleVal )
+    !     Call JSON_GetReal( jsonApple, "diameter", dbleVal )
     !     Call JSON_GetLogical( jsonApple, "isSell", logVal )
     !     Call JSON_GetChar( jsonApple, "market", chVal )
     !     Call JSON_GetString( jsonApple, "market", str )
@@ -78,7 +78,7 @@ Implicit None
     Block
         !!...
         Integer, allocatable :: intVec(:)
-        Real(4), allocatable :: realVec(:)
+        Real(8), allocatable :: realVec(:)
         Real(8), allocatable :: dbleVec(:)
         Logical, allocatable :: logVec(:)
         Character(len=:), Allocatable, dimension(:) :: chVec(:)
@@ -88,7 +88,7 @@ Implicit None
 
         ! Call JSON_GetIntVector( jsonBanana, "length", intVec )
         ! Call JSON_GetRealVector( jsonBanana, "weight", realVec )
-        ! Call JSON_GetDbleVector( jsonBanana, "weight", dbleVec )
+        ! Call JSON_GetReal( jsonBanana, "weight", dbleVec )
         ! Call JSON_GetLogicalVector( jsonBanana, "isSell", logVec )
         ! Call JSON_GetCharVector( jsonBanana, "market", chVec )
         ! Call JSON_GetStringVector( jsonBanana, "market", strVec )
@@ -108,8 +108,8 @@ Implicit None
         strVec2(2) = "ABVCDD"
 
         Call JSON_GetIntVectorOrDefault( jsonBanana, "length1", intVec, [1 ,4, 3] )
-        Call JSON_GetRealVectorOrDefault( jsonBanana, "weight1", realVec, [1.5, 2.1])
-        Call JSON_GetDbleVectorOrDefault( jsonBanana, "weight1", dbleVec, [2.D0, 2.3D0] )
+        Call JSON_GetRealVectorOrDefault( jsonBanana, "weight1", realVec, [1.5D0, 2.1D0])
+        Call JSON_GetRealVectorOrDefault( jsonBanana, "weight1", dbleVec, [2.D0, 2.3D0] )
         Call JSON_GetLogicalVectorOrDefault( jsonBanana, "isSell1", logVec, [.FALSE., .FALSE.] )
         ! Call JSON_GetCharVectorOrDefault( jsonBanana, "market1", chVec, ["A", "B", "C"] )
         ! Call JSON_GetStringVectorOrDefault( jsonBanana, "market1", strVec, ["A", "B", "C"] )
@@ -118,7 +118,7 @@ Implicit None
         ! Call JSON_GetStringVectorOrDefault( jsonBanana, "market1", strVec, strVec2 )
 
         Call JSON_GetCharVectorOrDefault( jsonBanana, "market1", chVec, [1, 2, 3] )
-        Call JSON_GetStringVectorOrDefault( jsonBanana, "market1", strVec, [10.0, 2.7, 5.3] )
+        Call JSON_GetStringVectorOrDefault( jsonBanana, "market1", strVec, [10.0D0, 2.7D0, 5.3D0] )
 
         write(*,*) "intVal  : ", intVec
         write(*,*) "realVal : ", realVec

@@ -197,7 +197,7 @@ Subroutine ARG_GetArgReal_typGURU(this, key, value, index, isError)
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
-    Real(4), intent(out)          :: value
+    Real(RP), intent(out)         :: value
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
@@ -223,59 +223,13 @@ Subroutine ARG_GetArgReal_typGURU(this, key, value, index, isError)
         endif
     end if
 
-    if (isError_) value   = 0.0
-    if ( present(isError) ) then
-        isError = isError_
-    else
-        Call this%Error( &
-        &   msg      = "Failed to get real.", &
-        &   head     = "ARG_GetArgReal_typGURU", &
-        &   value    = key )
-    end if
-
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgDble_typGURU(this, key, value, index, isError)
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Class(typGURU), intent(in)    :: this
-    Character(len=*), intent(in)  :: key
-    Real(8), intent(out)          :: value
-    Integer, intent(in), optional :: index
-    Logical, optional             :: isError
-!! -------------------------------------------------------------------------- !!
-    Logical :: isFound_, isError_
-    Integer :: ikey, index_
-
-    !!... Check
-    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
-
-    isError_ = .TRUE.
-    index_   = 1
-    If ( isFound_ ) then
-        if ( present(index) ) index_ = index
-
-        If ( (this%arguments(ikey)%nWord.ge.1).and.&
-        &    (index_.le.this%arguments(ikey)%nWord) ) then
-
-            Call GetDbleFromChar( &
-            &   char    = this%arguments(ikey)%words(index_)%raw , &
-            &   value   = value ,   &
-            &   isError = isError_  )
-
-        endif
-    end if
-
     if (isError_) value   = 0.D0
     if ( present(isError) ) then
         isError = isError_
     else
         Call this%Error( &
         &   msg      = "Failed to get double precision.", &
-        &   head     = "ARG_GetArgDble_typGURU", &
+        &   head     = "ARG_GetArgReal_typGURU", &
         &   value    = key )
     end if
 
@@ -408,8 +362,8 @@ Subroutine ARG_GetArgRealOrDefault_typGURU(this, key, value, default, index, isE
     Implicit None
     Class(typGURU), intent(in)    :: this
     Character(len=*), intent(in)  :: key
-    Real(4), intent(out)          :: value
-    Real(4), intent(in)           :: default
+    Real(RP), intent(out)         :: value
+    Real(RP), intent(in)          :: default
     Integer, intent(in), optional :: index
     Logical, optional             :: isError
 !! -------------------------------------------------------------------------- !!
@@ -420,32 +374,6 @@ Subroutine ARG_GetArgRealOrDefault_typGURU(this, key, value, default, index, isE
         Call this%Debug( &
         &   msg      = "Failed to get value, 'default' is returned.", &
         &   head     = "ARG_GetArgRealOrDefault_typGURU", &
-        &   value    = key, &
-        &   refValue = default )
-    end if
-    if ( present(isError) ) isError = isError_
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgDbleOrDefault_typGURU(this, key, value, default, index, isError)
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Class(typGURU), intent(in)    :: this
-    Character(len=*), intent(in)  :: key
-    Real(8), intent(out)          :: value
-    Real(8), intent(in)           :: default
-    Integer, intent(in), optional :: index
-    Logical, optional             :: isError
-!! -------------------------------------------------------------------------- !!
-    Logical :: isError_
-    Call this%GetArgDble( key, value, index, isError_ )
-    if ( isError_ ) then
-        value = default
-        Call this%Debug( &
-        &   msg      = "Failed to get value, 'default' is returned.", &
-        &   head     = "ARG_GetArgDbleOrDefault_typGURU", &
         &   value    = key, &
         &   refValue = default )
     end if
@@ -560,12 +488,12 @@ Subroutine ARG_GetArgRealVector_typGURU( this, key, value, isError )
     Implicit None
     Class(typGURU), intent(in)     :: this
     Character(len=*), intent(in)   :: key
-    Real(4), allocatable           :: value(:)
+    Real(RP), allocatable          :: value(:)
     Logical, optional              :: isError
 !! -------------------------------------------------------------------------- !!
-    Logical :: isFound_, isError_
-    Integer :: iWord, ikey
-    Real(4) :: elemValue
+    Logical  :: isFound_, isError_
+    Integer  :: iWord, ikey
+    Real(RP) :: elemValue
 
     !!... Check
     Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
@@ -574,7 +502,7 @@ Subroutine ARG_GetArgRealVector_typGURU( this, key, value, isError )
     if ( allocated(value) ) deallocate(value)
     If ( isFound_ ) then
         If ( this%arguments(ikey)%nWord.ge.1 ) then
-            Allocate( value(this%arguments(ikey)%nWord) );  value(:) = 0.0
+            Allocate( value(this%arguments(ikey)%nWord) );  value(:) = 0
             loopWord: do iWord = 1, this%arguments(ikey)%nWord
                 Call GetRealFromChar( &
                 &   char    = this%arguments(ikey)%words(iWord)%raw, &
@@ -594,56 +522,8 @@ Subroutine ARG_GetArgRealVector_typGURU( this, key, value, isError )
         isError = isError_
     else
         Call this%Error( &
-        &   msg      = "Failed to get real vector.", &
-        &   head     = "ARG_GetArgRealVector_typGURU", &
-        &   value    = key )
-    end if
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgDbleVector_typGURU( this, key, value, isError )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Class(typGURU), intent(in)     :: this
-    Character(len=*), intent(in)   :: key
-    Real(8), allocatable           :: value(:)
-    Logical, optional              :: isError
-!! -------------------------------------------------------------------------- !!
-    Logical :: isFound_, isError_
-    Integer :: iWord, ikey
-    Real(8) :: elemValue
-
-    !!... Check
-    Call this%IsFoundKey( key = key, isFound = isFound_, ikey = ikey )
-
-    isError_ = .TRUE.
-    if ( allocated(value) ) deallocate(value)
-    If ( isFound_ ) then
-        If ( this%arguments(ikey)%nWord.ge.1 ) then
-            Allocate( value(this%arguments(ikey)%nWord) );  value(:) = 0
-            loopWord: do iWord = 1, this%arguments(ikey)%nWord
-                Call GetDbleFromChar( &
-                &   char    = this%arguments(ikey)%words(iWord)%raw, &
-                &   value   = elemValue,    &
-                &   isError = isError_      )
-                if (isError_) exit loopWord
-                value(iWord) = elemValue
-            end do loopWord
-        end if
-    End if
-
-    if (isError_) then
-        if ( allocated(value) ) deallocate(value)
-    end if
-
-    if ( present(isError) ) then
-        isError = isError_
-    else
-        Call this%Error( &
         &   msg      = "Failed to get double precision vector.", &
-        &   head     = "ARG_GetArgDbleVector_typGURU", &
+        &   head     = "ARG_GetArgRealVector_typGURU", &
         &   value    = key )
     end if
 !! -------------------------------------------------------------------------- !!
@@ -782,38 +662,15 @@ End Subroutine
 Subroutine ARG_GetArgRealVectorOrDefault_typGURU( this, key, value, default, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Class(typGURU), intent(in)        :: this
-    Character(len=*), intent(in)      :: key
-    Real(4), allocatable              :: value(:)
-    Real(4), intent(in), dimension(:) :: default
-    Logical, optional                 :: isError
+    Class(typGURU), intent(in)         :: this
+    Character(len=*), intent(in)       :: key
+    Real(RP), allocatable              :: value(:)
+    Real(RP), intent(in), dimension(:) :: default
+    Logical, optional                  :: isError
 !! -------------------------------------------------------------------------- !!
     Logical :: isError_
     Integer :: nElem
     Call this%GetArgRealVector( key, value, isError_ )
-    If ( isError_ ) then
-        if ( Allocated(value) ) Deallocate(value)
-        nElem = size(default)
-        if (nElem.ge.1) Allocate( value, source = default )
-    end if
-    if ( present(isError) ) isError = isError_
-!! -------------------------------------------------------------------------- !!
-End Subroutine
-!! -------------------------------------------------------------------------- !!
-
-!! -------------------------------------------------------------------------- !!
-Subroutine ARG_GetArgDbleVectorOrDefault_typGURU( this, key, value, default, isError )
-!! -------------------------------------------------------------------------- !!
-    Implicit None
-    Class(typGURU), intent(in)        :: this
-    Character(len=*), intent(in)      :: key
-    Real(8), allocatable              :: value(:)
-    Real(8), intent(in), dimension(:) :: default
-    Logical, optional                 :: isError
-!! -------------------------------------------------------------------------- !!
-    Logical :: isError_
-    Integer :: nElem
-    Call this%GetArgDbleVector( key, value, isError_ )
     If ( isError_ ) then
         if ( Allocated(value) ) Deallocate(value)
         nElem = size(default)

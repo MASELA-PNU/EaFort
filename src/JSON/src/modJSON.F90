@@ -20,7 +20,7 @@ Module modJSON
     &   typJSON     => json_value, &
     &   typJSONFile => json_file,  &
     &   json_unknown, json_null, json_object, json_array, json_logical, &
-    &   json_integer, json_real, json_string, json_CK
+    &   json_integer, json_real, json_string, json_CK, json_real
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
@@ -46,8 +46,14 @@ Implicit None
 !!... Functions associated with basic manipulations
 #include "routines/jsonFunc.proc"
 
-!!... Functions associated with variable manipulations
+!!... Functions to get variable
 #include "routines/jsonGetFunc.proc"
+
+!!... Functions to add variable
+#include "routines/jsonAddFunc.proc"
+
+!!... Functions to update variable
+#include "routines/jsonUpdateFunc.proc"
 
 !! -------------------------------------------------------------------------- !!
 Contains
@@ -59,8 +65,14 @@ Contains
 !!... Functions associated with basic manipulations
 #include "routines/jsonFunc.inc"
 
-!!... Functions associated with variable manipulations
+!!... Functions to get variable
 #include "routines/jsonGetFunc.inc"
+
+!!... Functions to add variable
+#include "routines/jsonAddFunc.inc"
+
+!!... Functions to update variable
+#include "routines/jsonUpdateFunc.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module
