@@ -1,5 +1,12 @@
 set(ITEM_NAME "JSON")
 set(SRC_CURRENT_${ITEM_NAME}
+    json-fortran/src/json_file_module.F90
+    json-fortran/src/json_kinds.F90
+    json-fortran/src/json_module.F90
+    json-fortran/src/json_parameters.F90
+    json-fortran/src/json_string_utilities.F90
+    json-fortran/src/json_value_module.F90
+
     src/modJSON.F90
 )
 
