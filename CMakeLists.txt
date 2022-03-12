@@ -40,6 +40,7 @@ message("  - ${Green}GIT_BRANCH        ${White}: ${GIT_BRANCH} ${Green}")
 message("  - ${Green}GIT_COMMIT_HASH   ${White}: ${GIT_COMMIT_HASH} ${Green}")
 message("")
 message("  - ${Green}Lib. Install Path ${White}: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${Green}")
+message("  - ${Green}Inc. Install Path ${White}: ${CMAKE_Fortran_MODULE_DIRECTORY} ${Green}")
 message("  - ${Green}Exe. Install Path ${White}: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${Green}")
 message("")
 

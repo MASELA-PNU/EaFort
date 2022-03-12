@@ -21,9 +21,9 @@ set(multiValueArgs
     INSTALL_INC             # Include Path List
     INSTALL_LIB             # Library Path List
     INSTALL_DEPEND          # Dependent project list
-    INSTALL_EXT_LIB         # Extra library list
-    INSTALL_EXT_INC         # Extra include path list
-    INSTALL_EXT_FLAG        # Extra Flags
+    INSTALL_EXTLIB          # Extra library list
+    INSTALL_EXTINC          # Extra include path list
+    INSTALL_EXTFLAG         # Extra Flags
 )
 
 ##... Get Function Arguments
@@ -35,9 +35,9 @@ set( INSTALL_SRC         "${AutoCompile_INSTALL_SRC}" )
 set( INSTALL_INC         "${AutoCompile_INSTALL_INC}" )
 set( INSTALL_LIB         "${AutoCompile_INSTALL_LIB}" )
 set( INSTALL_DEPEND      "${AutoCompile_INSTALL_DEPEND}" )
-set( INSTALL_EXT_LIB     "${AutoCompile_INSTALL_EXT_LIB}" )
-set( INSTALL_EXT_INC     "${AutoCompile_INSTALL_EXT_INC}" )
-set( INSTALL_EXT_FLAG    "${AutoCompile_INSTALL_EXT_FLAG}" )
+set( INSTALL_EXTLIB      "${AutoCompile_INSTALL_EXTLIB}" )
+set( INSTALL_EXTINC      "${AutoCompile_INSTALL_EXTINC}" )
+set( INSTALL_EXTFLAG     "${AutoCompile_INSTALL_EXTFLAG}" )
 
 set( IS_COMPILE_EXE      "${AutoCompile_IS_COMPILE_EXE}" )
 set( IS_COMPILE_LIB      "${AutoCompile_IS_COMPILE_LIB}" )
@@ -124,19 +124,19 @@ if (NOT "${INSTALL_DEPEND}" STREQUAL "" )
     target_link_libraries(${INSTALL_NAME} ${INSTALL_DEPEND} )
 endif()
 
-if (NOT "${INSTALL_EXT_LIB}" STREQUAL "" )
-    message("${Green}  - INSTALL_EXT_LIB   : ${White}${INSTALL_EXT_LIB}")
-    target_link_libraries(${INSTALL_NAME} ${INSTALL_EXT_LIB} )
+if (NOT "${INSTALL_EXTLIB}" STREQUAL "" )
+    message("${Green}  - INSTALL_EXT_LIB   : ${White}${INSTALL_EXTLIB}")
+    target_link_libraries(${INSTALL_NAME} ${INSTALL_EXTLIB} )
 endif()
 
-if (NOT "${INSTALL_EXT_INC}" STREQUAL "" )
-    message("${Green}  - INSTALL_EXT_INC   : ${White}${INSTALL_EXT_INC}")
-    target_link_libraries(${INSTALL_NAME} ${INSTALL_EXT_INC} )
+if (NOT "${INSTALL_EXTINC}" STREQUAL "" )
+    message("${Green}  - INSTALL_EXT_INC   : ${White}${INSTALL_EXTINC}")
+    target_include_directories(${INSTALL_NAME} PRIVATE ${INSTALL_EXTINC} )
 endif()
 
-if (NOT "${INSTALL_EXT_FLAG}" STREQUAL "" )
-    message("${Green}  - INSTALL_EXT_FLAG  : ${White}${INSTALL_EXT_FLAG}")
-    target_link_libraries(${INSTALL_NAME} ${INSTALL_EXT_FLAG} )
+if (NOT "${INSTALL_EXTFLAG}" STREQUAL "" )
+    message("${Green}  - INSTALL_EXT_FLAG  : ${White}${INSTALL_EXTFLAG}")
+    set_target_properties(${INSTALL_NAME} PROPERTIES COMPILE_FLAGS "${INSTALL_EXTFLAG}" )
 endif()
 
 message("${ColourReset} ")
