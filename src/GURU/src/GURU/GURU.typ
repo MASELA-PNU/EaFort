@@ -50,7 +50,7 @@ Type typGURU
     Logical :: isColor_ = .FALSE.
 
     !!... MPI Variable representing the master
-    Logical :: MPI_isMaster = .TRUE.
+    Logical :: MPI_isMaster_ = .TRUE.
 
 !! -------------------------------------------------------------------------- !!
 Contains
@@ -146,6 +146,11 @@ Contains
 
     !!... Toggle isMaster
     Procedure :: ToggleIsMaster => LOG_ToggleIsMaster_typGURU
+
+    !!... Retutn the mode is enabled or disabled.
+    Procedure :: IsDebug  => LOG_IsDebug_typGURU
+    Procedure :: IsColor  => LOG_IsColor_typGURU
+    Procedure :: IsMaster => LOG_IsMaster_typGURU
 
     !!... Write Message
     Procedure :: Write => LOG_Write_typGURU

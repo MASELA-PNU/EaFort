@@ -11,7 +11,7 @@ Implicit None
     Integer                :: iUnit
 
     !!... Test JSON File
-    Call JSON_GetFile( &
+    Call JSON_ReadFile( &
     &   filePath = "test/testJSON/src/JSON/test.json", &
     &   jsonFile = jsonFile, &
     &   json     = json )

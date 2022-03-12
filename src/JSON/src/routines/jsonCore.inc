@@ -156,7 +156,7 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine JSON_GetFile( filePath, jsonFile, json, isError )
+Subroutine JSON_ReadFile( filePath, jsonFile, json, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)     :: filePath
@@ -178,7 +178,7 @@ Subroutine JSON_GetFile( filePath, jsonFile, json, isError )
         Call GURU%Info( &
         &   info   = info,                          &
         &   msg    = "Given 'filePath' is empty.",  &
-        &   head   = "JSON_GetFile",                &
+        &   head   = "JSON_ReadFile",               &
         &   isStop = .FALSE.                        )
     End if
 
@@ -190,7 +190,7 @@ Subroutine JSON_GetFile( filePath, jsonFile, json, isError )
         Call GURU%Info( &
         &   info   = info,                      &
         &   msg   = "JSON file do not exist.",  &
-        &   head  = "JSON_GetFile",             &
+        &   head  = "JSON_ReadFile",            &
         &   value = filePath_,                  &
         &   isStop = .FALSE.                    )
     end if
@@ -202,7 +202,7 @@ Subroutine JSON_GetFile( filePath, jsonFile, json, isError )
         Call GURU%Info( &
         &   info   = info,                              &
         &   msg   = "Failed to initialize JSON file.",  &
-        &   head  = "JSON_GetFile",                     &
+        &   head  = "JSON_ReadFile",                    &
         &   isStop = .FALSE.                            )
     End if
 
@@ -213,7 +213,7 @@ Subroutine JSON_GetFile( filePath, jsonFile, json, isError )
         Call GURU%Info( &
         &   info   = info,                          &
         &   msg   = "Failed to load JSON file.",    &
-        &   head  = "JSON_GetFile",                 &
+        &   head  = "JSON_ReadFile",                &
         &   value = filePath_ ,                     &
         &   isStop = .FALSE.                        )
     End if
@@ -225,7 +225,7 @@ Subroutine JSON_GetFile( filePath, jsonFile, json, isError )
         Call GURU%Info( &
         &   info   = info,                      &
         &   msg   = "Failed to get JSON root.", &
-        &   head  = "JSON_GetFile",             &
+        &   head  = "JSON_ReadFile",            &
         &   value = filePath_,                  &
         &   isStop = .FALSE.                    )
     End if
@@ -240,7 +240,7 @@ End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-    Subroutine JSON_GetFileIfExist( filePath, jsonFile, json, isError )
+    Subroutine JSON_ReadFileIfExist( filePath, jsonFile, json, isError )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Character(len=*), intent(in)     :: filePath
@@ -251,12 +251,12 @@ End Subroutine
     Logical :: isError_
 
     !!... Get File
-    Call JSON_GetFile( filePath, jsonFile, json, isError_ )
+    Call JSON_ReadFile( filePath, jsonFile, json, isError_ )
 
     if ( isError_ ) then
         Call GURU%Warn( &
         &   msg   = "Failed to load JSON file. json null pointer is returned.", &
-        &   head  = "JSON_GetFileIfExist", &
+        &   head  = "JSON_ReadFileIfExist", &
         &   value = trim(adjustl(filePath)) )
     end if
 

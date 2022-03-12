@@ -3,14 +3,14 @@ Interface JSON_InitializeCore
     Procedure :: JSON_InitializeCore
 End Interface JSON_InitializeCore
 
-!!... Get JSON File
-Interface JSON_GetFile
-    Procedure :: JSON_GetFile
+!!... Read JSON File
+Interface JSON_ReadFile
+    Procedure :: JSON_ReadFile
 End Interface
 
-!!... Get JSON File or get null JSON pointer
-Interface JSON_GetFileIfExist
-    Procedure :: JSON_GetFileIfExist
+!!... Read JSON File or get null JSON pointer
+Interface JSON_ReadFileIfExist
+    Procedure :: JSON_ReadFileIfExist
 End Interface
 
 !!... Close JSON file

@@ -21,9 +21,9 @@ Subroutine LOG_Initialize_typGURU( &
 
     !!... TODO: Set the MPI Envi
     !this%MPI_isMaster = .FALSE.
-    if ( present(MPI_isMaster) ) this%MPI_isMaster = MPI_isMaster
+    if ( present(MPI_isMaster) ) this%MPI_isMaster_ = MPI_isMaster
 
-    If ( this%MPI_isMaster ) then
+    If ( this%MPI_isMaster_ ) then
 
     !!... Set log file
     this%isLogFile = .FALSE.
@@ -49,157 +49,163 @@ Subroutine LOG_Initialize_typGURU( &
             &   isStop      = .TRUE.                                    )
         End if
 
-    end If
-
-    !!... Open Log file & Ready to write log
-    blcCreateLogFile: Block
-        Logical :: isFileOpen, isFileExist
-        Logical :: isPrevFileExist
-
-        !!... Check file exist already or opened by other program
-        Inquire( file   = this%logFilePath_, &
-        &        exist  = isFileExist,       &
-        &        opened = isFileOpen         )
-
-        isPrevFileExist = .FALSE.
-        If ( isFileExist.EQV..TRUE. ) isPrevFileExist = .TRUE.
-
-        If ( isFileOpen.EQV..TRUE. ) then
-            Call WritePrefixMessage( &
-            &   prefix      = PREIX_ERROR,              &
-            &   prefixColor = COLOR_ERROR,              &
-            &   head        = "LOG_Initialize_typGURU",  &
-            &   msg         = "Given log file is already opened.", &
-            &   isColor     = this%isColor_,            &
-            &   isStop      = .TRUE.                    )
-        end if
-
-        !!... Separate Path
-        Call SeparatePath( this%logFilePath_, baseDir, baseName, ext)
-
-        If ( len_trim(baseDir).ge.1 ) then
-
-            isBaseDirExist = IsExistDir( baseDir )
-
-            If (isBaseDirExist.EQV..FALSE.) then
-
-                Call CreateDir( &
-                &   dirPath  = baseDir, &
-                &   isError  = isError, &
-                &   isCreate = isCreate )
-
-                If ( (isError.EQV..TRUE.).OR.(isCreate.EQV..FALSE.) ) then
-                    Call WritePrefixMessage( &
-                    &   prefix      = PREIX_ERROR,              &
-                    &   prefixColor = COLOR_ERROR,              &
-                    &   head        = "LOG_Initialize_typGURU",  &
-                    &   msg         = "Failed to create the directory for log file.", &
-                    &   value    = baseDir,                  &
-                    &   isColor     = this%isColor_,            &
-                    &   isStop      = .TRUE.                    )
-                End if
-
-            End if
-        end if
-
-        !!... If Prev Log file exist, rename them
-        If ( isPrevFileExist ) then
-            blkMoveFiles: Block
-                !type(string) :: filePath
-                !!...
-                Logical :: isExist, isOpened, isOrgExist
-                Integer :: iFile, ios
-                Character(len=:), Allocatable :: prevFilePath
-                Character(len=30) :: iFileChar
-
-
-                ! type(string) :: baseDir, baseName, ext
-                Integer :: iStr1, iStr2, iStr3, nChar
-                Integer :: iStrSep, iStrExt
-                Integer :: iStrBase1, iStrBase2
-                Logical :: isDirSep, isExtension
-
-                !!... Check log file exist and move !
-                Inquire( &
-                &   file   = this%logFilePath_, &
-                &   exist  = isExist,           &
-                &   opened = isOpened           )
-
-                if ( isOpened.EQV..TRUE. ) then
-                    Call WritePrefixMessage( &
-                    &   prefix      = PREIX_ERROR,              &
-                    &   prefixColor = COLOR_ERROR,              &
-                    &   head        = "LOG_Initialize_typGURU",  &
-                    &   msg         = "Given 'logFilePath' is already opened.", &
-                    &   value    = this%logFilePath_,        &
-                    &   isColor     = this%isColor_,            &
-                    &   isStop      = .TRUE.                    )
-                end if
-
-                isOrgExist = .FALSE.
-                if ( isExist.EQV..TRUE. ) isOrgExist = .TRUE.
-
-                If ( isOrgExist ) then
-
-                    !!... Check existing log file index
-                    do iFile = 1, N_MAX_LOG_FILE
-
-                        Write(iFileChar, *, iostat = ios) iFile
-
-                        If (ios.ne.0) then
-                            Call WritePrefixMessage( &
-                            &   prefix      = PREIX_ERROR,              &
-                            &   prefixColor = COLOR_ERROR,              &
-                            &   head        = "LOG_Initialize_typGURU",  &
-                            &   msg         = "Failed to convert the integer.", &
-                            &   isColor     = this%isColor_,            &
-                            &   isStop      = .TRUE.                    )
-                        end if
-
-                        prevFilePath = baseDir//baseName//"_"//trim(adjustl(iFileChar))//ext
-
-                        Inquire( &
-                        &   file   = prevFilePath, &
-                        &   exist  = isExist,      &
-                        &   opened = isOpened      )
-
-                        If ( (isExist.EQV..FALSE.).AND.(isOpened.EQV..FALSE.) ) then
-                            exit
-                        End if
-
-                        If ( iFIle.EQ.N_MAX_LOG_FILE ) then
-                            Call WritePrefixMessage( &
-                            &   prefix      = PREIX_ERROR,              &
-                            &   prefixColor = COLOR_ERROR,              &
-                            &   head        = "LOG_Initialize_typGURU",  &
-                            &   msg         = "Too many log files. Please delete them.", &
-                            &   isColor     = this%isColor_,            &
-                            &   isStop      = .TRUE.                    )
-                        End If
-
-                    end do
-
-                    !!... Move the file
-                    Call RenameDirFile( this%logFilePath_, prevFilePath )
-
-                end if
-
-                If ( Allocated(prevFilePath) )  Deallocate(prevFilePath)
-                !If ( Allocated(iFileChar) )     Deallocate(iFileChar)
-
-            End Block blkMoveFiles
-        End if
-
-        !!... Create Log File
-        Open( &
-        &   newunit = this%logUnit,     &
-        &   file    = this%logFilePath_, &
-        &   status  = "replace"          )
-
-        !!... Write Log File
         this%isLogFile = .TRUE.
 
-    End Block blcCreateLogFile
+    end If
+
+    if ( this%isLogFile ) then
+
+        !!... Open Log file & Ready to write log
+        blcCreateLogFile: Block
+            Logical :: isFileOpen, isFileExist
+            Logical :: isPrevFileExist
+
+            !!... Check file exist already or opened by other program
+            Inquire( file   = this%logFilePath_, &
+            &        exist  = isFileExist,       &
+            &        opened = isFileOpen         )
+
+            isPrevFileExist = .FALSE.
+            If ( isFileExist.EQV..TRUE. ) isPrevFileExist = .TRUE.
+
+            If ( isFileOpen.EQV..TRUE. ) then
+                Call WritePrefixMessage( &
+                &   prefix      = PREIX_ERROR,              &
+                &   prefixColor = COLOR_ERROR,              &
+                &   head        = "LOG_Initialize_typGURU",  &
+                &   msg         = "Given log file is already opened.", &
+                &   isColor     = this%isColor_,            &
+                &   isStop      = .TRUE.                    )
+            end if
+
+            !!... Separate Path
+            Call SeparatePath( this%logFilePath_, baseDir, baseName, ext)
+
+            If ( len_trim(baseDir).ge.1 ) then
+
+                isBaseDirExist = IsExistDir( baseDir )
+
+                If (isBaseDirExist.EQV..FALSE.) then
+
+                    Call CreateDir( &
+                    &   dirPath  = baseDir, &
+                    &   isError  = isError, &
+                    &   isCreate = isCreate )
+
+                    If ( (isError.EQV..TRUE.).OR.(isCreate.EQV..FALSE.) ) then
+                        Call WritePrefixMessage( &
+                        &   prefix      = PREIX_ERROR,              &
+                        &   prefixColor = COLOR_ERROR,              &
+                        &   head        = "LOG_Initialize_typGURU",  &
+                        &   msg         = "Failed to create the directory for log file.", &
+                        &   value    = baseDir,                  &
+                        &   isColor     = this%isColor_,            &
+                        &   isStop      = .TRUE.                    )
+                    End if
+
+                End if
+            end if
+
+            !!... If Prev Log file exist, rename them
+            If ( isPrevFileExist ) then
+                blkMoveFiles: Block
+                    !type(string) :: filePath
+                    !!...
+                    Logical :: isExist, isOpened, isOrgExist
+                    Integer :: iFile, ios
+                    Character(len=:), Allocatable :: prevFilePath
+                    Character(len=30) :: iFileChar
+
+
+                    ! type(string) :: baseDir, baseName, ext
+                    Integer :: iStr1, iStr2, iStr3, nChar
+                    Integer :: iStrSep, iStrExt
+                    Integer :: iStrBase1, iStrBase2
+                    Logical :: isDirSep, isExtension
+
+                    !!... Check log file exist and move !
+                    Inquire( &
+                    &   file   = this%logFilePath_, &
+                    &   exist  = isExist,           &
+                    &   opened = isOpened           )
+
+                    if ( isOpened.EQV..TRUE. ) then
+                        Call WritePrefixMessage( &
+                        &   prefix      = PREIX_ERROR,              &
+                        &   prefixColor = COLOR_ERROR,              &
+                        &   head        = "LOG_Initialize_typGURU",  &
+                        &   msg         = "Given 'logFilePath' is already opened.", &
+                        &   value    = this%logFilePath_,        &
+                        &   isColor     = this%isColor_,            &
+                        &   isStop      = .TRUE.                    )
+                    end if
+
+                    isOrgExist = .FALSE.
+                    if ( isExist.EQV..TRUE. ) isOrgExist = .TRUE.
+
+                    If ( isOrgExist ) then
+
+                        !!... Check existing log file index
+                        do iFile = 1, N_MAX_LOG_FILE
+
+                            Write(iFileChar, *, iostat = ios) iFile
+
+                            If (ios.ne.0) then
+                                Call WritePrefixMessage( &
+                                &   prefix      = PREIX_ERROR,              &
+                                &   prefixColor = COLOR_ERROR,              &
+                                &   head        = "LOG_Initialize_typGURU",  &
+                                &   msg         = "Failed to convert the integer.", &
+                                &   isColor     = this%isColor_,            &
+                                &   isStop      = .TRUE.                    )
+                            end if
+
+                            prevFilePath = baseDir//baseName//"_"//trim(adjustl(iFileChar))//ext
+
+                            Inquire( &
+                            &   file   = prevFilePath, &
+                            &   exist  = isExist,      &
+                            &   opened = isOpened      )
+
+                            If ( (isExist.EQV..FALSE.).AND.(isOpened.EQV..FALSE.) ) then
+                                exit
+                            End if
+
+                            If ( iFIle.EQ.N_MAX_LOG_FILE ) then
+                                Call WritePrefixMessage( &
+                                &   prefix      = PREIX_ERROR,              &
+                                &   prefixColor = COLOR_ERROR,              &
+                                &   head        = "LOG_Initialize_typGURU",  &
+                                &   msg         = "Too many log files. Please delete them.", &
+                                &   isColor     = this%isColor_,            &
+                                &   isStop      = .TRUE.                    )
+                            End If
+
+                        end do
+
+                        !!... Move the file
+                        Call RenameDirFile( this%logFilePath_, prevFilePath )
+
+                    end if
+
+                    If ( Allocated(prevFilePath) )  Deallocate(prevFilePath)
+                    !If ( Allocated(iFileChar) )     Deallocate(iFileChar)
+
+                End Block blkMoveFiles
+            End if
+
+            !!... Create Log File
+            Open( &
+            &   newunit = this%logUnit,     &
+            &   file    = this%logFilePath_, &
+            &   status  = "replace"          )
+
+            !!... Write Log File
+            this%isLogFile = .TRUE.
+
+        End Block blcCreateLogFile
+
+    End if
 
     If ( Allocated(baseDir) )       Deallocate(baseDir)
     If ( Allocated(baseName) )      Deallocate(baseName)
@@ -233,9 +239,45 @@ End Subroutine
 Subroutine LOG_ToggleIsMaster_typGURU( this, isMaster )
     Implicit None
     Class(typGURU), intent(inout) :: this
-    Logical, intent(in)              :: isMaster
-    this%MPI_isMaster = isMaster
+    Logical, intent(in)           :: isMaster
+    this%MPI_isMaster_ = isMaster
 End Subroutine
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Function LOG_IsDebug_typGURU( this ) result(isDebug)
+!! -------------------------------------------------------------------------- !!
+    Implicit none
+    Class(typGURU), intent(in) :: this
+    Logical :: isDebug
+!! -------------------------------------------------------------------------- !!
+    isDebug = this%isDebug_
+!! -------------------------------------------------------------------------- !!
+End Function
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Function LOG_IsColor_typGURU( this ) result(IsColor)
+!! -------------------------------------------------------------------------- !!
+    Implicit none
+    Class(typGURU), intent(in) :: this
+    Logical :: IsColor
+!! -------------------------------------------------------------------------- !!
+    IsColor = this%IsColor_
+!! -------------------------------------------------------------------------- !!
+End Function
+!! -------------------------------------------------------------------------- !!
+
+!! -------------------------------------------------------------------------- !!
+Function LOG_IsMaster_typGURU( this ) result(isMaster)
+!! -------------------------------------------------------------------------- !!
+    Implicit none
+    Class(typGURU), intent(in) :: this
+    Logical :: isMaster
+!! -------------------------------------------------------------------------- !!
+    isMaster = this%MPI_isMaster_
+!! -------------------------------------------------------------------------- !!
+End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
@@ -276,7 +318,7 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
         if ( isSpace ) tmpMsg = prefix//tmpMsg
 
         if ( iMsg.lt.nMsgLine ) then
-            If ( this%MPI_isMaster ) then
+            If ( this%MPI_isMaster_ ) then
                 Call WriteMessage( &
                 &   msg       = tmpMsg,         &
                 &   unit      = this%logUnit,  &
@@ -287,7 +329,7 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
                 &   color     = color           )
             end if
         else
-            If ( this%MPI_isMaster ) then
+            If ( this%MPI_isMaster_ ) then
                 Call WriteMessage( &
                 &   msg       = tmpMsg,         &
                 &   unit      = this%logUnit,  &
@@ -779,7 +821,7 @@ End Subroutine
     this%isColor_ = .FALSE.
 
     !!... MPI Variable representing the master
-    this%MPI_isMaster = .TRUE.
+    this%MPI_isMaster_ = .TRUE.
 
 !! -------------------------------------------------------------------------- !!
     End Subroutine
