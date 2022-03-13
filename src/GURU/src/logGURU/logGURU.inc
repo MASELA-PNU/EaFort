@@ -295,6 +295,7 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
     Character(len=:), Allocatable :: prefix, tmpMsg
     Logical :: isSpace
     Integer :: iMsg, nMsgLine
+    Integer :: logUnit
 
     !!... Separate message with line separator
     str = msg
@@ -311,6 +312,10 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
         end if
     end if
 
+    !!... Set log Unit
+    logUnit = 6
+    If ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
+
     !!... Write each lines
     do iMsg = 1, nMsgLine
 
@@ -318,29 +323,16 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
         if ( isSpace ) tmpMsg = prefix//tmpMsg
 
         if ( iMsg.lt.nMsgLine ) then
-            If ( this%MPI_isMaster_ ) then
-                Call WriteMessage( &
-                &   msg       = tmpMsg,         &
-                &   unit      = this%logUnit,  &
-                &   color     = color           )
-            else
-                Call WriteMessage(              &
-                &   msg       = tmpMsg,         &
-                &   color     = color           )
-            end if
+            Call WriteMessage( &
+            &   msg       = tmpMsg,         &
+            &   unit      = logUnit,        &
+            &   color     = color           )
         else
-            If ( this%MPI_isMaster_ ) then
-                Call WriteMessage( &
-                &   msg       = tmpMsg,         &
-                &   unit      = this%logUnit,  &
-                &   color     = color,          &
-                &   isAdvance = isAdvance       )
-            else
-                Call WriteMessage(              &
-                &   msg       = tmpMsg,         &
-                &   color     = color,          &
-                &   isAdvance = isAdvance       )
-            end if
+            Call WriteMessage( &
+            &   msg       = tmpMsg,         &
+            &   unit      = logUnit,        &
+            &   color     = color,          &
+            &   isAdvance = isAdvance       )
         end if
 
         If (Allocated(tmpMsg)) Deallocate(tmpMsg)
@@ -522,9 +514,15 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     Logical, intent(in), Optional          :: isStop
 !! -------------------------------------------------------------------------- !!
     Logical :: isStop_
+    Logical :: isColor
+    Integer :: logUnit
 
     isStop_ = .true.
     if (present(isStop)) isStop_ = isStop
+
+    isColor = this%isColor_
+    logUnit = 6
+    if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
 
     !!... Write Message
     Call WritePrefixMessage( &
@@ -534,8 +532,8 @@ Subroutine LOG_Error_typGURU( this, msg, head, value, refValue, isStop )
     &   head        = head,             &
     &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,     &
-    &   isColor     = this%isColor_,    &
+    &   unit        = logUnit,          &
+    &   isColor     = isColor,          &
     &   isStop      = isStop_           )
 
 !! -------------------------------------------------------------------------- !!
@@ -554,9 +552,15 @@ Subroutine LOG_ErrorSingleVector_typGURU( this, msg, head, value, refValue, isSt
     Logical, intent(in), Optional                :: isStop
 !! -------------------------------------------------------------------------- !!
     Logical :: isStop_
+    Logical :: isColor
+    Integer :: logUnit
 
     isStop_ = .true.
     if (present(isStop)) isStop_ = isStop
+
+    isColor = this%isColor_
+    logUnit = 6
+    if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
 
     !!... Write Message
     Call WritePrefixMessageSingleVector( &
@@ -566,8 +570,8 @@ Subroutine LOG_ErrorSingleVector_typGURU( this, msg, head, value, refValue, isSt
     &   head        = head,             &
     &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,     &
-    &   isColor     = this%isColor_,    &
+    &   unit        = logUnit,          &
+    &   isColor     = isColor,          &
     &   isStop      = isStop_           )
 
 !! -------------------------------------------------------------------------- !!
@@ -586,9 +590,15 @@ Subroutine LOG_ErrorVectorVector_typGURU( this, msg, head, value, refValue, isSt
     Logical, intent(in), Optional                :: isStop
 !! -------------------------------------------------------------------------- !!
     Logical :: isStop_
+    Logical :: isColor
+    Integer :: logUnit
 
     isStop_ = .true.
     if (present(isStop)) isStop_ = isStop
+
+    isColor = this%isColor_
+    logUnit = 6
+    if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
 
     !!... Write Message
     Call WritePrefixMessageVectorVector( &
@@ -598,8 +608,8 @@ Subroutine LOG_ErrorVectorVector_typGURU( this, msg, head, value, refValue, isSt
     &   head        = head,             &
     &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,     &
-    &   isColor     = this%isColor_,    &
+    &   unit        = logUnit,          &
+    &   isColor     = isColor,          &
     &   isStop      = isStop_           )
 
 !! -------------------------------------------------------------------------- !!
@@ -616,6 +626,13 @@ Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
     Class(*), intent(in), Optional         :: value
     Class(*), intent(in), Optional         :: refValue
 !! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: logUnit
+
+    isColor = this%isColor_
+    logUnit = 6
+    if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
+
     !!... Write Message
     Call WritePrefixMessage( &
     &   prefix      = PREIX_WARN,       &
@@ -624,8 +641,8 @@ Subroutine LOG_Warn_typGURU( this, msg, head, value, refValue )
     &   head        = head,             &
     &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,     &
-    &   isColor     = this%isColor_,    &
+    &   unit        = logUnit,          &
+    &   isColor     = isColor,          &
     &   isStop      = .FALSE.           )
 
 !! -------------------------------------------------------------------------- !!
@@ -642,6 +659,13 @@ Subroutine LOG_WarnSingleVector_typGURU( this, msg, head, value, refValue )
     Class(*), intent(in), Optional               :: value
     Class(*), Dimension(:), intent(in), Optional :: refValue
 !! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: logUnit
+
+    isColor = this%isColor_
+    logUnit = 6
+    if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
+
     !!... Write Message
     Call WritePrefixMessageSingleVector( &
     &   prefix      = PREIX_WARN,       &
@@ -650,8 +674,8 @@ Subroutine LOG_WarnSingleVector_typGURU( this, msg, head, value, refValue )
     &   head        = head,             &
     &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,     &
-    &   isColor     = this%isColor_,    &
+    &   unit        = logUnit,          &
+    &   isColor     = isColor,          &
     &   isStop      = .FALSE.           )
 
 !! -------------------------------------------------------------------------- !!
@@ -668,6 +692,13 @@ Subroutine LOG_WarnVectorVector_typGURU( this, msg, head, value, refValue )
     Class(*), Dimension(:), intent(in), Optional :: value
     Class(*), Dimension(:), intent(in), Optional :: refValue
 !! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: logUnit
+
+    isColor = this%isColor_
+    logUnit = 6
+    if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
+
     !!... Write Message
     Call WritePrefixMessageVectorVector( &
     &   prefix      = PREIX_WARN,       &
@@ -676,8 +707,8 @@ Subroutine LOG_WarnVectorVector_typGURU( this, msg, head, value, refValue )
     &   head        = head,             &
     &   value       = value,            &
     &   refValue    = refValue,         &
-    &   unit        = this%logUnit,     &
-    &   isColor     = this%isColor_,    &
+    &   unit        = logUnit,          &
+    &   isColor     = isColor,          &
     &   isStop      = .FALSE.           )
 
 !! -------------------------------------------------------------------------- !!
@@ -694,18 +725,24 @@ Subroutine LOG_Debug_typGURU( this, msg, head, value, refValue )
     Class(*), intent(in), Optional         :: value
     Class(*), intent(in), Optional         :: refValue
 !! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: logUnit
 
     If ( this%isDebug_ ) then
+        isColor = this%isColor_
+        logUnit = 6
+        if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
+
         !!... Write Message
         Call WritePrefixMessage( &
         &   prefix      = PREIX_DEBUG,      &
         &   prefixColor = COLOR_DEBUG,      &
         &   msg         = msg,              &
         &   head        = head,             &
-        &   value    = value,            &
+        &   value       = value,            &
         &   refValue    = refValue,         &
-        &   unit        = this%logUnit,    &
-        &   isColor     = this%isColor_,    &
+        &   unit        = logUnit,          &
+        &   isColor     = isColor,          &
         &   isStop      = .FALSE.           )
 
     End if
@@ -724,8 +761,13 @@ Subroutine LOG_DebugSingleVector_typGURU( this, msg, head, value, refValue )
     Class(*), intent(in), Optional               :: value
     Class(*), Dimension(:), intent(in), Optional :: refValue
 !! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: logUnit
 
     If ( this%isDebug_ ) then
+        isColor = this%isColor_
+        logUnit = 6
+        if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
 
         !!... Write Message
         Call WritePrefixMessageSingleVector( &
@@ -735,8 +777,8 @@ Subroutine LOG_DebugSingleVector_typGURU( this, msg, head, value, refValue )
         &   head        = head,             &
         &   value       = value,            &
         &   refValue    = refValue,         &
-        &   unit        = this%logUnit,     &
-        &   isColor     = this%isColor_,    &
+        &   unit        = logUnit,          &
+        &   isColor     = isColor,          &
         &   isStop      = .FALSE.           )
 
     End if
@@ -755,8 +797,14 @@ Subroutine LOG_DebugVectorVector_typGURU( this, msg, head, value, refValue )
     Class(*), Dimension(:), intent(in), Optional :: value
     Class(*), Dimension(:), intent(in), Optional :: refValue
 !! -------------------------------------------------------------------------- !!
+    Logical :: isColor
+    Integer :: logUnit
 
     If ( this%isDebug_ ) then
+        isColor = this%isColor_
+        logUnit = 6
+        if ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
+
         !!... Write Message
         Call WritePrefixMessageVectorVector( &
         &   prefix      = PREIX_DEBUG,      &
@@ -765,8 +813,8 @@ Subroutine LOG_DebugVectorVector_typGURU( this, msg, head, value, refValue )
         &   head        = head,             &
         &   value       = value,            &
         &   refValue    = refValue,         &
-        &   unit        = this%logUnit,     &
-        &   isColor     = this%isColor_,    &
+        &   unit        = logUnit,          &
+        &   isColor     = isColor,          &
         &   isStop      = .FALSE.           )
 
     End if
