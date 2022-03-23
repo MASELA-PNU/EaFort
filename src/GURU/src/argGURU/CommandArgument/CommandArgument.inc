@@ -246,6 +246,7 @@ Implicit None
 
         nGivenArg = indEnd - indStart
 
+        If (this%isRequiredKey) then
         if (nGivenArg.LT.this%nRequiredWord) then
             Call WritePrefixMessage( &
             &   prefix      = PREIX_ERROR,                              &
@@ -258,6 +259,7 @@ Implicit None
             &   isColor     = .FALSE.,                                  &
             &   isStop      = .TRUE.                                    )
         end if
+        End If
 
         If ( nGivenArg.GE.1 ) then
             this%nWord = nGivenArg
@@ -268,7 +270,7 @@ Implicit None
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
                 this%words(jArg) = trim(arg)
-                !write(*,*) iArg, this%words(jArg)%Chars()
+                write(*,*) iArg, this%words(jArg)%Chars()
             end do
         end if
 
@@ -315,20 +317,20 @@ Implicit None
 
         nGivenArg = indEnd - indStart
 
-        If (this%nRequiredWord.GE.1) then
-            if ( nGivenArg.LT.this%nRequiredWord ) then
-                Call WritePrefixMessage( &
-                &   prefix      = PREIX_ERROR,                              &
-                &   prefixColor = COLOR_ERROR,                              &
-                &   head        = "Update_typCommandArgument",              &
-                &   msg         = "The number of argument after keyword is less than the requirement.\n&
-                                &* Required number of words is given in the below.", &
-                &   value    = trim(this%key),                           &
-                &   refValue    = this%nRequiredWord,                       &
-                &   isColor     = .FALSE.,                                  &
-                &   isStop      = .TRUE.                                    )
-            end if
-        End if
+        If (this%isRequiredKey) then
+        if ( nGivenArg.LT.this%nRequiredWord ) then
+            Call WritePrefixMessage( &
+            &   prefix      = PREIX_ERROR,                              &
+            &   prefixColor = COLOR_ERROR,                              &
+            &   head        = "Update_typCommandArgument",              &
+            &   msg         = "The number of argument after keyword is less than the requirement.\n&
+                            &* Required number of words is given in the below.", &
+            &   value    = trim(this%key),                           &
+            &   refValue    = this%nRequiredWord,                       &
+            &   isColor     = .FALSE.,                                  &
+            &   isStop      = .TRUE.                                    )
+        end if
+        End If
 
         If ( nGivenArg.GE.1 ) then
             this%nWord = nGivenArg
