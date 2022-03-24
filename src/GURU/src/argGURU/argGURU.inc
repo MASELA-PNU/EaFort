@@ -177,14 +177,14 @@ Subroutine ARG_GetArgInt_typGURU(this, key, value, index, isError)
         endif
     end if
 
-    if (isError_) value   = 0
     if ( present(isError) ) then
         isError = isError_
+        value   = 0
     else
         Call this%Error( &
         &   msg      = "Failed to get integer.", &
         &   head     = "ARG_GetArgInt_typGURU", &
-        &   refValue = key )
+        &   value    = key )
     end if
 
 !! -------------------------------------------------------------------------- !!
@@ -223,9 +223,9 @@ Subroutine ARG_GetArgReal_typGURU(this, key, value, index, isError)
         endif
     end if
 
-    if (isError_) value   = 0.D0
     if ( present(isError) ) then
         isError = isError_
+        value   = 0.D0
     else
         Call this%Error( &
         &   msg      = "Failed to get double precision.", &
@@ -269,9 +269,9 @@ Subroutine ARG_GetArgLogical_typGURU(this, key, value, index, isError)
         endif
     end if
 
-    if (isError_) value   = .FALSE.
     if ( present(isError) ) then
         isError = isError_
+        value   = .FALSE.
     else
         Call this%Error( &
         &   msg      = "Failed to get logical.", &
@@ -316,10 +316,10 @@ Subroutine ARG_GetArgChar_typGURU(this, key, value, index, isError)
 
     end if
 
-    if ( present(isError) ) isError = isError_
-
-    if (isError_) then
+    if ( present(isError) ) then
+        isError = isError_
         value   = ""
+    else
         Call this%Error( &
         &   msg      = "Failed to get character.", &
         &   head     = "ARG_GetArgChar_typGURU", &
