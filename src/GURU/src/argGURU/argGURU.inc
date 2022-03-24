@@ -177,9 +177,10 @@ Subroutine ARG_GetArgInt_typGURU(this, key, value, index, isError)
         endif
     end if
 
+    if (isError_) value   = 0
+
     if ( present(isError) ) then
         isError = isError_
-        value   = 0
     else
         Call this%Error( &
         &   msg      = "Failed to get integer.", &
@@ -223,9 +224,10 @@ Subroutine ARG_GetArgReal_typGURU(this, key, value, index, isError)
         endif
     end if
 
+    if (isError_) value = 0.D0
+
     if ( present(isError) ) then
         isError = isError_
-        value   = 0.D0
     else
         Call this%Error( &
         &   msg      = "Failed to get double precision.", &
@@ -269,9 +271,10 @@ Subroutine ARG_GetArgLogical_typGURU(this, key, value, index, isError)
         endif
     end if
 
+    if (isError_) value = .FALSE.
+
     if ( present(isError) ) then
         isError = isError_
-        value   = .FALSE.
     else
         Call this%Error( &
         &   msg      = "Failed to get logical.", &
@@ -316,9 +319,10 @@ Subroutine ARG_GetArgChar_typGURU(this, key, value, index, isError)
 
     end if
 
+    if (isError_) value   = ""
+
     if ( present(isError) ) then
         isError = isError_
-        value   = ""
     else
         Call this%Error( &
         &   msg      = "Failed to get character.", &
@@ -491,7 +495,7 @@ Subroutine ARG_GetArgRealVector_typGURU( this, key, value, isError )
     Real(RP), allocatable          :: value(:)
     Logical, optional              :: isError
 !! -------------------------------------------------------------------------- !!
-    Logical  :: isFound_, isError_
+    Logical  :: isFound_, isError_, isStop_
     Integer  :: iWord, ikey
     Real(RP) :: elemValue
 
