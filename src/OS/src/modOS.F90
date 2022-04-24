@@ -17,6 +17,12 @@ Module modOS
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
+#ifdef __OS_LINUX__
+Character(len=1), Parameter :: CHAR_DIR_SEP = "/"
+#else
+Character(len=1), Parameter :: CHAR_DIR_SEP = "\"
+#endif
+
 !!... Control the file system procedure definitions
 #include "fileSystem/fileSystem.proc"
 

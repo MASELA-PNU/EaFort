@@ -17,6 +17,9 @@ Interface Var2Char
     Procedure :: String2Char_Vector
 End Interface
 
+!!... Maximum length of single character for conversion
+Integer, PARAMETER :: N_TMP_CHAR_CONV = 100
+
 !!... Integer 2 Character
 Interface Int2Char
     Procedure :: Int2Char

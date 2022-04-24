@@ -270,7 +270,6 @@ Implicit None
                 CALL GET_COMMAND_ARGUMENT( iArg,  arg )
                 jArg = jArg + 1
                 this%words(jArg) = trim(arg)
-                write(*,*) iArg, this%words(jArg)%Chars()
             end do
         end if
 

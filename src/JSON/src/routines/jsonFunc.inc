@@ -17,7 +17,7 @@ Subroutine JSON_Remove(json, path)
     type(typJSON), pointer       :: json
     Character(len=*), intent(in) :: path
 !! -------------------------------------------------------------------------- !!
-    Call jsonCore%remove_if_present( json, path )
+    Call jsonCore%Remove_if_present( json, path )
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
@@ -26,12 +26,21 @@ End Subroutine
 Subroutine JSON_GetInfo(json, name, nChild)
 !! -------------------------------------------------------------------------- !!
     Implicit None
-    Type(typJSON), pointer        :: json
-    Character(len=:), allocatable :: name
-    integer,intent(out)           :: nChild
+    Type(typJSON), pointer                  :: json
+    Character(len=:), allocatable, optional :: name
+    integer,intent(out), optional           :: nChild
 !! -------------------------------------------------------------------------- !!
-    if ( Allocated(name) ) Deallocate(name)
-    Call jsonCore%info(p = json, n_children = nChild, name = name)
+    Character(len=:), allocatable :: name_
+    integer :: nChild_
+    Call jsonCore%Info(p = json, n_children = nChild_, name = name_)
+
+    If (present(name)) then
+        if ( Allocated(name) ) Deallocate(name)
+        name = name_
+    end if
+
+    if (present(nChild)) nChild = nChild_
+
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
@@ -43,7 +52,7 @@ Subroutine JSON_GetNChild( json, nChild )
     Type(typJSON), pointer :: json
     integer, intent(out)   :: nChild
 !! -------------------------------------------------------------------------- !!
-    Call jsonCore%info(p = json, n_children = nChild)
+    Call jsonCore%Info(p = json, n_children = nChild)
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
@@ -56,7 +65,7 @@ Subroutine JSON_GetName(json, name)
     Character(len=:), allocatable      :: name
 !! -------------------------------------------------------------------------- !!
     if ( Allocated(name) ) deallocate(name)
-    Call jsonCore%info(p = json, name = name)
+    Call jsonCore%Info(p = json, name = name)
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!

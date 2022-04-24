@@ -55,38 +55,56 @@ End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function Int2Char(var) result( varChar )
+Function Int2Char(var, fmt) result( varChar )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Integer, Intent(in)           :: var
+    Character(len=*), optional    :: fmt
     Character(len=:), allocatable :: varChar
 !! -------------------------------------------------------------------------- !!
     type(string) :: str
     Logical :: isError
+    character(len=N_TMP_CHAR_CONV) :: tmpChar
+    Integer :: ios
+
     If ( Allocated(varChar) ) deallocate(varChar)
-    Call GetStrFromClass( var, str, isError )
-    varChar = str%raw
-    if ( isError ) then
-        Call GURU%Error( &
-        &   msg   = "Failed to convert to character.", &
-        &   head  = "Int2Char", &
-        &   value = var )
-    end if
-    Call str%Free()
+
+    If ( present(fmt) ) then
+        write(tmpChar, fmt, iostat = ios) var
+        if (ios.NE.0) then
+            Call GURU%Error( &
+            &   msg   = "Failed to convert integer to character. Please check 'fmt'.", &
+            &   head  = "Int2Char", &
+            &   value = fmt )
+        end if
+        varChar = trim(adjustl(tmpChar))
+    else
+        Call GetStrFromClass( var, str, isError )
+        varChar = str%raw
+        if ( isError ) then
+            Call GURU%Error( &
+            &   msg   = "Failed to convert to character.", &
+            &   head  = "Int2Char", &
+            &   value = var )
+        end if
+        Call str%Free()
+    End if
 !! -------------------------------------------------------------------------- !!
 End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function Int2Char_Vector(var) result( varChar )
+Function Int2Char_Vector(var, fmt) result( varChar )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Integer, dimension(:), Intent(in) :: var
+    Character(len=*), optional        :: fmt
     Character(len=:), allocatable     :: varChar
 !! -------------------------------------------------------------------------- !!
     Integer :: nVar, iVar
     type(string) :: str, tmpStr
     Logical :: isError
+    Logical :: isFMT
     If ( Allocated(varChar) ) deallocate(varChar)
 
     nVar = size(var)
@@ -98,15 +116,26 @@ Function Int2Char_Vector(var) result( varChar )
 
     ifGenStr: if ( nVar.GE.1 ) then
 
+        isFMT = present(fmt)
+
         str%raw = "[ "
         do iVar = 1, nVar-1
-            Call GetStrFromClass( var(iVar), tmpStr, isError )
-            if (isError) exit ifGenStr
+            If (isFMT) then
+                tmpStr = Int2Char( var(iVar), fmt )
+            else
+                Call GetStrFromClass( var(iVar), tmpStr, isError )
+                if (isError) exit ifGenStr
+            end if
             str%raw = str%raw//tmpStr%raw//", "
         end do
 
-        Call GetStrFromClass( var(nVar), tmpStr, isError )
-        if (isError) exit ifGenStr
+        If (isFMT) then
+            tmpStr = Int2Char( var(iVar), fmt )
+        else
+            Call GetStrFromClass( var(nVar), tmpStr, isError )
+            if (isError) exit ifGenStr
+        End if
+
         str%raw = str%raw//tmpStr%raw
         str%raw = str%raw//" ]"
 
@@ -129,38 +158,55 @@ End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function Real2Char(var) result( varChar )
+Function Real2Char(var, fmt) result( varChar )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Real(RP), Intent(in)          :: var
+    Character(len=*), optional    :: fmt
     Character(len=:), allocatable :: varChar
 !! -------------------------------------------------------------------------- !!
     type(string) :: str
     Logical :: isError
+    character(len=N_TMP_CHAR_CONV) :: tmpChar
+    Integer :: ios
+
     If ( Allocated(varChar) ) deallocate(varChar)
-    Call GetStrFromClass( var, str, isError )
-    varChar = str%raw
-    if ( isError ) then
-        Call GURU%Error( &
-        &   msg   = "Failed to convert to character.", &
-        &   head  = "Real2Char", &
-        &   value = var )
-    end if
-    Call str%Free()
+    If ( present(fmt) ) then
+        write(tmpChar, fmt, iostat = ios) var
+        if (ios.NE.0) then
+            Call GURU%Error( &
+            &   msg   = "Failed to convert real to character. Please check 'fmt'.", &
+            &   head  = "Int2Char", &
+            &   value = fmt )
+        end if
+        varChar = trim(adjustl(tmpChar))
+    else
+        Call GetStrFromClass( var, str, isError )
+        varChar = str%raw
+        if ( isError ) then
+            Call GURU%Error( &
+            &   msg   = "Failed to convert to character.", &
+            &   head  = "Real2Char", &
+            &   value = var )
+        end if
+        Call str%Free()
+    End if
 !! -------------------------------------------------------------------------- !!
 End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function Real2Char_Vector(var) result( varChar )
+Function Real2Char_Vector(var, fmt) result( varChar )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Real(RP), dimension(:), Intent(in) :: var
+    Character(len=*), optional         :: fmt
     Character(len=:), allocatable      :: varChar
 !! -------------------------------------------------------------------------- !!
     Integer :: nVar, iVar
     type(string) :: str, tmpStr
     Logical :: isError
+    Logical :: isFMT
     If ( Allocated(varChar) ) deallocate(varChar)
 
     nVar = size(var)
@@ -172,15 +218,26 @@ Function Real2Char_Vector(var) result( varChar )
 
     ifGenStr: if ( nVar.GE.1 ) then
 
+        isFMT = present(fmt)
+
         str%raw = "[ "
         do iVar = 1, nVar-1
-            Call GetStrFromClass( var(iVar), tmpStr, isError )
-            if (isError) exit ifGenStr
+            If (isFMT) then
+                tmpStr = Real2Char( var(iVar), fmt )
+            else
+                Call GetStrFromClass( var(iVar), tmpStr, isError )
+                if (isError) exit ifGenStr
+            End if
             str%raw = str%raw//tmpStr%raw//", "
         end do
 
-        Call GetStrFromClass( var(nVar), tmpStr, isError )
-        if (isError) exit ifGenStr
+        If (isFMT) then
+            tmpStr = Real2Char( var(iVar), fmt )
+        else
+            Call GetStrFromClass( var(nVar), tmpStr, isError )
+            if (isError) exit ifGenStr
+        End if
+
         str%raw = str%raw//tmpStr%raw
         str%raw = str%raw//" ]"
 
@@ -203,38 +260,55 @@ End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function Logical2Char(var) result( varChar )
+Function Logical2Char(var, fmt) result( varChar )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Logical, Intent(in)           :: var
+    Character(len=*), optional    :: fmt
     Character(len=:), allocatable :: varChar
 !! -------------------------------------------------------------------------- !!
     type(string) :: str
     Logical :: isError
+    character(len=N_TMP_CHAR_CONV) :: tmpChar
+    Integer :: ios
+
     If ( Allocated(varChar) ) deallocate(varChar)
-    Call GetStrFromClass( var, str, isError )
-    varChar = str%raw
-    if ( isError ) then
-        Call GURU%Error( &
-        &   msg   = "Failed to convert to character.", &
-        &   head  = "Logical2Char", &
-        &   value = var )
-    end if
-    Call str%Free()
+    If ( present(fmt) ) then
+        write(tmpChar, fmt, iostat = ios) var
+        if (ios.NE.0) then
+            Call GURU%Error( &
+            &   msg   = "Failed to convert logical to character. Please check 'fmt'.", &
+            &   head  = "Int2Char", &
+            &   value = fmt )
+        end if
+        varChar = trim(adjustl(tmpChar))
+    else
+        Call GetStrFromClass( var, str, isError )
+        varChar = str%raw
+        if ( isError ) then
+            Call GURU%Error( &
+            &   msg   = "Failed to convert to character.", &
+            &   head  = "Logical2Char", &
+            &   value = var )
+        end if
+        Call str%Free()
+    End if
 !! -------------------------------------------------------------------------- !!
 End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Function Logical2Char_Vector(var) result( varChar )
+Function Logical2Char_Vector(var, fmt) result( varChar )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Logical, dimension(:), Intent(in) :: var
+    Character(len=*), optional        :: fmt
     Character(len=:), allocatable     :: varChar
 !! -------------------------------------------------------------------------- !!
     Integer :: nVar, iVar
     type(string) :: str, tmpStr
     Logical :: isError
+    Logical :: isFMT
     If ( Allocated(varChar) ) deallocate(varChar)
 
     nVar = size(var)
@@ -246,15 +320,26 @@ Function Logical2Char_Vector(var) result( varChar )
 
     ifGenStr: if ( nVar.GE.1 ) then
 
+        isFMT = present(fmt)
+
         str%raw = "[ "
         do iVar = 1, nVar-1
-            Call GetStrFromClass( var(iVar), tmpStr, isError )
-            if (isError) exit ifGenStr
+            If (isFMT) then
+                tmpStr = Logical2Char( var(iVar), fmt )
+            else
+                Call GetStrFromClass( var(iVar), tmpStr, isError )
+                if (isError) exit ifGenStr
+            End if
             str%raw = str%raw//tmpStr%raw//", "
         end do
 
-        Call GetStrFromClass( var(nVar), tmpStr, isError )
-        if (isError) exit ifGenStr
+        If (isFMT) then
+            tmpStr = Logical2Char( var(iVar), fmt )
+        else
+            Call GetStrFromClass( var(nVar), tmpStr, isError )
+            if (isError) exit ifGenStr
+        End if
+
         str%raw = str%raw//tmpStr%raw
         str%raw = str%raw//" ]"
 
