@@ -1,28 +1,34 @@
 !! -------------------------------------------------------------------------- !!
-!                                   EaFort:JSON                               !!
+!! EaFort:testMathPackModule
 !! -------------------------------------------------------------------------- !!
-!   Wrapper Module of JSON-Fortran for easy use.
-!
-!   author: Young-Myung Choi
-!   date: 2021-10-20
-!
+!! Testing Program of MathPack Module
+!!
+!!   Author: Young-Myung Choi
+!!   Date  : 2021-12-03
+!!
 !! -------------------------------------------------------------------------- !!
-Module pkgEaFort
+Module testMathPackModule
 !! -------------------------------------------------------------------------- !!
 
-    Use modEaFort       !!... Global Variables
-    Use modGURU         !!... GURU Module
-    Use modString       !!... String Module
-    Use modOS           !!... OS Module
-    Use modFileIO       !!... File IO Module
-    Use modJSON         !!... JSON Module
-    Use pkgMathPack     !!... Math Package
+    Use pkgEaFort
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
+!! -------------------------------------------------------------------------- !!
+Contains
+!! -------------------------------------------------------------------------- !!
 
+#include "tests/basicFunctions/testFactorial.inc"
+
+#include "tests/specialFunctions/testBesselFunc.inc"
+
+#include "tests/specialFunctions/testBesselFuncDeriv.inc"
+
+#include "tests/linearAlgebra/testCrossProduct3.inc"
+
+#include "tests/linearAlgebra/testMatrixInv.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

@@ -13,6 +13,9 @@ Module modEaFort
     !!... String Module
     Use stringifor              !!... Third Party String Module
 
+    !!... IEEE Module
+    Use IEEE_ARITHMETIC
+
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
@@ -39,6 +42,9 @@ Implicit None
 !!... Separate file path
 #include "auxilary/SeparatePath.proc"
 
+!!... IEEE Functions
+#include "IEEE/ieee_functions.proc"
+
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
@@ -54,6 +60,9 @@ Contains
 
 !!... Separate file path
 #include "auxilary/SeparatePath.inc"
+
+!!... IEEE Functions
+#include "IEEE/ieee_functions.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

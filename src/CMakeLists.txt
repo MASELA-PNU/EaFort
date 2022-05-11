@@ -13,6 +13,7 @@ set(LIST_SUB_ITEM_NAME
     GURU
     OS
     fileIO
+    mathPack
 )
 
 foreach( SUB_ITEM_NAME IN LISTS LIST_SUB_ITEM_NAME )
@@ -28,4 +29,5 @@ AutoCompile(
     INSTALL_PATH        "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
     INSTALL_DEPEND      "${DEPEND_${ITEM_NAME}}"
     INSTALL_SRC         "${SRC_${ITEM_NAME}}"
+    INSTALL_EXTLIB      "${EaFort_EXTLIB}"
 )

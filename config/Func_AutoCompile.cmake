@@ -22,13 +22,14 @@ set(multiValueArgs
     INSTALL_LIB             # Library Path List
     INSTALL_DEPEND          # Dependent project list
     INSTALL_EXTLIB          # Extra library list
+    INSTALL_EXTDIR          # Extra library directory
     INSTALL_EXTINC          # Extra include path list
     INSTALL_EXTFLAG         # Extra Flags
 )
 
 ##... Get Function Arguments
-    cmake_parse_arguments( AutoCompile
-        "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}" )
+cmake_parse_arguments( AutoCompile
+    "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}" )
 
 ##... Set arguments as variables in function script
 set( INSTALL_SRC         "${AutoCompile_INSTALL_SRC}" )
@@ -36,6 +37,7 @@ set( INSTALL_INC         "${AutoCompile_INSTALL_INC}" )
 set( INSTALL_LIB         "${AutoCompile_INSTALL_LIB}" )
 set( INSTALL_DEPEND      "${AutoCompile_INSTALL_DEPEND}" )
 set( INSTALL_EXTLIB      "${AutoCompile_INSTALL_EXTLIB}" )
+set( INSTALL_EXTDIR      "${AutoCompile_INSTALL_EXTDIR}" )
 set( INSTALL_EXTINC      "${AutoCompile_INSTALL_EXTINC}" )
 set( INSTALL_EXTFLAG     "${AutoCompile_INSTALL_EXTFLAG}" )
 
@@ -121,17 +123,22 @@ endif()
 if (NOT "${INSTALL_DEPEND}" STREQUAL "" )
     message("${Green}  - INSTALL_DEPEND    : ${White}${INSTALL_DEPEND}")
     add_dependencies(${INSTALL_NAME} ${INSTALL_DEPEND} )
-    target_link_libraries(${INSTALL_NAME} ${INSTALL_DEPEND} )
+    target_link_libraries(${INSTALL_NAME} "${INSTALL_DEPEND}" )
+endif()
+
+if (NOT "${INSTALL_EXTDIR}" STREQUAL "" )
+    message("${Green}  - INSTALL_EXT_DIR   : ${White}${INSTALL_EXTDIR}")
+    target_link_directories(${INSTALL_NAME} PRIVATE "${INSTALL_EXTDIR}" )
 endif()
 
 if (NOT "${INSTALL_EXTLIB}" STREQUAL "" )
     message("${Green}  - INSTALL_EXT_LIB   : ${White}${INSTALL_EXTLIB}")
-    target_link_libraries(${INSTALL_NAME} ${INSTALL_EXTLIB} )
+    target_link_libraries(${INSTALL_NAME} "${INSTALL_EXTLIB}" )
 endif()
 
 if (NOT "${INSTALL_EXTINC}" STREQUAL "" )
     message("${Green}  - INSTALL_EXT_INC   : ${White}${INSTALL_EXTINC}")
-    target_include_directories(${INSTALL_NAME} PRIVATE ${INSTALL_EXTINC} )
+    target_include_directories(${INSTALL_NAME} PRIVATE "${INSTALL_EXTINC}" )
 endif()
 
 if (NOT "${INSTALL_EXTFLAG}" STREQUAL "" )

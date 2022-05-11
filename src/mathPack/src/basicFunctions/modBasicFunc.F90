@@ -1,28 +1,32 @@
+!                                   EaFort:GURU                               !!
 !! -------------------------------------------------------------------------- !!
-!                                   EaFort:JSON                               !!
-!! -------------------------------------------------------------------------- !!
-!   Wrapper Module of JSON-Fortran for easy use.
+!   Math Package
+!
+!    - Special Packages
+!    - Linear Algebra (Interface with Math Kernel Library)
 !
 !   author: Young-Myung Choi
-!   date: 2021-10-20
+!   date: 2022-05-01
 !
 !! -------------------------------------------------------------------------- !!
-Module pkgEaFort
+Module modMathPack_BasicFunc
 !! -------------------------------------------------------------------------- !!
 
-    Use modEaFort       !!... Global Variables
-    Use modGURU         !!... GURU Module
-    Use modString       !!... String Module
-    Use modOS           !!... OS Module
-    Use modFileIO       !!... File IO Module
-    Use modJSON         !!... JSON Module
-    Use pkgMathPack     !!... Math Package
+    Use modMathPack     !!... Global variables of Math Package
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
 !! -------------------------------------------------------------------------- !!
 
+!!... Factorial Functions
+#include "factorial/factorial.proc"
 
+!! -------------------------------------------------------------------------- !!
+Contains
+!! -------------------------------------------------------------------------- !!
+
+!!... Factorial Functions
+#include "factorial/factorial.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

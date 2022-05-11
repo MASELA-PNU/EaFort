@@ -9,7 +9,10 @@
 ## Default Settings --------------------------------------------------------- ##
 
 ##... Set the minimum version of cmake
-cmake_minimum_required(VERSION 2.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
+endif()
 
 ##... CMake Project Name
 project(EaFort)
@@ -30,6 +33,9 @@ include( config/fortranFlag.cmake )
 
 ##... Auto Compilation Functions
 include( config/Func_AutoCompile.cmake )
+
+## Find Library and compile
+include( config/FindLibraryAndGetFlag.cmake)
 
 ## Print CMake Project Information ------------------------------------------ ##
 message("")
@@ -61,6 +67,20 @@ message("${ColourReset}")
 
 ## Math Kernel Library ------------------------------------------------------ ##
 
+set( LAPACK_MANUAL_INSTALL FALSE )
+# set( LAPACK_MANUAL_INSTALL TRUE )
+
+if ( LAPACK_MANUAL_INSTALL )
+    set(LAPACK_VERSION 3.10.1)
+    set(LAPACK_PATH_HINT ${PROJECT_COMPILE_PATH}/ThirdParty/lapack-${LAPACK_VERSION}/lib)
+    set(LAPACK_DEFINED_PATH TRUE)
+else()
+    set(LAPACK_DEFINED_PATH FALSE)
+endif()
+
+include( config/findMathKernel.cmake )
+set(EaFort_EXTLIB ${MKL_LIB})
+
 ## Compile EaFort Library --------------------------------------------------- ##
 
 ##... Set Library name
@@ -77,3 +97,4 @@ add_subdirectory(test/testOS)
 add_subdirectory(test/testAuxFunc)
 add_subdirectory(test/testFileIO)
 add_subdirectory(test/testJSON)
+add_subdirectory(test/testMathPack)

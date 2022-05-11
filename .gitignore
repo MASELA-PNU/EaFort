@@ -15,3 +15,6 @@ include/*
 build/*
 buildWin/*
 buildLinux/*
+
+#... ThirdParty 
+ThirdParty/lapack*
