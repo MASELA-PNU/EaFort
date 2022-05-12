@@ -11,6 +11,11 @@ Function BesselY_IntReal(n, x) Result( funcValue )
         &   msg   = "The argument 'x' is very small to evaluate the function.", &
         &   head  = "BesselY_IntReal", &
         &   value = x )
+    elseif (x.lt.0.0_RP) then
+        Call GURU%Error( &
+        &   msg   = "The argument 'x' is negative. It is not supported.", &
+        &   head  = "BesselY_IntReal", &
+        &   value = x )
     end if
     funcValue = fac * Bessel_YN(n, dabs(x))
 End Function

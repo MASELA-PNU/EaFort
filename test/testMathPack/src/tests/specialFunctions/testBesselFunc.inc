@@ -17,10 +17,10 @@ Subroutine testBesselFunc()
     do iX = 1, nX
 
         do n = -5, 5
-            ! funcValues(n) = BesselJ(n, x)
+            funcValues(n) = BesselJ(n, x)
             ! funcValues(n) = BesselY(n, x)
             ! funcValues(n) = BesselK(n, x)
-            funcValues(n) = BesselI(n, x)
+            ! funcValues(n) = BesselI(n, x)
         end do
 
         write(iUnit, 1001) x, funcValues(-5:5)

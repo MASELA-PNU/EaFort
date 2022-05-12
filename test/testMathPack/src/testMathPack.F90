@@ -20,7 +20,7 @@ Implicit None
     ! Call testFactorial()
 
     !!... Test Bessel Function
-    ! Call testBesselFunc()
+    Call testBesselFunc()
 
     !!... Test Derivatives of Bessel Function
     ! Call testBesselFuncDeriv()
@@ -29,7 +29,7 @@ Implicit None
     ! Call testCrossProduct3()
 
     !!... Test Matrix Inverse
-    Call testMatrixInv()
+    ! Call testMatrixInv()
 
 !! -------------------------------------------------------------------------- !!
 End Program
