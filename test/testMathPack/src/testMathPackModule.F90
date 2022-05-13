@@ -22,6 +22,8 @@ Contains
 
 #include "tests/basicFunctions/testFactorial.inc"
 
+#include "tests/basicFunctions/testBinomialCoef.inc"
+
 #include "tests/specialFunctions/testBesselFunc.inc"
 
 #include "tests/specialFunctions/testBesselFuncDeriv.inc"

@@ -21,12 +21,18 @@ Implicit None
 !!... Factorial Functions
 #include "factorial/factorial.proc"
 
+!!... Binomial Coefficient
+#include "binomialCoef/binomialCoef.proc"
+
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
 
 !!... Factorial Functions
 #include "factorial/factorial.inc"
+
+!!... Binomial Coefficient
+#include "binomialCoef/binomialCoef.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module

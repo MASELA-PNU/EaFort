@@ -14,6 +14,7 @@ Module modMathPack
 
     Use modEaFort       !!... Global variables of EaFort
     Use modGURU         !!... GURU Module
+    Use modString       !!... String Module
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
