@@ -24,6 +24,9 @@ Implicit None
 !!... Binomial Coefficient
 #include "binomialCoef/binomialCoef.proc"
 
+!!... Complex Hyperbolic Functions
+#include "hyperBolicFunctions/hyperBolicFunctions.proc"
+
 !! -------------------------------------------------------------------------- !!
 Contains
 !! -------------------------------------------------------------------------- !!
@@ -33,6 +36,9 @@ Contains
 
 !!... Binomial Coefficient
 #include "binomialCoef/binomialCoef.inc"
+
+!!... Complex Hyperbolic Functions
+#include "hyperBolicFunctions/hyperBolicFunctions.inc"
 
 !! -------------------------------------------------------------------------- !!
 End Module
