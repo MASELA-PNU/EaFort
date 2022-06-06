@@ -279,7 +279,7 @@ End Subroutine
     isError_ = .FALSE.
     if ( nString.ge.1 ) then
 
-        Allocate( value(nString) ); value(:) = 0
+        Allocate( value(nString) ); value(:) = .FALSE.
 
         loopString: do iString = 1, nString
 

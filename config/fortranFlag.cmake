@@ -12,7 +12,7 @@ if ("${CMAKE_Fortran_COMPILER_ID}" MATCHES "Intel")
 
 elseif("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
 
-    set(Fortran_FLAG_GLOBAL_RELEASE "-cpp -fPIC -O2 -fopenmp")
+    set(Fortran_FLAG_GLOBAL_RELEASE "-cpp -fPIC -O2 -fopenmp -fno-protect-parens -ffast-math -fbounds-check")
     set(Fortran_FLAG_GLOBAL_DEBUG   "-cpp -fPIC -O0 -Wall -Wextra -fcheck=all -fbacktrace -pedantic -fopenmp" )
     add_definitions(-D__GNU_FORTRAN__)
 

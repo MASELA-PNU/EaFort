@@ -281,7 +281,7 @@ End Function
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
+Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance, masterOnly )
 !! -------------------------------------------------------------------------- !!
     Implicit None
     Class(typGURU), intent(in)          :: this
@@ -289,13 +289,24 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
     Character(len=*), intent(in), Optional :: color
     Integer, intent(in), Optional          :: nSpace
     Logical, intent(in), Optional          :: isAdvance
+    Logical, intent(in), Optional          :: masterOnly
 !! -------------------------------------------------------------------------- !!
     type(string)              :: str
     type(string), Allocatable :: strVect(:)
-    Character(len=:), Allocatable :: prefix, tmpMsg
-    Logical :: isSpace
+    Character(len=:), Allocatable :: prefix, tmpMsg, color_
+    Logical :: isSpace, isWrite
     Integer :: iMsg, nMsgLine
     Integer :: logUnit
+
+    !!... Check Master Only
+    isWrite = .TRUE.
+    if ( present(masterOnly) ) then
+        if ( masterOnly.eqv..true. ) then
+            if (this%MPI_isMaster_.EQV..FALSE. )  isWrite = .FALSE.
+        end if
+    end if
+
+    If (isWrite) then
 
     !!... Separate message with line separator
     str = msg
@@ -312,6 +323,11 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
         end if
     end if
 
+    color_ = ""
+    If (this%isColor_) then
+        If (Present(color)) color_ = color
+    End if
+
     !!... Set log Unit
     logUnit = 6
     If ( (this%MPI_isMaster_).AND.(this%isLogFile) ) logUnit = this%logUnit
@@ -326,12 +342,12 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
             Call WriteMessage( &
             &   msg       = tmpMsg,         &
             &   unit      = logUnit,        &
-            &   color     = color           )
+            &   color     = color_          )
         else
             Call WriteMessage( &
             &   msg       = tmpMsg,         &
             &   unit      = logUnit,        &
-            &   color     = color,          &
+            &   color     = color_,         &
             &   isAdvance = isAdvance       )
         end if
 
@@ -348,12 +364,14 @@ Subroutine LOG_Write_typGURU( this, msg, color, nSpace, isAdvance )
     end do
     If (Allocated(strVect)) deallocate(strVect)
 
+    End if
+
 !! -------------------------------------------------------------------------- !!
 End Subroutine
 !! -------------------------------------------------------------------------- !!
 
 !! -------------------------------------------------------------------------- !!
-Subroutine LOG_WriteDebug_typGURU( this, msg, color, nSpace, isAdvance )
+Subroutine LOG_WriteDebug_typGURU( this, msg, color, nSpace, isAdvance, masterOnly )
 !! -------------------------------------------------------------------------- !!
 Implicit None
 Class(typGURU), intent(in)          :: this
@@ -361,13 +379,15 @@ Character(len=*), intent(in)           :: msg
 Character(len=*), intent(in), Optional :: color
 Integer, intent(in), Optional          :: nSpace
 Logical, intent(in), Optional          :: isAdvance
+Logical, intent(in), Optional          :: masterOnly
 !! -------------------------------------------------------------------------- !!
     If ( this%isDebug_ ) then
         Call this%Write( &
         &   msg       = msg,        &
         &   color     = color,      &
         &   nSpace    = nSpace,     &
-        &   isAdvance = isAdvance   )
+        &   isAdvance = isAdvance,  &
+        &   masterOnly = masterOnly  )
     end if
 !! -------------------------------------------------------------------------- !!
 End Subroutine

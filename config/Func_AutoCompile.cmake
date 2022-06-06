@@ -103,7 +103,16 @@ else()
 endif()
 
 ##... Print out Install Path and Compile Flags
+if ( IS_COMPILE_EXE )
     message("${Green}  - INSTALL_PATH      : ${White}${INSTALL_PATH}${Green}")
+    set_target_properties(${INSTALL_NAME}
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${INSTALL_PATH} )
+elseif( IS_COMPILE_LIB )
+    message("${Green}  - INSTALL_PATH      : ${White}${INSTALL_PATH}${Green}")
+    set_target_properties(${INSTALL_NAME}
+    PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${INSTALL_PATH} )
+endif()
+
     message("${Green}  - COMPILE_FLAG      : ${White}${Fortran_FLAG}${Green}")
 
 ## Set Fortran Flag
@@ -150,6 +159,6 @@ message("${ColourReset} ")
 
 ## Compile ------------------------------------------------------------------ ##
 
-install(TARGETS ${INSTALL_NAME} DESTINATION "${INSTALL_PATH}")
+install( TARGETS ${INSTALL_NAME} )
 
 endfunction()
