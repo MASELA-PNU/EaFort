@@ -79,12 +79,12 @@ else()
 endif()
 
 include( config/findMathKernel.cmake )
-set(EaFort_EXTLIB ${MKL_LIB})
 
 ## Compile EaFort Library --------------------------------------------------- ##
 
 ##... Set Library name
 set( LIB_NAME_EaFort EaFort )
+set( EXTLIB_EaFort ${MKL_LIB} )
 
 ##... Set dependencies
 add_subdirectory(src)

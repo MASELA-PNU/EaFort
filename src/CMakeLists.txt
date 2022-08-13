@@ -29,5 +29,5 @@ AutoCompile(
     INSTALL_PATH        "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
     INSTALL_DEPEND      "${DEPEND_${ITEM_NAME}}"
     INSTALL_SRC         "${SRC_${ITEM_NAME}}"
-    INSTALL_EXTLIB      "${EaFort_EXTLIB}"
+    INSTALL_EXTLIB      "${EXTLIB_${ITEM_NAME}}"
 )
