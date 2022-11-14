@@ -13,8 +13,13 @@ set(LIST_SUB_ITEM_NAME
     GURU
     OS
     fileIO
-    mathPack
 )
+
+if ( IS_MATHFACK_COMPILE )
+    set(LIST_SUB_ITEM_NAME "${LIST_SUB_ITEM_NAME}" mathPack)
+endif()
+
+message(${LIST_SUB_ITEM_NAME})
 
 foreach( SUB_ITEM_NAME IN LISTS LIST_SUB_ITEM_NAME )
     add_subdirectory( ${SUB_ITEM_NAME} )

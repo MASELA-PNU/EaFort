@@ -67,18 +67,21 @@ message("${ColourReset}")
 
 ## Math Kernel Library ------------------------------------------------------ ##
 
-set( LAPACK_MANUAL_INSTALL FALSE )
-# set( LAPACK_MANUAL_INSTALL TRUE )
+set( IS_MATHFACK_COMPILE FALSE )
+# set( IS_MATHFACK_COMPILE TRUE )
 
-if ( LAPACK_MANUAL_INSTALL )
-    set(LAPACK_VERSION 3.10.1)
-    set(LAPACK_PATH_HINT ${PROJECT_COMPILE_PATH}/ThirdParty/lapack-${LAPACK_VERSION}/lib)
-    set(LAPACK_DEFINED_PATH TRUE)
-else()
-    set(LAPACK_DEFINED_PATH FALSE)
+if ( ${IS_MATHFACK_COMPILE} )
+    set( LAPACK_MANUAL_INSTALL FALSE )
+    # set( LAPACK_MANUAL_INSTALL TRUE )
+    if ( ${LAPACK_MANUAL_INSTALL} )
+        set(LAPACK_VERSION 3.10.1)
+        set(LAPACK_PATH_HINT ${PROJECT_COMPILE_PATH}/ThirdParty/lapack-${LAPACK_VERSION}/lib)
+        set(LAPACK_DEFINED_PATH TRUE)
+    else()
+        set(LAPACK_DEFINED_PATH FALSE)
+    endif()
+    include( config/findMathKernel.cmake )
 endif()
-
-include( config/findMathKernel.cmake )
 
 ## Compile EaFort Library --------------------------------------------------- ##
 
@@ -97,4 +100,8 @@ add_subdirectory(test/testOS)
 add_subdirectory(test/testAuxFunc)
 add_subdirectory(test/testFileIO)
 add_subdirectory(test/testJSON)
-add_subdirectory(test/testMathPack)
+
+
+if (${IS_MATHFACK_COMPILE})
+    add_subdirectory(test/testMathPack)
+endif()
