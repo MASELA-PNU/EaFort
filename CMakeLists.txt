@@ -81,6 +81,8 @@ if ( ${IS_MATHFACK_COMPILE} )
         set(LAPACK_DEFINED_PATH FALSE)
     endif()
     include( config/findMathKernel.cmake )
+
+    add_definitions(-D__MATHPACK_COMPILE__)
 endif()
 
 ## Compile EaFort Library --------------------------------------------------- ##

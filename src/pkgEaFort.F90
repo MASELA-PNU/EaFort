@@ -16,7 +16,10 @@ Module pkgEaFort
     Use modOS           !!... OS Module
     Use modFileIO       !!... File IO Module
     Use modJSON         !!... JSON Module
+
+#ifdef __MATHPACK_COMPILE__
     Use pkgMathPack     !!... Math Package
+#endif
 
 !! -------------------------------------------------------------------------- !!
 Implicit None
