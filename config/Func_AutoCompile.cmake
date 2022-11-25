@@ -159,6 +159,6 @@ message("${ColourReset} ")
 
 ## Compile ------------------------------------------------------------------ ##
 
-install( TARGETS ${INSTALL_NAME} )
+install( TARGETS ${INSTALL_NAME} DESTINATION ${INSTALL_PATH})
 
 endfunction()
