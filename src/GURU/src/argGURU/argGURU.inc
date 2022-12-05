@@ -324,10 +324,12 @@ Subroutine ARG_GetArgChar_typGURU(this, key, value, index, isError)
     if ( present(isError) ) then
         isError = isError_
     else
-        Call this%Error( &
-        &   msg      = "Failed to get character.", &
-        &   head     = "ARG_GetArgChar_typGURU", &
-        &   value    = key )
+        if (isError_) then
+          Call this%Error( &
+          &   msg      = "Failed to get character.", &
+          &   head     = "ARG_GetArgChar_typGURU", &
+          &   value    = key )
+        end if
     end if
 
 !! -------------------------------------------------------------------------- !!
